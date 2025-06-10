@@ -1,5 +1,3 @@
----
-
 # Docstant
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
@@ -53,5 +51,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
----
-
+![lg](https://github.com/user-attachments/assets/8d960423-ca4b-48e6-97f9-4509e6561148)
