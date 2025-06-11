@@ -1,6 +1,7 @@
 "use client"
 
 import { User } from '@/types';
+import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface AuthContextType {
@@ -23,9 +24,10 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter()
 
     useEffect(() => {
-    //    Fetch user profile
+        //    Fetch user profile
     }, []);
 
     const login = async (email: string, password: string) => {
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = () => {
         setUser(null);
         localStorage.clear();
+        router.replace('/login')
     };
 
     return (

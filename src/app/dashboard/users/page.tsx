@@ -1,6 +1,8 @@
+import UserManagement from "./(components)/UsersList"
+
 const UsersPage = () => {
   return (
-    <div>Users</div>
+    <UserManagement/>
   )
 }
 
