@@ -3,6 +3,9 @@
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 interface AuthContextType {
     user: User | null;
@@ -21,27 +24,40 @@ export const useAuth = () => {
     return context;
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const queryClient = new QueryClient();
+
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
     useEffect(() => {
-        //    Fetch user profile
     }, []);
 
     const login = async (email: string, password: string) => {
         setIsLoading(true);
-
         try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/login`,
+                { email, password }
+            );
 
-        } catch (error) {
+            const user = response.data.user;
+            const token = response.data.token;
 
+            localStorage.setItem("token", token);
+
+            if (user.firstTimeLogin) {
+                router.push(`/auth/reset-password`);
+            } else {
+                toast.success("Login Successful")
+                router.push("/dashboard");
+            }
+        } catch (error: any) {
+            console.error("Login failed", error);
         } finally {
-
             setIsLoading(false);
         }
-
     };
 
     const logout = () => {
@@ -51,8 +67,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isLoading }}>
-            {children}
-        </AuthContext.Provider>
+        <QueryClientProvider client={queryClient}>
+            <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+                {children}
+            </AuthContext.Provider>
+        </QueryClientProvider>
     );
 };
