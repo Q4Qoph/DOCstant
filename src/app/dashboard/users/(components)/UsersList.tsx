@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from '@/components/ui/table';
 import {
   Select,
@@ -33,66 +33,95 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { 
-  Search, 
-  UserPlus, 
-  Edit3, 
-  Trash2, 
-  Shield, 
+import {
+  Search,
+  UserPlus,
+  Edit3,
+  Trash2,
+  Shield,
   Phone,
   Mail,
   Filter
 } from 'lucide-react';
+import { toast } from 'sonner';
+import { Sheet, SheetTrigger } from '@/components/ui/sheet';
+import UserForm from './UserForm';
 
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [users, setUsers] = useState<User[]>([
-    { 
-      id: '1', 
-      name: 'Dr. Sarah Johnson', 
-      email: 'dr.johnson@hospital.com', 
-      role: 'GP', 
-      phone: '+1234567890', 
-      department: 'internal-medicine' 
+    {
+      id: '1',
+      name: 'Dr. Sarah Johnson',
+      email: 'dr.johnson@hospital.com',
+      role: 'GP',
+      phone: '+1234567890',
     },
-    { 
-      id: '2', 
-      name: 'Nurse Mary Wilson', 
-      email: 'nurse.wilson@hospital.com', 
-      role: 'RN', 
-      phone: '+1234567891' 
+    {
+      id: '2',
+      name: 'Nurse Mary Wilson',
+      email: 'nurse.wilson@hospital.com',
+      role: 'RN',
+      phone: '+1234567891'
     },
-    { 
-      id: '3', 
-      name: 'Dr. Michael Brown', 
-      email: 'dr.brown@hospital.com', 
-      role: 'C', 
-      phone: '+1234567892', 
-      department: 'surgery' 
+    {
+      id: '3',
+      name: 'Dr. Michael Brown',
+      email: 'dr.brown@hospital.com',
+      role: 'C',
+      phone: '+1234567892',
     },
-    { 
-      id: '4', 
-      name: 'Pharmacist John Davis', 
-      email: 'pharmacist.davis@hospital.com', 
-      role: 'P', 
-      phone: '+1234567893' 
+    {
+      id: '4',
+      name: 'Pharmacist John Davis',
+      email: 'pharmacist.davis@hospital.com',
+      role: 'P',
+      phone: '+1234567893'
     },
-    { 
-      id: '5', 
-      name: 'Lab Tech Lisa Garcia', 
-      email: 'lab.garcia@hospital.com', 
-      role: 'L', 
-      phone: '+1234567894' 
+    {
+      id: '5',
+      name: 'Lab Tech Lisa Garcia',
+      email: 'lab.garcia@hospital.com',
+      role: 'L',
+      phone: '+1234567894'
     },
-    { 
-      id: '6', 
-      name: 'Admin Robert Lee', 
-      email: 'admin@hospital.com', 
-      role: 'admin', 
-      phone: '+1234567895' 
+    {
+      id: '6',
+      name: 'Admin Robert Lee',
+      email: 'admin@hospital.com',
+      role: 'admin',
+      phone: '+1234567895'
     }
   ]);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+
+
+  const handleAddUser = () => {
+    setEditingUser(undefined);
+    setIsSheetOpen(true);
+    console.log(editingUser)
+  };
+  const handleSaveUser = (userData: any) => {
+    if (editingUser) {
+      // Update existing user
+      setUsers(prev => prev.map(user =>
+        user.id === editingUser.id
+          ? { ...user, ...userData }
+          : user
+      ));
+      toast.success('User updated successfully!');
+    } else {
+      // Add new user
+      setUsers(prev => [...prev, userData]);
+      toast.success('User created successfully!');
+    }
+  };
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setIsSheetOpen(true);
+  };
 
   const roleLabels = {
     'RN': 'Receptionist/Nurse',
@@ -112,46 +141,35 @@ const UserManagement: React.FC = () => {
     'admin': 'bg-red-100 text-red-800'
   };
 
-  const departmentLabels = {
-    'internal-medicine': 'Internal Medicine',
-    'surgery': 'Surgery',
-    'paediatrics': 'Paediatrics',
-    'obs-gyn': 'Obs & Gyn',
-    'geriatrics': 'Geriatrics'
-  };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = 
+    const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone.includes(searchTerm);
-    
+
     const matchesRole = filterRole === 'all' || user.role === filterRole;
-    
+
     return matchesSearch && matchesRole;
   });
 
   const handleRoleUpdate = (userId: string, newRole: User['role']) => {
-    setUsers(prev => prev.map(user => 
-      user.id === userId 
+    setUsers(prev => prev.map(user =>
+      user.id === userId
         ? { ...user, role: newRole }
         : user
     ));
-    
+
     // toast({
     //   title: "Role Updated",
     //   description: "User role has been successfully updated.",
     // });
+    toast.success("User role has been successfully updated.")
   };
 
   const handleDeleteUser = (userId: string) => {
     setUsers(prev => prev.filter(user => user.id !== userId));
-    
-    // toast({
-    //   title: "User Deleted",
-    //   description: "User has been successfully removed from the system.",
-    //   variant: "destructive"
-    // });
+    toast.error('User has been successfully removed from the system.')
   };
 
   const getInitials = (name: string) => {
@@ -163,13 +181,23 @@ const UserManagement: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
+          <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
           <p className="text-gray-600 mt-1">Manage system users, roles, and permissions</p>
         </div>
-        <Button className="flex items-center space-x-2">
-          <UserPlus className="h-4 w-4" />
-          <span>Add New User</span>
-        </Button>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
+            <Button onClick={handleAddUser} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
+              <UserPlus className="h-4 w-4" />
+              <span>Add New User</span>
+            </Button>
+          </SheetTrigger>
+          <UserForm
+            user={editingUser}
+            isOpen={isSheetOpen}
+            onClose={() => setIsSheetOpen(false)}
+            onSave={handleSaveUser}
+          />
+        </Sheet>
       </div>
 
       {/* Stats Cards */}
@@ -185,7 +213,7 @@ const UserManagement: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center">
@@ -280,7 +308,6 @@ const UserManagement: React.FC = () => {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead>Department</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -322,15 +349,6 @@ const UserManagement: React.FC = () => {
                     </Select>
                   </TableCell>
                   <TableCell>
-                    {user.department ? (
-                      <Badge variant="outline">
-                        {departmentLabels[user.department as keyof typeof departmentLabels]}
-                      </Badge>
-                    ) : (
-                      <span className="text-gray-400">N/A</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2 text-sm">
                         <Phone className="h-3 w-3 text-gray-400" />
@@ -343,8 +361,12 @@ const UserManagement: React.FC = () => {
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end space-x-2">
-                      <Button variant="ghost" size="sm">
+                    <div className="flex items-center justify-end space-x-2 ">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditUser(user)}
+                      >
                         <Edit3 className="h-4 w-4" />
                       </Button>
                       <AlertDialog>
@@ -362,7 +384,7 @@ const UserManagement: React.FC = () => {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction 
+                            <AlertDialogAction
                               onClick={() => handleDeleteUser(user.id)}
                               className="bg-red-600 hover:bg-red-700"
                             >

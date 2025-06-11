@@ -104,3 +104,13 @@ export interface InventoryItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  role: 'RN' | 'GP' | 'C' | 'P' | 'L' | 'admin';
+  department: string;
+  password: string;
+  confirmPassword: string;
+};
