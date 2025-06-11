@@ -5,8 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, User, Lock, Heart, Shield } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
@@ -20,9 +19,8 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      toast.success("Login Successful")
-    } catch (error) {
-      toast.error('Invalid credentials. Please try again.')
+    } catch (error: any) {
+      toast.error(error.message)
     }
   };
 
@@ -33,9 +31,7 @@ const LoginForm = () => {
         <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-6">
-
               <Image src="/logo.png" alt="HIMS Logo" width={200} height={32} />
-
             </div>
             <h1 className="text-4xl font-bold mb-4">
               Hospital Information

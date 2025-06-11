@@ -46,6 +46,8 @@ import {
 import { toast } from 'sonner';
 import { Sheet, SheetTrigger } from '@/components/ui/sheet';
 import UserForm from './UserForm';
+import api from '@/lib/axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,25 +99,25 @@ const UserManagement: React.FC = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
 
+  const queryClient = useQueryClient()
 
   const handleAddUser = () => {
     setEditingUser(undefined);
     setIsSheetOpen(true);
     console.log(editingUser)
   };
+
   const handleSaveUser = (userData: any) => {
     if (editingUser) {
       // Update existing user
-      setUsers(prev => prev.map(user =>
-        user.id === editingUser.id
-          ? { ...user, ...userData }
-          : user
-      ));
+      api.put(`/api/user/register${editingUser.id}`, userData)
       toast.success('User updated successfully!');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     } else {
       // Add new user
-      setUsers(prev => [...prev, userData]);
+      api.post('/api/user/register', userData)
       toast.success('User created successfully!');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   };
   const handleEditUser = (user: User) => {
