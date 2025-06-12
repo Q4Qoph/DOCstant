@@ -106,7 +106,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
     email: '',
     phone: '',
     role: '' as User['role'],
-    department: '',
     password: '',
     confirmPassword: ''
   });
@@ -120,7 +119,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: user.email,
         phone: user.phone,
         role: user.role,
-        department: user.department || '',
         password: '',
         confirmPassword: ''
       });
@@ -130,7 +128,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: '',
         phone: '',
         role: '' as User['role'],
-        department: '',
         password: '',
         confirmPassword: ''
       });
@@ -175,7 +172,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
       if (Object.keys(validationErrors).length === 0) {
         const userData = {
           ...formData,
-          id: user?.id || Date.now().toString(),
         };
         
         // Remove confirmPassword and empty password for editing

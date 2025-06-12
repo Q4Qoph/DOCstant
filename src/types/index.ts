@@ -4,7 +4,6 @@ export interface User {
   email: string;
   role: 'RN' | 'GP' | 'C' | 'P' | 'L' | 'admin';
   phone: string;
-  department?: string;
 }
 
 export interface Patient {

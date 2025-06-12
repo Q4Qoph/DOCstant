@@ -47,7 +47,7 @@ import { toast } from 'sonner';
 import { Sheet, SheetTrigger } from '@/components/ui/sheet';
 import UserForm from './UserForm';
 import api from '@/lib/axios';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -101,6 +101,14 @@ const UserManagement: React.FC = () => {
 
   const queryClient = useQueryClient()
 
+  // const { data: users, isLoading, isError } = useQuery({
+  //   queryKey: ["users"],
+  //   queryFn: async () => {
+  //     const response = await api.get("/api/user/users")
+  //     return response.data
+  //   }
+  // })
+
   const handleAddUser = () => {
     setEditingUser(undefined);
     setIsSheetOpen(true);
@@ -144,23 +152,10 @@ const UserManagement: React.FC = () => {
   };
 
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phone.includes(searchTerm);
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole;
-
-    return matchesSearch && matchesRole;
-  });
 
   const handleRoleUpdate = (userId: string, newRole: User['role']) => {
-    setUsers(prev => prev.map(user =>
-      user.id === userId
-        ? { ...user, role: newRole }
-        : user
-    ));
+
 
     // toast({
     //   title: "Role Updated",
@@ -170,7 +165,6 @@ const UserManagement: React.FC = () => {
   };
 
   const handleDeleteUser = (userId: string) => {
-    setUsers(prev => prev.filter(user => user.id !== userId));
     toast.error('User has been successfully removed from the system.')
   };
 
@@ -178,6 +172,19 @@ const UserManagement: React.FC = () => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
+  // if (isLoading) return <p>Loading..</p>
+  // if (isError) return <p>Loading..</p>
+
+  const filteredUsers = users.filter((user: User) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.phone.includes(searchTerm);
+
+    const matchesRole = filterRole === 'all' || user.role === filterRole;
+
+    return matchesSearch && matchesRole;
+  });
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -225,7 +232,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Doctors</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter(u => u.role === 'GP' || u.role === 'C').length}
+                  {users.filter((u: User) => u.role === 'GP' || u.role === 'C').length}
                 </p>
               </div>
             </div>
@@ -241,7 +248,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Nurses</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter(u => u.role === 'RN').length}
+                  {users.filter((u: User) => u.role === 'RN').length}
                 </p>
               </div>
             </div>
@@ -257,7 +264,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Support Staff</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter(u => u.role === 'P' || u.role === 'L').length}
+                  {users.filter((u: User) => u.role === 'P' || u.role === 'L').length}
                 </p>
               </div>
             </div>
@@ -315,7 +322,7 @@ const UserManagement: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
+              {filteredUsers.map((user: User) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center space-x-3">

@@ -4,8 +4,8 @@ import { User } from '@/types';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
+import api from '@/lib/axios';
 
 interface AuthContextType {
     user: User | null;
@@ -37,8 +37,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const login = async (email: string, password: string) => {
         setIsLoading(true);
         try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/login`,
+            const response = await api.post(
+                `/api/user/login`,
                 { email, password }
             );
 
