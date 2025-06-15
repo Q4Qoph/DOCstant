@@ -357,7 +357,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         disabled={isLoading}
                         className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                        {isLoading ? "Saving..." : initialData ? "Update Record" : "Add Record"}
+                        {isLoading ? "Saving..." : initialData ? "Update Record" : "Get Diagnosis"}
                     </Button>
                 </div>
             </form>
