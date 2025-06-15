@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus } from 'lucide-react';
+import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -21,6 +21,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
       { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
+      { id: 'records', label: 'Records', icon: List, href: '/dashboard/records' },
     ];
 
     switch (user?.role) {

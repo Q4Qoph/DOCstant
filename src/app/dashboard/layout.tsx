@@ -15,8 +15,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex h-screen bg-gray-50">
             <DashboardSidebar
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
                 collapsed={sidebarCollapsed}
             />
 
