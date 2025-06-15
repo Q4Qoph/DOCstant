@@ -54,7 +54,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 router.push("/dashboard");
             }
         } catch (error: any) {
-            console.error("Login failed", error);
+            toast.error(`Login failed: ${error.message}`);
+
         } finally {
             setIsLoading(false);
         }

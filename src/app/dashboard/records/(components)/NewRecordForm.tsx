@@ -1,0 +1,366 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, Trash2 } from "lucide-react";
+import { patientSchema, type Patient } from "@/lib/schemas";
+import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+
+export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
+    const [isLoading, setIsLoading] = useState(false)
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [formData, setFormData] = useState<Patient>(
+        initialData || {
+            name: "",
+            age: 0,
+            phoneNumber: "",
+            address: "",
+            idNumber: "",
+            medicalHistory: "",
+            allergies: "",
+            toxicHabits: "",
+            vaccinations: [{ vaccineName: "" }],
+            isPregnant: false,
+            examinations: [{ physicalExamination: "", technique: 0 }],
+            laboratoryResults: "",
+            imageResults: "",
+            aiResponse: "",
+        }
+    );
+    const isEditing = !!initialData;
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrors({});
+
+        try {
+            const validatedData = patientSchema.parse(formData);
+            // onSubmit(validatedData);
+        } catch (error: any) {
+            const fieldErrors: Record<string, string> = {};
+            error.errors?.forEach((err: any) => {
+                const path = err.path.join(".");
+                fieldErrors[path] = err.message;
+            });
+            setErrors(fieldErrors);
+        }
+    };
+
+    const addVaccination = () => {
+        setFormData(prev => ({
+            ...prev,
+            vaccinations: [...prev.vaccinations, { vaccineName: "" }]
+        }));
+    };
+
+    const removeVaccination = (index: number) => {
+        setFormData(prev => ({
+            ...prev,
+            vaccinations: prev.vaccinations.filter((_, i) => i !== index)
+        }));
+    };
+
+    const updateVaccination = (index: number, vaccineName: string) => {
+        setFormData(prev => ({
+            ...prev,
+            vaccinations: prev.vaccinations.map((vac, i) =>
+                i === index ? { vaccineName } : vac
+            )
+        }));
+    };
+
+    const addExamination = () => {
+        setFormData(prev => ({
+            ...prev,
+            examinations: [...prev.examinations, { physicalExamination: "", technique: 0 }]
+        }));
+    };
+
+    const removeExamination = (index: number) => {
+        setFormData(prev => ({
+            ...prev,
+            examinations: prev.examinations.filter((_, i) => i !== index)
+        }));
+    };
+
+    const updateExamination = (index: number, field: string, value: string | number) => {
+        setFormData(prev => ({
+            ...prev,
+            examinations: prev.examinations.map((exam, i) =>
+                i === index ? { ...exam, [field]: value } : exam
+            )
+        }));
+    };
+
+    return (
+        <SheetContent className="w-[500px] sm:w-[800px] overflow-y-auto px-8 py-4">
+            <SheetHeader className="p-0">
+                <SheetTitle>{isEditing ? 'Update diagnosis record' : 'Create new diagnosis record'}</SheetTitle>
+                <SheetDescription>
+                    {isEditing ? 'Update diagnosis information' : 'Create a new diagnosis record'}
+                </SheetDescription>
+            </SheetHeader>
+
+            <form onSubmit={handleSubmit} className="space-y-6 mt-6">
+                {/* Basic Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="name" className="">Name</Label>
+                        <Input
+                            id="name"
+                            value={formData.name}
+                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.name ? 'border-red-500' : ''}`}
+                        />
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="age" className="">Age</Label>
+                        <Input
+                            id="age"
+                            type="number"
+                            value={formData.age}
+                            onChange={(e) => setFormData(prev => ({ ...prev, age: parseInt(e.target.value) || 0 }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.age ? 'border-red-500' : ''}`}
+                        />
+                        {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="phoneNumber" className="">Phone Number</Label>
+                        <Input
+                            id="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.phoneNumber ? 'border-red-500' : ''}`}
+                        />
+                        {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="idNumber" className="">ID Number</Label>
+                        <Input
+                            id="idNumber"
+                            value={formData.idNumber}
+                            onChange={(e) => setFormData(prev => ({ ...prev, idNumber: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.idNumber ? 'border-red-500' : ''}`}
+                        />
+                        {errors.idNumber && <p className="text-red-500 text-sm mt-1">{errors.idNumber}</p>}
+                    </div>
+                </div>
+
+                <div>
+                    <Label htmlFor="address" className="">Address</Label>
+                    <Textarea
+                        id="address"
+                        value={formData.address}
+                        onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.address ? 'border-red-500' : ''}`}
+                    />
+                    {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                </div>
+
+                {/* Medical Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="medicalHistory" className="">Medical History</Label>
+                        <Textarea
+                            id="medicalHistory"
+                            value={formData.medicalHistory}
+                            onChange={(e) => setFormData(prev => ({ ...prev, medicalHistory: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.medicalHistory ? 'border-red-500' : ''}`}
+                        />
+                        {errors.medicalHistory && <p className="text-red-500 text-sm mt-1">{errors.medicalHistory}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="allergies" className="">Allergies</Label>
+                        <Textarea
+                            id="allergies"
+                            value={formData.allergies}
+                            onChange={(e) => setFormData(prev => ({ ...prev, allergies: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.allergies ? 'border-red-500' : ''}`}
+                        />
+                        {errors.allergies && <p className="text-red-500 text-sm mt-1">{errors.allergies}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="toxicHabits" className="">Toxic Habits</Label>
+                        <Textarea
+                            id="toxicHabits"
+                            value={formData.toxicHabits}
+                            onChange={(e) => setFormData(prev => ({ ...prev, toxicHabits: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.toxicHabits ? 'border-red-500' : ''}`}
+                        />
+                        {errors.toxicHabits && <p className="text-red-500 text-sm mt-1">{errors.toxicHabits}</p>}
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            id="isPregnant"
+                            checked={formData.isPregnant}
+                            onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isPregnant: !!checked }))}
+                            className="border-blue-300"
+                        />
+                        <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
+                    </div>
+                </div>
+
+                {/* Vaccinations */}
+                <div>
+                    <div className="flex justify-between items-center mb-3">
+                        <Label className=" text-lg font-semibold">Vaccinations</Label>
+                        <Button
+                            type="button"
+                            onClick={addVaccination}
+                            variant="outline"
+                            size="sm"
+                            className="border-blue-300  hover:bg-blue-50"
+                        >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add Vaccination
+                        </Button>
+                    </div>
+                    {formData.vaccinations.map((vaccination, index) => (
+                        <div key={index} className="flex gap-2 mb-2">
+                            <Input
+                                value={vaccination.vaccineName}
+                                onChange={(e) => updateVaccination(index, e.target.value)}
+                                placeholder="Vaccine name"
+                                className="border-blue-200 focus:border-blue-500"
+                            />
+                            {formData.vaccinations.length > 1 && (
+                                <Button
+                                    type="button"
+                                    onClick={() => removeVaccination(index)}
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-red-300 text-red-700 hover:bg-red-50"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            )}
+                        </div>
+                    ))}
+                    {errors.vaccinations && <p className="text-red-500 text-sm mt-1">{errors.vaccinations}</p>}
+                </div>
+
+                {/* Examinations */}
+                <div>
+                    <div className="flex justify-between items-center mb-3">
+                        <Label className=" text-lg font-semibold">Examinations</Label>
+                        <Button
+                            type="button"
+                            onClick={addExamination}
+                            variant="outline"
+                            size="sm"
+                            className="border-blue-300  hover:bg-blue-50"
+                        >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add Examination
+                        </Button>
+                    </div>
+                    {formData.examinations.map((examination, index) => (
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3 p-3 border border-blue-200 rounded">
+                            <div>
+                                <Label className=" text-sm">Physical Examination</Label>
+                                <Textarea
+                                    value={examination.physicalExamination}
+                                    onChange={(e) => updateExamination(index, 'physicalExamination', e.target.value)}
+                                    placeholder="Physical examination details"
+                                    className="border-blue-200 focus:border-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <Label className=" text-sm">Technique</Label>
+                                <Input
+                                    type="number"
+                                    value={examination.technique}
+                                    onChange={(e) => updateExamination(index, 'technique', parseInt(e.target.value) || 0)}
+                                    placeholder="Technique"
+                                    className="border-blue-200 focus:border-blue-500"
+                                />
+                            </div>
+                            {formData.examinations.length > 1 && (
+                                <div className="md:col-span-2">
+                                    <Button
+                                        type="button"
+                                        onClick={() => removeExamination(index)}
+                                        variant="outline"
+                                        size="sm"
+                                        className="border-red-300 text-red-700 hover:bg-red-50"
+                                    >
+                                        <Trash2 className="h-4 w-4 mr-1" />
+                                        Remove Examination
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                    {errors.examinations && <p className="text-red-500 text-sm mt-1">{errors.examinations}</p>}
+                </div>
+
+                {/* Results */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="laboratoryResults" className="">Laboratory Results</Label>
+                        <Textarea
+                            id="laboratoryResults"
+                            value={formData.laboratoryResults}
+                            onChange={(e) => setFormData(prev => ({ ...prev, laboratoryResults: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.laboratoryResults ? 'border-red-500' : ''}`}
+                        />
+                        {errors.laboratoryResults && <p className="text-red-500 text-sm mt-1">{errors.laboratoryResults}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="imageResults" className="">Image Results</Label>
+                        <Textarea
+                            id="imageResults"
+                            value={formData.imageResults}
+                            onChange={(e) => setFormData(prev => ({ ...prev, imageResults: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.imageResults ? 'border-red-500' : ''}`}
+                        />
+                        {errors.imageResults && <p className="text-red-500 text-sm mt-1">{errors.imageResults}</p>}
+                    </div>
+                </div>
+
+                <div>
+                    <Label htmlFor="aiResponse" className="">AI Response</Label>
+                    <Textarea
+                        id="aiResponse"
+                        value={formData.aiResponse}
+                        onChange={(e) => setFormData(prev => ({ ...prev, aiResponse: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.aiResponse ? 'border-red-500' : ''}`}
+                    />
+                    {errors.aiResponse && <p className="text-red-500 text-sm mt-1">{errors.aiResponse}</p>}
+                </div>
+
+                {/* Form Actions */}
+                <div className="flex justify-end gap-3 pt-4">
+                    <Button
+                        type="button"
+                        onClick={onCancel}
+                        variant="outline"
+                        className="border-blue-300  hover:bg-blue-50"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                        {isLoading ? "Saving..." : initialData ? "Update Record" : "Add Record"}
+                    </Button>
+                </div>
+            </form>
+        </SheetContent>
+    );
+}
