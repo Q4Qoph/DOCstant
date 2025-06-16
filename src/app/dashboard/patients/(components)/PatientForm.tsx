@@ -173,49 +173,47 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                 </div>
 
                 {/* Medical Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="medicalHistory" className="">Medical History</Label>
-                        <Textarea
-                            id="medicalHistory"
-                            value={formData.medicalHistory}
-                            onChange={(e) => setFormData(prev => ({ ...prev, medicalHistory: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.medicalHistory ? 'border-red-500' : ''}`}
-                        />
-                        {errors.medicalHistory && <p className="text-red-500 text-sm mt-1">{errors.medicalHistory}</p>}
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="medicalHistory" className="">Medical History</Label>
+                    <Textarea
+                        id="medicalHistory"
+                        value={formData.medicalHistory}
+                        onChange={(e) => setFormData(prev => ({ ...prev, medicalHistory: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.medicalHistory ? 'border-red-500' : ''}`}
+                    />
+                    {errors.medicalHistory && <p className="text-red-500 text-sm mt-1">{errors.medicalHistory}</p>}
+                </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="allergies" className="">Allergies</Label>
-                        <Textarea
-                            id="allergies"
-                            value={formData.allergies}
-                            onChange={(e) => setFormData(prev => ({ ...prev, allergies: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.allergies ? 'border-red-500' : ''}`}
-                        />
-                        {errors.allergies && <p className="text-red-500 text-sm mt-1">{errors.allergies}</p>}
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="allergies" className="">Allergies</Label>
+                    <Textarea
+                        id="allergies"
+                        value={formData.allergies}
+                        onChange={(e) => setFormData(prev => ({ ...prev, allergies: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.allergies ? 'border-red-500' : ''}`}
+                    />
+                    {errors.allergies && <p className="text-red-500 text-sm mt-1">{errors.allergies}</p>}
+                </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="toxicHabits" className="">Toxic Habits</Label>
-                        <Textarea
-                            id="toxicHabits"
-                            value={formData.toxicHabits}
-                            onChange={(e) => setFormData(prev => ({ ...prev, toxicHabits: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.toxicHabits ? 'border-red-500' : ''}`}
-                        />
-                        {errors.toxicHabits && <p className="text-red-500 text-sm mt-1">{errors.toxicHabits}</p>}
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="toxicHabits" className="">Toxic Habits</Label>
+                    <Textarea
+                        id="toxicHabits"
+                        value={formData.toxicHabits}
+                        onChange={(e) => setFormData(prev => ({ ...prev, toxicHabits: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.toxicHabits ? 'border-red-500' : ''}`}
+                    />
+                    {errors.toxicHabits && <p className="text-red-500 text-sm mt-1">{errors.toxicHabits}</p>}
+                </div>
 
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            id="isPregnant"
-                            checked={formData.isPregnant}
-                            onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isPregnant: !!checked }))}
-                            className="border-blue-300"
-                        />
-                        <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
-                    </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="isPregnant"
+                        checked={formData.isPregnant}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isPregnant: !!checked }))}
+                        className="border-blue-300"
+                    />
+                    <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
                 </div>
 
                 {/* Form Actions */}

@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import NewRecordForm from "./EditPatientForm";
 import PatientForm from "./PatientForm";
+import PatientsRecordSkeleton from "../loading";
 
 // const patients = [{
 //     id: "1",
@@ -46,8 +47,8 @@ export default function Records() {
         isError,
     } = useQuery({
         queryKey: ['records'],
-        queryFn: async() => {
-           const response = await api.get("/api/diagnosisrecord")
+        queryFn: async () => {
+            const response = await api.get("/api/diagnosisrecord")
             return response.data
         },
     });
@@ -81,14 +82,14 @@ export default function Records() {
                         </Button>
                     </SheetTrigger>
                     <PatientForm
-                    setIsSheetOpen={setIsSheetOpen}
+                        setIsSheetOpen={setIsSheetOpen}
                         onCancel={() => setIsSheetOpen(false)}
                     />
                 </Sheet>
             </div>
 
             {isLoading ? (
-                <div className="text-center py-8 600">Loading Records...</div>
+                <PatientsRecordSkeleton />
             ) : patients.length === 0 ? (
                 <Card>
                     <CardContent className="text-center py-8">
@@ -107,7 +108,7 @@ export default function Records() {
                                     <div>
                                         <CardTitle className="900">{patient.name}</CardTitle>
                                         <p className="700 text-sm">
-                                            Age: {patient.age} 
+                                            Age: {patient.age}
                                         </p>
                                     </div>
                                     <div className="flex gap-2">
