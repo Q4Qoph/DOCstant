@@ -21,7 +21,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
       { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
-      { id: 'records', label: 'Records', icon: List, href: '/dashboard/records' },
+      { id: 'patients', label: 'Patients', icon: List, href: '/dashboard/patients' },
     ];
 
     switch (user?.role) {

@@ -9,43 +9,47 @@ import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import NewRecordForm from "./NewRecordForm";
+import NewRecordForm from "./EditPatientForm";
+import PatientForm from "./PatientForm";
 
-const patients = [{
-    id: "1",
-    name: "Jane Doe",
-    age: 32,
-    idNumber: "12345678",
-    phoneNumber: "0712345678",
-    address: "123 Nairobi St",
-    isPregnant: true,
-    vaccinations: [1, 2],
-    examinations: [1],
-    medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
-},
-{
-    id: "2",
-    name: "Jane Doe",
-    age: 32,
-    idNumber: "12345678",
-    phoneNumber: "0712345678",
-    address: "123 Nairobi St",
-    isPregnant: true,
-    vaccinations: [1, 2],
-    examinations: [1],
-    medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
-}]
+// const patients = [{
+//     id: "1",
+//     name: "Jane Doe",
+//     age: 32,
+//     idNumber: "12345678",
+//     phoneNumber: "0712345678",
+//     address: "123 Nairobi St",
+//     isPregnant: true,
+//     vaccinations: [1, 2],
+//     examinations: [1],
+//     medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
+// },
+// {
+//     id: "2",
+//     name: "Jane Doe",
+//     age: 32,
+//     idNumber: "12345678",
+//     phoneNumber: "0712345678",
+//     address: "123 Nairobi St",
+//     isPregnant: true,
+//     vaccinations: [1, 2],
+//     examinations: [1],
+//     medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
+// }]
 
 export default function Records() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const {
-        data,
+        data: patients,
         isLoading,
         isError,
     } = useQuery({
         queryKey: ['records'],
-        queryFn: () => api.get("/api/diagnosisrecord"),
+        queryFn: async() => {
+           const response = await api.get("/api/diagnosisrecord")
+            return response.data
+        },
     });
 
     const router = useRouter()
@@ -55,13 +59,13 @@ export default function Records() {
     };
 
     const onView = (id: string) => {
-        router.push(`/dashboard/records/${id}`)
+        router.push(`/dashboard/patients/${id}`)
     };
 
     return (
         <div className="p-8">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold t">Diagnosis Records</h1>
+                <h1 className="text-2xl font-bold t">Patients Records</h1>
                 {/* <Button
                     onClick={onAdd}
                     className="bg-blue-600 hover:bg-blue-700 text-white"
@@ -73,37 +77,37 @@ export default function Records() {
                     <SheetTrigger asChild>
                         <Button onClick={onAdd} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
                             <Plus className="h-4 w-4 mr-2" />
-                            <span>Add New Patient</span>
+                            <span> Add New Patient</span>
                         </Button>
                     </SheetTrigger>
-                    <NewRecordForm
-                        isOpen={isSheetOpen}
-                        onClose={() => setIsSheetOpen(false)}
+                    <PatientForm
+                    setIsSheetOpen={setIsSheetOpen}
+                        onCancel={() => setIsSheetOpen(false)}
                     />
                 </Sheet>
             </div>
 
             {isLoading ? (
-                <div className="text-center py-8 600">Loading patients...</div>
+                <div className="text-center py-8 600">Loading Records...</div>
             ) : patients.length === 0 ? (
                 <Card>
                     <CardContent className="text-center py-8">
-                        <p className="600 text-lg">No patients found.</p>
+                        <p className="600 text-lg">No records found.</p>
                         <Button onClick={onAdd} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                            Add First Patient
+                            Get Diagnosis
                         </Button>
                     </CardContent>
                 </Card>
             ) : (
                 <div className="grid gap-4">
-                    {patients.map((patient, index) => (
-                        <Card key={index} className="border-blue-200">
+                    {patients.map((patient: any) => (
+                        <Card key={patient.id} className="border-blue-200">
                             <CardHeader className="border-b border-blue-200">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <CardTitle className="900">{patient.name}</CardTitle>
                                         <p className="700 text-sm">
-                                            Age: {patient.age} • ID: {patient.idNumber}
+                                            Age: {patient.age} 
                                         </p>
                                     </div>
                                     <div className="flex gap-2">

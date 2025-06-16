@@ -6,19 +6,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
-import { patientSchema, type Patient } from "@/lib/schemas";
+import { diagnosisSchema, type Patient } from "@/lib/schemas";
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import api from "@/lib/axios";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
+export default function EditPatientForm({ initialData, onCancel }: any) {
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState<Patient>(
         initialData || {
             name: "",
             age: 0,
+            sex: "",
             phoneNumber: "",
+            chiefComplaint: "",
+            weight: "",
+            height: "",
+            temperature: "",
+            bloodPresure: "",
+            respiratoryRate: "",
+            heartRate: "",
+            symptoms: "",
             address: "",
             idNumber: "",
             medicalHistory: "",
@@ -29,18 +40,24 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
             examinations: [{ physicalExamination: "", technique: 0 }],
             laboratoryResults: "",
             imageResults: "",
-            aiResponse: "",
         }
     );
     const isEditing = !!initialData;
+const queryClient = useQueryClient()
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
 
         try {
-            const validatedData = patientSchema.parse(formData);
-            // onSubmit(validatedData);
+            const validatedData = diagnosisSchema.parse(formData);
+            const response = await api.put(`/api/DiagnosisRecord/${initialData.id}`, validatedData)
+            if(response.status == 200){
+                toast.success("Patient diagnosis record updated successfully!")
+                queryClient.invalidateQueries({queryKey: ["patient",  initialData.id]})
+                onCancel()
+            }
+
         } catch (error: any) {
             const fieldErrors: Record<string, string> = {};
             error.errors?.forEach((err: any) => {
@@ -120,7 +137,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="age" className="">Age</Label>
                         <Input
                             id="age"
@@ -131,8 +148,18 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         />
                         {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
                     </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="sex">Sex</Label>
+                        <Input
+                            id="sex"
+                            value={formData.sex}
+                            onChange={(e) => setFormData(prev => ({ ...prev, sex: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.sex ? 'border-red-500' : ''}`}
+                        />
+                        {errors.sex && <p className="text-red-500 text-sm mt-1">{errors.sex}</p>}
+                    </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="phoneNumber" className="">Phone Number</Label>
                         <Input
                             id="phoneNumber"
@@ -143,7 +170,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="idNumber" className="">ID Number</Label>
                         <Input
                             id="idNumber"
@@ -155,7 +182,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                     </div>
                 </div>
 
-                <div>
+                <div className="space-y-2">
                     <Label htmlFor="address" className="">Address</Label>
                     <Textarea
                         id="address"
@@ -165,10 +192,96 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                     />
                     {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                 </div>
+                <div className="space-y-2">
+                    <Label htmlFor="chiefComplaint">Chief Complaint</Label>
+                    <Textarea
+                        id="chiefComplaint"
+                        value={formData.chiefComplaint}
+                        onChange={(e) => setFormData(prev => ({ ...prev, chiefComplaint: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.chiefComplaint ? 'border-red-500' : ''}`}
+                    />
+                    {errors.chiefComplaint && <p className="text-red-500 text-sm mt-1">{errors.chiefComplaint}</p>}
+                </div>
 
+                <div className="space-y-2">
+                    <Label htmlFor="symptoms">Symptoms</Label>
+                    <Textarea
+                        id="symptoms"
+                        value={formData.symptoms}
+                        onChange={(e) => setFormData(prev => ({ ...prev, symptoms: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.symptoms ? 'border-red-500' : ''}`}
+                    />
+                    {errors.symptoms && <p className="text-red-500 text-sm mt-1">{errors.symptoms}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="weight">Weight (kg)</Label>
+                    <Input
+                        id="weight"
+                        value={formData.weight}
+                        onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.weight ? 'border-red-500' : ''}`}
+                    />
+                    {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="height">Height (cm)</Label>
+                    <Input
+                        id="height"
+                        value={formData.height}
+                        onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.height ? 'border-red-500' : ''}`}
+                    />
+                    {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="temperature">Temperature (°C)</Label>
+                    <Input
+                        id="temperature"
+                        value={formData.temperature}
+                        onChange={(e) => setFormData(prev => ({ ...prev, temperature: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.temperature ? 'border-red-500' : ''}`}
+                    />
+                    {errors.temperature && <p className="text-red-500 text-sm mt-1">{errors.temperature}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="bloodPresure">Blood Pressure</Label>
+                    <Input
+                        id="bloodPresure"
+                        value={formData.bloodPresure}
+                        onChange={(e) => setFormData(prev => ({ ...prev, bloodPresure: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.bloodPresure ? 'border-red-500' : ''}`}
+                    />
+                    {errors.bloodPresure && <p className="text-red-500 text-sm mt-1">{errors.bloodPresure}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="respiratoryRate">Respiratory Rate</Label>
+                    <Input
+                        id="respiratoryRate"
+                        value={formData.respiratoryRate}
+                        onChange={(e) => setFormData(prev => ({ ...prev, respiratoryRate: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.respiratoryRate ? 'border-red-500' : ''}`}
+                    />
+                    {errors.respiratoryRate && <p className="text-red-500 text-sm mt-1">{errors.respiratoryRate}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="heartRate">Heart Rate</Label>
+                    <Input
+                        id="heartRate"
+                        value={formData.heartRate}
+                        onChange={(e) => setFormData(prev => ({ ...prev, heartRate: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.heartRate ? 'border-red-500' : ''}`}
+                    />
+                    {errors.heartRate && <p className="text-red-500 text-sm mt-1">{errors.heartRate}</p>}
+                </div>
                 {/* Medical Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="medicalHistory" className="">Medical History</Label>
                         <Textarea
                             id="medicalHistory"
@@ -179,7 +292,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         {errors.medicalHistory && <p className="text-red-500 text-sm mt-1">{errors.medicalHistory}</p>}
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="allergies" className="">Allergies</Label>
                         <Textarea
                             id="allergies"
@@ -190,7 +303,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         {errors.allergies && <p className="text-red-500 text-sm mt-1">{errors.allergies}</p>}
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="toxicHabits" className="">Toxic Habits</Label>
                         <Textarea
                             id="toxicHabits"
@@ -253,7 +366,7 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
 
                 {/* Examinations */}
                 <div>
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex justify-between items-center mb-3 space-y-2">
                         <Label className=" text-lg font-semibold">Examinations</Label>
                         <Button
                             type="button"
@@ -268,8 +381,8 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                     </div>
                     {formData.examinations.map((examination, index) => (
                         <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3 p-3 border border-blue-200 rounded">
-                            <div>
-                                <Label className=" text-sm">Physical Examination</Label>
+                            <div >
+                                <Label className=" text-sm ">Physical Examination</Label>
                                 <Textarea
                                     value={examination.physicalExamination}
                                     onChange={(e) => updateExamination(index, 'physicalExamination', e.target.value)}
@@ -329,17 +442,6 @@ export default function NewRecordForm({ initialData, isOpen, onCancel }: any) {
                         />
                         {errors.imageResults && <p className="text-red-500 text-sm mt-1">{errors.imageResults}</p>}
                     </div>
-                </div>
-
-                <div>
-                    <Label htmlFor="aiResponse" className="">AI Response</Label>
-                    <Textarea
-                        id="aiResponse"
-                        value={formData.aiResponse}
-                        onChange={(e) => setFormData(prev => ({ ...prev, aiResponse: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.aiResponse ? 'border-red-500' : ''}`}
-                    />
-                    {errors.aiResponse && <p className="text-red-500 text-sm mt-1">{errors.aiResponse}</p>}
                 </div>
 
                 {/* Form Actions */}
