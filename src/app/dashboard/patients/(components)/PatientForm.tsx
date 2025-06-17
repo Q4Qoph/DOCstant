@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Trash2 } from "lucide-react";
 import { patientSchema } from "@/lib/schemas";
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import api from "@/lib/axios";
@@ -21,6 +20,12 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             age: 0,
             sex: "",
             phoneNumber: "",
+            weight: "",
+            height: "",
+            temperature: "",
+            bloodPresure: "",
+            respiratoryRate: "",
+            heartRate: "",
             chiefComplaint: "",
             symptoms: "",
             address: "",
@@ -49,6 +54,12 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     age: 0,
                     sex: "",
                     phoneNumber: "",
+                    weight: "",
+                    height: "",
+                    temperature: "",
+                    bloodPresure: "",
+                    respiratoryRate: "",
+                    heartRate: "",
                     chiefComplaint: "",
                     symptoms: "",
                     address: "",
@@ -63,6 +74,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
 
 
         } catch (error: any) {
+            toast.error(error.message)
             const fieldErrors: Record<string, string> = {};
             error.errors?.forEach((err: any) => {
                 const path = err.path.join(".");
@@ -215,7 +227,71 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     />
                     <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
                 </div>
+<div className="space-y-2">
+                    <Label htmlFor="weight">Weight (kg)</Label>
+                    <Input
+                        id="weight"
+                        value={formData.weight}
+                        onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.weight ? 'border-red-500' : ''}`}
+                    />
+                    {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+                </div>
 
+                <div className="space-y-2">
+                    <Label htmlFor="height">Height (cm)</Label>
+                    <Input
+                        id="height"
+                        value={formData.height}
+                        onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.height ? 'border-red-500' : ''}`}
+                    />
+                    {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="temperature">Temperature (°C)</Label>
+                    <Input
+                        id="temperature"
+                        value={formData.temperature}
+                        onChange={(e) => setFormData(prev => ({ ...prev, temperature: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.temperature ? 'border-red-500' : ''}`}
+                    />
+                    {errors.temperature && <p className="text-red-500 text-sm mt-1">{errors.temperature}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="bloodPresure">Blood Pressure</Label>
+                    <Input
+                        id="bloodPresure"
+                        value={formData.bloodPresure}
+                        onChange={(e) => setFormData(prev => ({ ...prev, bloodPresure: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.bloodPresure ? 'border-red-500' : ''}`}
+                    />
+                    {errors.bloodPresure && <p className="text-red-500 text-sm mt-1">{errors.bloodPresure}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="respiratoryRate">Respiratory Rate</Label>
+                    <Input
+                        id="respiratoryRate"
+                        value={formData.respiratoryRate}
+                        onChange={(e) => setFormData(prev => ({ ...prev, respiratoryRate: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.respiratoryRate ? 'border-red-500' : ''}`}
+                    />
+                    {errors.respiratoryRate && <p className="text-red-500 text-sm mt-1">{errors.respiratoryRate}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="heartRate">Heart Rate</Label>
+                    <Input
+                        id="heartRate"
+                        value={formData.heartRate}
+                        onChange={(e) => setFormData(prev => ({ ...prev, heartRate: e.target.value }))}
+                        className={`border-blue-200 focus:border-blue-500 ${errors.heartRate ? 'border-red-500' : ''}`}
+                    />
+                    {errors.heartRate && <p className="text-red-500 text-sm mt-1">{errors.heartRate}</p>}
+                </div>
                 {/* Form Actions */}
                 <div className="flex justify-end gap-3 pt-4">
                     <Button

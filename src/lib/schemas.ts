@@ -46,6 +46,12 @@ export const patientSchema = z.object({
   medicalHistory: z.string().min(1, "Medical history is required"),
   allergies: z.string().min(1, "Allergies information is required"),
   toxicHabits: z.string().min(1, "Toxic habits information is required"),
+  weight: z.string().min(1, "Weight is required"),
+  height: z.string().min(1, "Height is required"),
+  temperature: z.string().min(1, "Temperature is required"),
+  bloodPresure: z.string().min(1, "Blood pressure is required"),
+  respiratoryRate: z.string().min(1, "Respiratory rate is required"),
+  heartRate: z.string().min(1, "Heart rate is required"),
   isPregnant: z.boolean(),
 });
 
