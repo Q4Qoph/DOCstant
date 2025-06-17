@@ -12,41 +12,20 @@ import { useQuery } from "@tanstack/react-query";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key, useState } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import NewRecordForm from "../(components)/NewRecordForm";
+import EditPatientForm from "../(components)/EditPatientForm";
+import PatientDetailsSkeleton from "./loading";
 
 export const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 
-const patient = {
-    id: "2",
-    name: "Jane Doe",
-    age: 32,
-    idNumber: "12345678",
-    phoneNumber: "0712345678",
-    address: "123 Nairobi St",
-    isPregnant: true,
-    vaccinations: [{
-        vaccineName: "string"
-    }],
-    allergies: "string",
-    toxicHabits: "string",
-    examinations: [{
-        physicalExamination: "string",
-        technique: 0
-    }],
-    medicalHistory: "Previous medical history includes routine checkups and one hospitalization.",
-    laboratoryResults: "string",
-    imageResults: "string",
-    aiResponse: "string"
-}
 
 const RecordDetails = () => {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    
+
     const { id } = useParams()
     const router = useRouter()
 
     const {
-        data,
+        data: patient,
         isLoading,
         isError,
     } = useQuery({
@@ -57,7 +36,6 @@ const RecordDetails = () => {
 
     const onBack = () => {
         router.back()
-        // implement your navigation logic
     };
 
     const onEdit = () => {
@@ -65,14 +43,11 @@ const RecordDetails = () => {
     };
 
     const onDelete = () => {
-        // implement your delete logic
     };
 
     if (isLoading) {
         return (
-            <div className="max-w-4xl mx-auto">
-                <div className="text-center py-8 ">Loading patient details...</div>
-            </div>
+           <PatientDetailsSkeleton/>
         );
     }
 
@@ -97,13 +72,12 @@ const RecordDetails = () => {
                         <SheetTrigger asChild>
                             <Button onClick={onEdit} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
                                 <Edit className="h-4 w-4 mr-2" />
-                                <span>Edit</span>
+                                <span>Update</span>
                             </Button>
                         </SheetTrigger>
-                        <NewRecordForm
+                        <EditPatientForm
                             initialData={patient}
-                            isOpen={isSheetOpen}
-                            onClose={() => setIsSheetOpen(false)}
+                            onCancel={() => setIsSheetOpen(false)}
                         />
                     </Sheet>
                     <AlertDialog>
@@ -223,93 +197,114 @@ const RecordDetails = () => {
             </Card>
 
             {/* Vaccinations */}
-            <Card className="mb-6 border-blue-200">
-                <CardHeader className=" border-b border-blue-200">
-                    <CardTitle className=" flex items-center gap-2">
-                        <Activity className="h-5 w-5" />
-                        Vaccinations ({patient.vaccinations.length})
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {patient.vaccinations.map((vaccination: { vaccineName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; }, index: Key | null | undefined) => (
-                            <div key={index} className="bg-green-50 p-3 rounded-lg border border-green-200">
-                                <Badge className="bg-green-100 text-green-800 border-green-300">
-                                    {vaccination.vaccineName}
-                                </Badge>
-                            </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
+            {
+                patient.vaccinations.length > 0 &&
+                <Card className="mb-6 border-blue-200">
+                    <CardHeader className=" border-b border-blue-200">
+                        <CardTitle className=" flex items-center gap-2">
+                            <Activity className="h-5 w-5" />
+                            Vaccinations ({patient.vaccinations.length})
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {patient.vaccinations.map((vaccination: { vaccineName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; }, index: Key | null | undefined) => (
+                                <div key={index} className="bg-green-50 p-3 rounded-lg border border-green-200">
+                                    <Badge className="bg-green-100 text-green-800 border-green-300">
+                                        {vaccination.vaccineName}
+                                    </Badge>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            }
 
             {/* Examinations */}
-            <Card className="mb-6 border-blue-200">
-                <CardHeader className="border-b border-blue-200">
-                    <CardTitle className=" flex items-center gap-2">
-                        <Activity className="h-5 w-5" />
-                        Physical Examinations ({patient.examinations.length})
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                    {patient.examinations.map((examination: any, index: any) => (
-                        <div key={index} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                            <div className="flex justify-between items-start mb-3">
-                                <h4 className=" font-semibold">Examination #{index + 1}</h4>
-                                <Badge className="bg-blue-100  border-blue-300">
-                                    Technique: {examination.technique}
-                                </Badge>
+            {
+                patient.examinations.length > 0 &&
+                <Card className="mb-6 border-blue-200">
+                    <CardHeader className="border-b border-blue-200">
+                        <CardTitle className=" flex items-center gap-2">
+                            <Activity className="h-5 w-5" />
+                            Physical Examinations ({patient.examinations.length})
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 space-y-4">
+                        {patient.examinations.map((examination: any, index: any) => (
+                            <div key={index} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                <div className="flex justify-between items-start mb-3">
+                                    <h4 className=" font-semibold">Examination #{index + 1}</h4>
+                                    <Badge className="bg-blue-100  border-blue-300">
+                                        Technique: {examination.technique}
+                                    </Badge>
+                                </div>
+                                <p className="text-gray-700 whitespace-pre-wrap">{examination.physicalExamination}</p>
                             </div>
-                            <p className="text-gray-700 whitespace-pre-wrap">{examination.physicalExamination}</p>
-                        </div>
-                    ))}
-                </CardContent>
-            </Card>
+                        ))}
+                    </CardContent>
+                </Card>
+            }
 
             {/* Laboratory Results */}
-            <Card className="mb-6 border-blue-200">
-                <CardHeader className=" border-b border-blue-200">
-                    <CardTitle className=" flex items-center gap-2">
-                        <TestTube className="h-5 w-5" />
-                        Laboratory Results
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <p className="text-gray-700 whitespace-pre-wrap">{patient.laboratoryResults}</p>
-                    </div>
-                </CardContent>
-            </Card>
+            {
+                patient.laboratoryResults &&
+                <Card className="mb-6 border-blue-200">
+                    <CardHeader className=" border-b border-blue-200">
+                        <CardTitle className=" flex items-center gap-2">
+                            <TestTube className="h-5 w-5" />
+                            Laboratory Results
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            <p className="text-gray-700 whitespace-pre-wrap">{patient.laboratoryResults}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            }
 
             {/* Image Results */}
-            <Card className="mb-6 border-blue-200">
-                <CardHeader className=" border-b border-blue-200">
-                    <CardTitle className=" flex items-center gap-2">
-                        <Camera className="h-5 w-5" />
-                        Image Results
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-                        <p className="text-gray-700 whitespace-pre-wrap">{patient.imageResults}</p>
-                    </div>
-                </CardContent>
-            </Card>
+            {
+                patient.imageResults &&
+                <Card className="mb-6 border-blue-200">
+                    <CardHeader className=" border-b border-blue-200">
+                        <CardTitle className=" flex items-center gap-2">
+                            <Camera className="h-5 w-5" />
+                            Image Results
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            <p className="text-gray-700 whitespace-pre-wrap">{patient.imageResults}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            }
 
             {/* AI Response */}
-            <Card className="mb-6 border-blue-200">
-                <CardHeader className="border-b border-blue-200">
-                    <CardTitle className=" flex items-center gap-2">
-                        <Bot className="h-5 w-5" />
-                        AI Analysis & Response
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <p className="text-gray-700 whitespace-pre-wrap">{patient.aiResponse}</p>
-                    </div>
-                </CardContent>
-            </Card>
+            {
+                patient.aiResponse &&
+                <Card className="mb-6 border-blue-200">
+                    <CardHeader className="border-b border-blue-200">
+                        <CardTitle className=" flex items-center gap-2">
+                            <Bot className="h-5 w-5" />
+                            AI Analysis & Response
+                        </CardTitle>
+
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p className="text-gray-700 whitespace-pre-wrap">{patient.aiResponse}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            }
+
+            <div className="space-x-2">
+                <Button className="bg-blue-500 hover:bg-blue-600">Get Diagnosits</Button>
+                <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600">Save Diagnosis</Button>
+            </div>
         </div>
     );
 }

@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List } from 'lucide-react';
+import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -21,7 +21,8 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
       { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
-      { id: 'records', label: 'Records', icon: List, href: '/dashboard/records' },
+      { id: 'patients', label: 'Patients', icon: List, href: '/dashboard/patients' },
+      { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
     ];
 
     switch (user?.role) {
@@ -95,27 +96,27 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
-            
+
             return (
-              <Link key={item.id} href={item.href}  className={cn(
+              <Link key={item.id} href={item.href} className={cn(
                 "flex items-center p-2 w-full justify-start transition-colors",
                 collapsed ? "px-2" : "px-3",
-                isActive 
-                  ? "bg-blue-50 text-blue-500 hover:bg-blue-100 border-l-3 border-blue-500" 
+                isActive
+                  ? "bg-blue-50 text-blue-500 hover:bg-blue-100 border-l-3 border-blue-500"
                   : "hover:bg-gray-100"
               )}>
-                              <Icon className={cn(
-                    "h-4 w-4",
-                    isActive ? "text-blue-500" : "text-gray-600"
-                  )} />
-                  {!collapsed && (
-                    <span className={cn(
-                      "ml-2",
-                      isActive ? "text-blue-500 font-medium" : "text-gray-700"
-                    )}>
-                      {item.label}
-                    </span>
-                  )}
+                <Icon className={cn(
+                  "h-4 w-4",
+                  isActive ? "text-blue-500" : "text-gray-600"
+                )} />
+                {!collapsed && (
+                  <span className={cn(
+                    "ml-2",
+                    isActive ? "text-blue-500 font-medium" : "text-gray-700"
+                  )}>
+                    {item.label}
+                  </span>
+                )}
               </Link>
             );
           })}

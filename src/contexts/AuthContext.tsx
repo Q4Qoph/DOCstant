@@ -38,7 +38,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsLoading(true);
         try {
             const response = await api.post(
-                `/api/user/login`,
+                `/api/User/Login`,
                 { email, password }
             );
 
