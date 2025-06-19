@@ -107,7 +107,7 @@ const Dashboard = () => {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
@@ -191,7 +191,7 @@ const Dashboard = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 };

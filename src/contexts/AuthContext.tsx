@@ -43,17 +43,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 { email, password }
             );
 
-            const user = response.data.user;
+            // const user = response.data.user;
             const token = response.data.token;
 
             localStorage.setItem("token", token);
 
-            if (user.firstTimeLogin) {
-                router.push(`/auth/reset-password`);
-            } else {
-                toast.success("Login Successful")
-                router.push("/dashboard");
-            }
+            toast.success("Login Successful")
+            router.push("/dashboard");
+            // if (user.firstTimeLogin) {
+            //     router.push(`/auth/reset-password`);
+            // } else {
+            //     toast.success("Login Successful")
+            //     router.push("/dashboard");
+            // }
         } catch (error: any) {
             toast.error(`Login failed: ${error.message}`);
 
@@ -73,7 +75,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthContext.Provider value={{ user, login, logout, isLoading , resetPassword}}>
+            <AuthContext.Provider value={{ user, login, logout, isLoading, resetPassword }}>
                 {children}
             </AuthContext.Provider>
         </QueryClientProvider>
