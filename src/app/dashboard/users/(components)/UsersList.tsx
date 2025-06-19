@@ -52,62 +52,62 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: '1',
-      name: 'Dr. Sarah Johnson',
-      email: 'dr.johnson@hospital.com',
-      role: 'GP',
-      phone: '+1234567890',
-    },
-    {
-      id: '2',
-      name: 'Nurse Mary Wilson',
-      email: 'nurse.wilson@hospital.com',
-      role: 'RN',
-      phone: '+1234567891'
-    },
-    {
-      id: '3',
-      name: 'Dr. Michael Brown',
-      email: 'dr.brown@hospital.com',
-      role: 'C',
-      phone: '+1234567892',
-    },
-    {
-      id: '4',
-      name: 'Pharmacist John Davis',
-      email: 'pharmacist.davis@hospital.com',
-      role: 'P',
-      phone: '+1234567893'
-    },
-    {
-      id: '5',
-      name: 'Lab Tech Lisa Garcia',
-      email: 'lab.garcia@hospital.com',
-      role: 'L',
-      phone: '+1234567894'
-    },
-    {
-      id: '6',
-      name: 'Admin Robert Lee',
-      email: 'admin@hospital.com',
-      role: 'admin',
-      phone: '+1234567895'
-    }
-  ]);
+  // const [users, setUsers] = useState<User[]>([
+  //   {
+  //     id: '1',
+  //     name: 'Dr. Sarah Johnson',
+  //     email: 'dr.johnson@hospital.com',
+  //     role: 'GP',
+  //     phone: '+1234567890',
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Nurse Mary Wilson',
+  //     email: 'nurse.wilson@hospital.com',
+  //     role: 'RN',
+  //     phone: '+1234567891'
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Dr. Michael Brown',
+  //     email: 'dr.brown@hospital.com',
+  //     role: 'C',
+  //     phone: '+1234567892',
+  //   },
+  //   {
+  //     id: '4',
+  //     name: 'Pharmacist John Davis',
+  //     email: 'pharmacist.davis@hospital.com',
+  //     role: 'P',
+  //     phone: '+1234567893'
+  //   },
+  //   {
+  //     id: '5',
+  //     name: 'Lab Tech Lisa Garcia',
+  //     email: 'lab.garcia@hospital.com',
+  //     role: 'L',
+  //     phone: '+1234567894'
+  //   },
+  //   {
+  //     id: '6',
+  //     name: 'Admin Robert Lee',
+  //     email: 'admin@hospital.com',
+  //     role: 'admin',
+  //     phone: '+1234567895'
+  //   }
+  // ]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
 
   const queryClient = useQueryClient()
 
-  // const { data: users, isLoading, isError } = useQuery({
-  //   queryKey: ["users"],
-  //   queryFn: async () => {
-  //     const response = await api.get("/api/user/users")
-  //     return response.data
-  //   }
-  // })
+  const { data: users, isLoading, isError } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await api.get("/api/user/users")
+      return response.data
+    }
+  })
 
   const handleAddUser = () => {
     setEditingUser(undefined);
@@ -172,8 +172,8 @@ const UserManagement: React.FC = () => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
-  // if (isLoading) return <p>Loading..</p>
-  // if (isError) return <p>Loading..</p>
+  if (isLoading) return <p>Loading..</p>
+  if (isError) return <p>Loading..</p>
 
   const filteredUsers = users.filter((user: User) => {
     const matchesSearch =

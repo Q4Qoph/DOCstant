@@ -12,6 +12,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     isLoading: boolean;
+    resetPassword: (password: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,6 +62,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
     };
 
+    const resetPassword = async (newPassword: string) => {
+
+    }
     const logout = () => {
         setUser(null);
         localStorage.clear();
@@ -69,7 +73,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+            <AuthContext.Provider value={{ user, login, logout, isLoading , resetPassword}}>
                 {children}
             </AuthContext.Provider>
         </QueryClientProvider>
