@@ -15,7 +15,7 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
 
-export const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
+const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 
 
 const RecordDetails = () => {
