@@ -68,10 +68,13 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const menuItems = getMenuItems();
 
   return (
-    <div className={cn(
-      "bg-white border-r border-gray-200 transition-all duration-300 h-full flex flex-col",
-      collapsed ? "w-16" : "w-64"
-    )}>
+    <div
+      className={cn(
+        "bg-white border-r border-gray-200 transition-all duration-300 h-full flex flex-col fixed z-50 top-0 left-0",
+        collapsed ? "w-16" : "w-64",
+        "md:relative md:z-auto" // On desktop, default positioning
+      )}
+    >
       {/* Logo Section */}
       <div className="p-4">
         <div className="">
