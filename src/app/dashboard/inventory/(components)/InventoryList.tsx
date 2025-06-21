@@ -16,7 +16,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Search } from "lucide-react"
 import { toast } from "sonner"
 import api from "@/lib/axios"
@@ -41,6 +40,7 @@ const InventoryList = ({ items, loading, onEdit }: any) => {
             toast.error(error.message)
         },
     })
+
     const filteredItems = items.filter(
         (item: any) =>
             item.genericName.toLowerCase().includes(searchTerm.toLowerCase()) ||
