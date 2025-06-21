@@ -20,6 +20,8 @@ import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Search } from "lucide-react"
 import { toast } from "sonner"
 import api from "@/lib/axios"
+import { formatDate } from "@/lib/utils"
+import InventoryTableSkeleton from "./InventoryTableSkeleton"
 
 const deleteItem = async (id: number): Promise<void> => {
     const response = await api.delete(`/api/inventory/${id}`)
@@ -41,9 +43,11 @@ const InventoryList = ({ items, loading, onEdit }: any) => {
     })
     const filteredItems = items.filter(
         (item: any) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.genericName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             item.itemCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.supplier.toLowerCase().includes(searchTerm.toLowerCase()),
+            item.supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.presentation.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     const handleDelete = (id: number) => {
@@ -59,9 +63,8 @@ const InventoryList = ({ items, loading, onEdit }: any) => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-8">
-                <div className="text-muted-foreground">Loading items...</div>
-            </div>
+            <InventoryTableSkeleton />
+
         )
     }
 
@@ -87,11 +90,13 @@ const InventoryList = ({ items, loading, onEdit }: any) => {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Item Code</TableHead>
+                                <TableHead>Exp Date</TableHead>
                                 <TableHead>Name</TableHead>
+                                <TableHead>Brand</TableHead>
+                                <TableHead>Presentation</TableHead>
                                 <TableHead>Quantity</TableHead>
                                 <TableHead>Price</TableHead>
                                 <TableHead>Supplier</TableHead>
-                                <TableHead>Status</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -99,15 +104,13 @@ const InventoryList = ({ items, loading, onEdit }: any) => {
                             {filteredItems.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell className="font-medium">{item.itemCode}</TableCell>
-                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{formatDate(item.expiryDate)}</TableCell>
+                                    <TableCell>{item.genericName}</TableCell>
+                                    <TableCell>{item.brand}</TableCell>
+                                    <TableCell>{item.presentation}</TableCell>
                                     <TableCell>{item.quantity}</TableCell>
                                     <TableCell>{formatPrice(item.price)}</TableCell>
                                     <TableCell>{item.supplier}</TableCell>
-                                    <TableCell>
-                                        <Badge variant={item.quantity > 10 ? "default" : item.quantity > 0 ? "secondary" : "destructive"}>
-                                            {item.quantity > 10 ? "In Stock" : item.quantity > 0 ? "Low Stock" : "Out of Stock"}
-                                        </Badge>
-                                    </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
                                             <Button variant="outline" size="sm" onClick={() => onEdit(item)}>
