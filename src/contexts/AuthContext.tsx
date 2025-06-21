@@ -50,6 +50,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
             toast.success("Login Successful")
             router.push("/dashboard");
+
             // if (user.firstTimeLogin) {
             //     router.push(`/auth/reset-password`);
             // } else {
@@ -57,7 +58,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             //     router.push("/dashboard");
             // }
         } catch (error: any) {
-            toast.error(`Login failed: ${error.message}`);
+            const message = error.response?.data || error.message || "An unexpected error occurred";
+            toast.error(`Login failed: ${message}`);
 
         } finally {
             setIsLoading(false);
