@@ -12,6 +12,7 @@ import { Check, X, Filter, Loader2 } from "lucide-react"
 import api from "@/lib/axios"
 import { PrescriptionRecord } from "@/types"
 import ActionModal from "./(components)/ActionModal"
+import { toast } from "sonner"
 
 export default function PrescriptionDashboard() {
     const [filter, setFilter] = useState<string>("all")
@@ -43,34 +44,23 @@ export default function PrescriptionDashboard() {
     // Mutation for updating prescription status
     const updatePrescriptionMutation = useMutation({
         mutationFn: async ({ id, approve, comment }: { id: number; approve: boolean; comment: string }) => {
-            const response = await fetch(`/api/prescriptions/${id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ approve, comment }),
+            const endpoint = approve ? `/approve/${id}` : `/reject/${id}`
+            const response = await api.put(endpoint, null, {
+                params: { comment },
             })
-            if (!response.ok) {
-                throw new Error("Failed to update prescription")
-            }
-            return response.json()
+
+            return response.data
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["prescriptions"] })
-            //   toast({
-            //     title: "Success",
-            //     description: "Prescription updated successfully",
-            //   })
+            toast.success("Prescription updated successfully")
             setActionModal({ isOpen: false, prescription: null, action: "approve" })
         },
         onError: () => {
-            //   toast({
-            //     title: "Error",
-            //     description: "Failed to update prescription",
-            //     variant: "destructive",
-            //   })
+            toast.error("Failed to update prescription")
         },
     })
+
 
     const handleAction = (prescription: PrescriptionRecord, action: "approve" | "reject") => {
         setActionModal({

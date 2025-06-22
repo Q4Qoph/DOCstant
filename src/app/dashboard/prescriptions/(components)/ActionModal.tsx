@@ -1,11 +1,11 @@
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -14,7 +14,7 @@ import { PrescriptionRecord } from "@/types"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 
-interface ActionModalProps {
+interface ActionSheetProps {
     isOpen: boolean
     onClose: () => void
     prescription: PrescriptionRecord | null
@@ -23,7 +23,14 @@ interface ActionModalProps {
     isLoading: boolean
 }
 
-const ActionModal = ({ isOpen, onClose, prescription, action, onSubmit, isLoading }: ActionModalProps) => {
+const ActionSheet = ({
+    isOpen,
+    onClose,
+    prescription,
+    action,
+    onSubmit,
+    isLoading,
+}: ActionSheetProps) => {
     const [comment, setComment] = useState("")
 
     const handleSubmit = () => {
@@ -32,22 +39,24 @@ const ActionModal = ({ isOpen, onClose, prescription, action, onSubmit, isLoadin
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
+        <Sheet open={isOpen} onOpenChange={onClose}>
+            <SheetContent side="right" className="w-[500px] sm:w-[800px] overflow-y-auto px-8 py-4">
+                <SheetHeader className="p-0">
+                    <SheetTitle>
                         {action === "approve" ? "Approve" : "Reject"} Prescription
-                    </DialogTitle>
-                    <DialogDescription>
+                    </SheetTitle>
+                    <SheetDescription>
                         {prescription && (
                             <>
                                 Patient: <strong>{prescription.record?.name}</strong>
                                 <br />
-                                Drug: <strong>{prescription.drugName}</strong> ({prescription.medicineDosage})
+                                Drug: <strong>{prescription.drugName}</strong> (
+                                {prescription.medicineDosage})
                             </>
                         )}
-                    </DialogDescription>
-                </DialogHeader>
+                    </SheetDescription>
+                </SheetHeader>
+
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
                         <Label htmlFor="comment">Comment</Label>
@@ -60,22 +69,27 @@ const ActionModal = ({ isOpen, onClose, prescription, action, onSubmit, isLoadin
                         />
                     </div>
                 </div>
-                <DialogFooter>
+
+                <SheetFooter className="mt-auto flex justify-end gap-2">
                     <Button variant="outline" onClick={onClose} disabled={isLoading}>
                         Cancel
                     </Button>
                     <Button
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className={action === "approve" ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"}
+                        className={
+                            action === "approve"
+                                ? "bg-blue-600 hover:bg-blue-700"
+                                : "bg-red-600 hover:bg-red-700"
+                        }
                     >
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {action === "approve" ? "Approve" : "Reject"}
                     </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 }
 
-export default ActionModal
+export default ActionSheet
