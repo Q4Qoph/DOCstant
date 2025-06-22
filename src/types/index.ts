@@ -113,3 +113,22 @@ export type FormData = {
   password: string;
   confirmPassword: string;
 };
+export interface PrescriptionRecord {
+  id: number
+  record: {
+    id: string
+    name: string
+    age: number
+    sex: string
+    phoneNumber: string
+    chiefComplaint: string
+  }
+  diagnosisId: string
+  drugName: string
+  quantity: number
+  medicineDosage: string
+  comments: string
+  approve: boolean
+  createdAt: string
+  updatedAt: string
+}

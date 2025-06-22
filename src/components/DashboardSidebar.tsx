@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse } from 'lucide-react';
+import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse, Pill } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -23,6 +23,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
       { id: 'patients', label: 'Patients', icon: List, href: '/dashboard/patients' },
       { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+      { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
     ];
 
     switch (user?.role) {

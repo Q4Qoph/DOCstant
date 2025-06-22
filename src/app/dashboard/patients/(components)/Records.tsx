@@ -40,7 +40,10 @@ export default function Records() {
     return (
         <div className="py-8">
             <div className="flex justify-between items-center mb-6 px-8">
-                <h1 className="text-2xl font-bold t">Patients Records</h1>
+                <div>
+                    <h1 className="text-3xl font-bold t">Patients Records</h1>
+                    <p className="">Review and manage patient diagnosis records</p>
+                </div>
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetTrigger asChild>
                         <Button onClick={onAdd} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
@@ -69,8 +72,8 @@ export default function Records() {
             ) : (
                 <div className="grid gap-4 px-8">
                     {patients.map((patient: any) => (
-                        <Card key={patient.id} className="border-blue-200">
-                            <CardHeader className="border-b border-blue-200">
+                        <Card key={patient.id}>
+                            <CardHeader className="border-b">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <CardTitle className="900">{patient.name}</CardTitle>
