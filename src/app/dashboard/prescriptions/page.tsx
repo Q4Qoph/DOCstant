@@ -8,11 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-import { Check, X, Filter, Loader2 } from "lucide-react"
+import { Check, X, Filter, Loader2, Eye } from "lucide-react"
 import api from "@/lib/axios"
 import { PrescriptionRecord } from "@/types"
 import ActionModal from "./(components)/ActionModal"
-import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function PrescriptionDashboard() {
     const [filter, setFilter] = useState<string>("all")
@@ -26,6 +26,7 @@ export default function PrescriptionDashboard() {
         action: "approve",
     })
 
+    const router = useRouter()
     const queryClient = useQueryClient()
 
     // Fetch prescriptions with React Query
@@ -41,43 +42,8 @@ export default function PrescriptionDashboard() {
         },
     })
 
-    // Mutation for updating prescription status
-    const updatePrescriptionMutation = useMutation({
-        mutationFn: async ({ id, approve, comment }: { id: number; approve: boolean; comment: string }) => {
-            const endpoint = approve ? `/approve/${id}` : `/reject/${id}`
-            const response = await api.put(endpoint, null, {
-                params: { comment },
-            })
-
-            return response.data
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["prescriptions"] })
-            toast.success("Prescription updated successfully")
-            setActionModal({ isOpen: false, prescription: null, action: "approve" })
-        },
-        onError: () => {
-            toast.error("Failed to update prescription")
-        },
-    })
-
-
-    const handleAction = (prescription: PrescriptionRecord, action: "approve" | "reject") => {
-        setActionModal({
-            isOpen: true,
-            prescription,
-            action,
-        })
-    }
-
-    const handleActionSubmit = (comment: string) => {
-        if (actionModal.prescription) {
-            updatePrescriptionMutation.mutate({
-                id: actionModal.prescription.id,
-                approve: actionModal.action === "approve",
-                comment,
-            })
-        }
+    const handleViewDetails = (prescriptionId: number) => {
+        router.push(`/dashboard/prescriptions/${prescriptionId}`)
     }
 
     const formatDate = (dateString: string) => {
@@ -188,39 +154,15 @@ export default function PrescriptionDashboard() {
                                                 </TableCell>
                                                 <TableCell className="text-sm text-blue-600">{formatDate(prescription.createdAt)}</TableCell>
                                                 <TableCell>
-                                                    <div className="flex gap-2">
-                                                        {!prescription.approve && (
-                                                            <>
-                                                                <Button
-                                                                    size="sm"
-                                                                    onClick={() => handleAction(prescription, "approve")}
-                                                                    className="bg-green-600 hover:bg-green-700 text-white"
-                                                                    disabled={updatePrescriptionMutation.isPending}
-                                                                >
-                                                                    <Check className="h-4 w-4" />
-                                                                </Button>
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="destructive"
-                                                                    onClick={() => handleAction(prescription, "reject")}
-                                                                    disabled={updatePrescriptionMutation.isPending}
-                                                                >
-                                                                    <X className="h-4 w-4" />
-                                                                </Button>
-                                                            </>
-                                                        )}
-                                                        {prescription.approve && (
-                                                            <Button
-                                                                size="sm"
-                                                                variant="outline"
-                                                                onClick={() => handleAction(prescription, "reject")}
-                                                                disabled={updatePrescriptionMutation.isPending}
-                                                                className="border-red-200 text-red-600 hover:bg-red-50"
-                                                            >
-                                                                <X className="h-4 w-4" />
-                                                            </Button>
-                                                        )}
-                                                    </div>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => handleViewDetails(prescription.id)}
+                                                        className="flex items-center gap-2"
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                        View Details
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -238,15 +180,6 @@ export default function PrescriptionDashboard() {
                     </CardContent>
                 </Card>
             </div>
-
-            <ActionModal
-                isOpen={actionModal.isOpen}
-                onClose={() => setActionModal({ isOpen: false, prescription: null, action: "approve" })}
-                prescription={actionModal.prescription}
-                action={actionModal.action}
-                onSubmit={handleActionSubmit}
-                isLoading={updatePrescriptionMutation.isPending}
-            />
         </div>
     )
 }
