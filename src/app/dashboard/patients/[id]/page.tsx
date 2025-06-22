@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Edit, Trash2, Phone, MapPin, User, Calendar, FileText, Activity, TestTube, Camera, Bot } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, Phone, MapPin, User, Calendar, FileText, Activity, TestTube, Camera, Bot, Stethoscope, Save, Pill, Sparkles } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
@@ -14,11 +14,13 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
+import PrescriptionSheet from "../../prescriptions/(components)/PrescriptionSheet";
 
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 
 
 const RecordDetails = () => {
+    const [prescOpen, setPrescOpen] = useState(false)
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const { id } = useParams()
@@ -47,10 +49,14 @@ const RecordDetails = () => {
 
     if (isLoading) {
         return (
-           <PatientDetailsSkeleton/>
+            <PatientDetailsSkeleton />
         );
     }
 
+    const handlePrescriptionSubmit = (data: any) => {
+        console.log("Prescription submitted:", data)
+        // Call API or mutate state here
+    }
     // if (isError) return <div>Error</div>
 
     return (
@@ -301,10 +307,29 @@ const RecordDetails = () => {
                 </Card>
             }
 
+
             <div className="space-x-2">
-                <Button className="bg-blue-500 hover:bg-blue-600">Get Diagnosits</Button>
-                <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600">Save Diagnosis</Button>
+                <Button className="bg-blue-500 hover:bg-blue-600">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Get Diagnosis
+                </Button>
+                <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Diagnosis
+                </Button>
+                <Button onClick={() => setPrescOpen(true)} className="bg-gray-400 text-white">
+                    <Pill className="h-4 w-4 mr-2" />
+                    Do Prescription
+                </Button>
             </div>
+
+            {/* Prescription sheet */}
+            <PrescriptionSheet
+                diagnosisId={patient.id}
+                open={prescOpen}
+                onOpenChange={setPrescOpen}
+                onSubmit={handlePrescriptionSubmit}
+            />
         </div>
     );
 }

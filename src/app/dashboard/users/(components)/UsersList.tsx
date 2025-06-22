@@ -48,6 +48,7 @@ import { Sheet, SheetTrigger } from '@/components/ui/sheet';
 import UserForm from './UserForm';
 import api from '@/lib/axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import UserManagementSkeleton from '../loading';
 
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -172,7 +173,7 @@ const UserManagement: React.FC = () => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
-  if (isLoading) return <p>Loading..</p>
+  if (isLoading) return <UserManagementSkeleton />
   if (isError) return <p>Loading..</p>
 
   const filteredUsers = users.filter((user: User) => {
@@ -190,7 +191,7 @@ const UserManagement: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
+          <h2 className="text-3xl font-bold text-gray-900">User Management</h2>
           <p className="text-gray-600 mt-1">Manage system users, roles, and permissions</p>
         </div>
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>

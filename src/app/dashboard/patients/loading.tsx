@@ -2,7 +2,7 @@ import React from 'react';
 
 const PatientsRecordSkeleton = () => {
   return (
-    <div className="p-6 space-y-4 animate-pulse">
+    <div className="px-8 space-y-4 animate-pulse">
       {[1, 2, 3].map((_, i) => (
         <div
           key={i}

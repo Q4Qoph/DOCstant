@@ -9,34 +9,8 @@ import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import NewRecordForm from "./EditPatientForm";
 import PatientForm from "./PatientForm";
 import PatientsRecordSkeleton from "../loading";
-
-// const patients = [{
-//     id: "1",
-//     name: "Jane Doe",
-//     age: 32,
-//     idNumber: "12345678",
-//     phoneNumber: "0712345678",
-//     address: "123 Nairobi St",
-//     isPregnant: true,
-//     vaccinations: [1, 2],
-//     examinations: [1],
-//     medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
-// },
-// {
-//     id: "2",
-//     name: "Jane Doe",
-//     age: 32,
-//     idNumber: "12345678",
-//     phoneNumber: "0712345678",
-//     address: "123 Nairobi St",
-//     isPregnant: true,
-//     vaccinations: [1, 2],
-//     examinations: [1],
-//     medicalHistory: "Previous medical history includes routine checkups and one hospitalization."
-// }]
 
 export default function Records() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -64,16 +38,12 @@ export default function Records() {
     };
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold t">Patients Records</h1>
-                {/* <Button
-                    onClick={onAdd}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add New Patient
-                </Button> */}
+        <div className="py-8">
+            <div className="flex justify-between items-center mb-6 px-8">
+                <div>
+                    <h1 className="text-3xl font-bold t">Patients Records</h1>
+                    <p className="">Review and manage patient diagnosis records</p>
+                </div>
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetTrigger asChild>
                         <Button onClick={onAdd} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
@@ -92,7 +62,7 @@ export default function Records() {
                 <PatientsRecordSkeleton />
             ) : patients.length === 0 ? (
                 <Card>
-                    <CardContent className="text-center py-8">
+                    <CardContent className="text-center p-8">
                         <p className="600 text-lg">No records found.</p>
                         <Button onClick={onAdd} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
                             Get Diagnosis
@@ -100,10 +70,10 @@ export default function Records() {
                     </CardContent>
                 </Card>
             ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-4 px-8">
                     {patients.map((patient: any) => (
-                        <Card key={patient.id} className="border-blue-200">
-                            <CardHeader className="border-b border-blue-200">
+                        <Card key={patient.id}>
+                            <CardHeader className="border-b">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <CardTitle className="900">{patient.name}</CardTitle>
