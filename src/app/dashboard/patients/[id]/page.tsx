@@ -53,11 +53,6 @@ const RecordDetails = () => {
         );
     }
 
-    const handlePrescriptionSubmit = (data: any) => {
-        console.log("Prescription submitted:", data)
-        // Call API or mutate state here
-    }
-    // if (isError) return <div>Error</div>
 
     return (
         <div className="p-8">
@@ -328,7 +323,6 @@ const RecordDetails = () => {
                 diagnosisId={patient.id}
                 open={prescOpen}
                 onOpenChange={setPrescOpen}
-                onSubmit={handlePrescriptionSubmit}
             />
         </div>
     );
