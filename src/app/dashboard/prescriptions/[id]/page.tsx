@@ -24,9 +24,16 @@ import {
     Ruler,
     UserCheck,
     Loader2,
+    Pill,
 } from "lucide-react"
 import api from "@/lib/axios"
 import { toast } from "sonner"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+const fetchMedications = async () => {
+    const response = await api.get("/api/inventory");
+    return response.data;
+};
 
 const PrescriptionDetails = () => {
     const params = useParams()
@@ -36,11 +43,18 @@ const PrescriptionDetails = () => {
 
     const [comment, setComment] = useState("")
     const [showCommentForm, setShowCommentForm] = useState(false)
-    const [actionType, setActionType] = useState<"approve" | "reject" | "assign" | null>(null)
+    const [showMedForm, setShowMedForm] = useState(false)
+    const [actionType, setActionType] = useState<"approve" | "reject" | "assign" | "administer" | null>(null)
+    const [selectedMed, setSelectedMed] = useState<string>();
 
     const getReceptionistId = () => {
         return localStorage.getItem("receptionistId") || "1"
     }
+
+    const medsQuery = useQuery({
+        queryKey: ["medications"],
+        queryFn: fetchMedications,
+    });
 
     const {
         data: prescription,
@@ -68,26 +82,42 @@ const PrescriptionDetails = () => {
 
     // Mutation for updating prescription status
     const updatePrescriptionMutation = useMutation({
-        mutationFn: async ({ action, comment }: { action: "approve" | "reject" | "assign"; comment: string }) => {
+        mutationFn: async ({ action,
+            comment,
+            nurseId,
+            nurseName,
+            medicationId }: {
+                action: "approve" | "reject" | "assign" | "administer"
+                comment?: string
+                nurseId?: string
+                nurseName?: string
+                medicationId?: string,
+
+            }) => {
             const receptionistId = getReceptionistId()
 
             let endpoint = ""
-            const params: any = { comment, receptionistId }
+            let data: any = null
+            let config: any = {}
 
             switch (action) {
                 case "approve":
-                    endpoint = `/approve/${prescriptionId}`
-                    break
                 case "reject":
-                    endpoint = `/reject/${prescriptionId}`
-                    break
+                    endpoint = `/${action}/${prescriptionId}`;
+                    config.params = { comment, receptionistId };
+                    return (await api.put(endpoint, null, config)).data;
+
                 case "assign":
-                    endpoint = `/api/receptionist/${prescriptionId}/assignnurse`
-                    break
+                    endpoint = `/api/receptionist/${prescriptionId}/assignnurse`;
+                    data = { nurseId, name: nurseName };
+                    return (await api.put(endpoint, data)).data;
+
+                case "administer":
+                    endpoint = `/api/receptionist/administerMeds`;
+                    data = { description: comment, administeredMedId: medicationId };
+                    return (await api.post(endpoint, data)).data;
             }
 
-            const response = await api.put(endpoint, null, { params })
-            return response.data
         },
         onSuccess: (data, variables) => {
             queryClient.invalidateQueries({ queryKey: ["prescription", prescriptionId] })
@@ -97,6 +127,7 @@ const PrescriptionDetails = () => {
                 approve: "Prescription approved successfully",
                 reject: "Prescription rejected successfully",
                 assign: "Prescription assigned to you successfully",
+                administer: "Medicine administered successfully",
             }
 
             toast.success(actionMessages[variables.action])
@@ -109,23 +140,40 @@ const PrescriptionDetails = () => {
         },
     })
 
-    const handleAction = (action: "approve" | "reject" | "assign") => {
+    const handleAction = (action: "approve" | "reject" | "assign" | "administer") => {
         setActionType(action)
-        if (action == "approve" || "reject") {
+        if (action === "approve" || action === "reject") {
             setShowCommentForm(true)
-        } else {
-
+        } else if (action == "assign") {
+            if (actionType) {
+                updatePrescriptionMutation.mutate({
+                    action,
+                    nurseId: "28f2027d-ba08-4625-6c7b-08ddb0107047",
+                    nurseName: "joe",
+                })
+            }
+        } else if (action == 'administer') {
+            setShowMedForm(true)
         }
+
     }
 
     const handleSubmit = () => {
-        if (actionType) {
-            updatePrescriptionMutation.mutate({
-                action: actionType,
-                comment: comment || "",
-            })
+        if (!actionType) return;
+
+        const payload: any = {
+            action: actionType,
+            comment: comment || "",
+        };
+
+        if (actionType === "administer") {
+            payload.medicationId = selectedMed;
         }
-    }
+
+        updatePrescriptionMutation.mutate(payload);
+    };
+
+
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -367,6 +415,7 @@ const PrescriptionDetails = () => {
                                         <Check className="h-4 w-4 mr-2" />
                                         Approve Prescription
                                     </Button>
+
                                     <Button
                                         variant="destructive"
                                         className="w-full bg-red-50 hover:bg-red-100 text-red-500"
@@ -384,20 +433,46 @@ const PrescriptionDetails = () => {
                                     <Button
                                         className="w-full bg-blue-50 hover:bg-blue-100 text-blue-500"
                                         onClick={() => handleAction("assign")}
-                                        disabled={updatePrescriptionMutation.isPending}
+                                        disabled={updatePrescriptionMutation.isPending }
                                     >
-                                        <UserCheck className="h-4 w-4 mr-2" />
-                                        Assign to Self
+                                        {updatePrescriptionMutation.isPending  && actionType === "assign" ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Assigning...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <UserCheck className="h-4 w-4 mr-2" />
+                                                Assign to Self
+                                            </>
+                                        )}
                                     </Button>
-                                    {/* <Button
+                                    <Button
+                                        className="w-full bg-green-50 hover:bg-green-100 text-green-600"
+                                        onClick={() => handleAction("administer")}
+                                        disabled={updatePrescriptionMutation.isPending || showMedForm}
+                                    >
+                                        {updatePrescriptionMutation.isPending  && actionType === "administer"? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Pill className="h-4 w-4 mr-2" />
+                                                Administer Medicine
+                                            </>
+                                        )}
+                                    </Button>
+                                    <Button
                                         variant="outline"
-                                        className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                                        className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-600"
                                         onClick={() => handleAction("reject")}
                                         disabled={updatePrescriptionMutation.isPending}
                                     >
                                         <X className="h-4 w-4 mr-2" />
                                         Revoke Approval
-                                    </Button> */}
+                                    </Button>
                                 </>
                             )}
                         </CardContent>
@@ -410,7 +485,6 @@ const PrescriptionDetails = () => {
                                 <CardDescription>
                                     {actionType === "approve" && "Add a comment for approval"}
                                     {actionType === "reject" && "Add a reason for rejection"}
-                                    {actionType === "assign" && "Add a note for assignment"}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -445,6 +519,80 @@ const PrescriptionDetails = () => {
                             </CardContent>
                         </Card>
                     )}
+                    {showMedForm && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Administer Medicine</CardTitle>
+                                <CardDescription>
+                                    Select a medicine and add a small description
+                                </CardDescription>
+                            </CardHeader>
+
+                            <CardContent className="space-y-4">
+                                {/* Select Medicine */}
+                                <div>
+                                    <Label htmlFor="medication">Select Medicine</Label>
+                                    <Select
+                                        value={selectedMed}
+                                        onValueChange={(value) => setSelectedMed(value)}
+                                        disabled={medsQuery.isLoading || updatePrescriptionMutation.isPending}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder="Choose a medicine" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {medsQuery.data?.map((med: any) => (
+                                                <SelectItem key={med.id} value={med.id}>
+                                                    {med.genericName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {/* Description */}
+                                <div>
+                                    <Label htmlFor="comment">Description</Label>
+                                    <Textarea
+                                        id="comment"
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                        placeholder="Enter a brief description..."
+                                        className="mt-1"
+                                        disabled={updatePrescriptionMutation.isPending}
+                                    />
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                            setShowCommentForm(false)
+                                            setComment("")
+                                            setSelectedMed("")
+                                            setActionType(null)
+                                        }}
+                                        disabled={updatePrescriptionMutation.isPending}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        className="bg-blue-500 hover:bg-blue-600 flex-1"
+                                        onClick={handleSubmit}
+                                        disabled={updatePrescriptionMutation.isPending || !selectedMed}
+                                    >
+                                        {updatePrescriptionMutation.isPending && actionType === "administer" ? (
+                                            <Loader2 className="animate-spin" />
+                                        ) : (
+                                            "Administer"
+                                        )}
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+
                 </div>
             </div>
         </div>
