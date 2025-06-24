@@ -412,8 +412,17 @@ const PrescriptionDetails = () => {
                                         onClick={() => handleAction("approve")}
                                         disabled={updatePrescriptionMutation.isPending}
                                     >
-                                        <Check className="h-4 w-4 mr-2" />
-                                        Approve Prescription
+                                        {updatePrescriptionMutation.isPending && actionType === "approve" ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Approving...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Check className="h-4 w-4 mr-2" />
+                                                Approve Prescription
+                                            </>
+                                        )}
                                     </Button>
 
                                     <Button
@@ -422,20 +431,30 @@ const PrescriptionDetails = () => {
                                         onClick={() => handleAction("reject")}
                                         disabled={updatePrescriptionMutation.isPending}
                                     >
-                                        <X className="h-4 w-4 mr-2" />
-                                        Reject Prescription
+                                        {updatePrescriptionMutation.isPending && actionType === "reject" ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Rejecting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <X className="h-4 w-4 mr-2" />
+                                                Reject Prescription
+                                            </>
+                                        )}
                                     </Button>
                                 </>
                             )}
+
 
                             {prescription.approve && (
                                 <>
                                     <Button
                                         className="w-full bg-blue-50 hover:bg-blue-100 text-blue-500"
                                         onClick={() => handleAction("assign")}
-                                        disabled={updatePrescriptionMutation.isPending }
+                                        disabled={updatePrescriptionMutation.isPending}
                                     >
-                                        {updatePrescriptionMutation.isPending  && actionType === "assign" ? (
+                                        {updatePrescriptionMutation.isPending && actionType === "assign" ? (
                                             <>
                                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                                 Assigning...
@@ -452,7 +471,7 @@ const PrescriptionDetails = () => {
                                         onClick={() => handleAction("administer")}
                                         disabled={updatePrescriptionMutation.isPending || showMedForm}
                                     >
-                                        {updatePrescriptionMutation.isPending  && actionType === "administer"? (
+                                        {updatePrescriptionMutation.isPending && actionType === "administer" ? (
                                             <>
                                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                                 Processing...
