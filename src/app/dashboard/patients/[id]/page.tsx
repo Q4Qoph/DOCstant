@@ -15,12 +15,16 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
 import PrescriptionSheet from "../../prescriptions/(components)/PrescriptionSheet";
+import LabTestForm from "../(components)/LabTestForm";
+import AdmitPatientForm from "../(components)/AdmitPatientForm";
 
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 
 
 const RecordDetails = () => {
     const [prescOpen, setPrescOpen] = useState(false)
+    const [labTestOpen, setLabTestOpen] = useState(false)
+    const [admitOpen, setAdmitOpen] = useState(false)
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const { id } = useParams()
@@ -251,11 +255,14 @@ const RecordDetails = () => {
             {
                 patient.laboratoryResults &&
                 <Card className="mb-6 border-blue-200">
-                    <CardHeader className=" border-b border-blue-200">
+                    <CardHeader className="flex justify-between border-b border-blue-200">
                         <CardTitle className=" flex items-center gap-2">
                             <TestTube className="h-5 w-5" />
                             Laboratory Results
                         </CardTitle>
+                        <Button onClick={() => setLabTestOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white w-fit">
+                            Add Test
+                        </Button>
                     </CardHeader>
                     <CardContent className="p-6">
                         <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
@@ -287,34 +294,39 @@ const RecordDetails = () => {
             {
                 patient.aiResponse &&
                 <Card className="mb-6 border-blue-200">
-                    <CardHeader className="border-b border-blue-200">
+                    <CardHeader className="flex justify-between border-b border-blue-200">
                         <CardTitle className=" flex items-center gap-2">
                             <Bot className="h-5 w-5" />
                             AI Analysis & Response
                         </CardTitle>
-
+                        <Button className="bg-blue-500 hover:bg-blue-600 w-fit">
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Get Diagnosis
+                        </Button>
                     </CardHeader>
                     <CardContent className="p-6">
                         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <p className="text-gray-700 whitespace-pre-wrap">{patient.aiResponse}</p>
                         </div>
+                        <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600 w-fit mt-8">
+                            <Save className="h-4 w-4 mr-2" />
+                            Save Diagnosis
+                        </Button>
                     </CardContent>
                 </Card>
             }
 
 
             <div className="space-x-2">
-                <Button className="bg-blue-500 hover:bg-blue-600">
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Get Diagnosis
-                </Button>
-                <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600">
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Diagnosis
-                </Button>
-                <Button onClick={() => setPrescOpen(true)} className="bg-gray-400 text-white">
+
+
+                <Button variant="outline" onClick={() => setPrescOpen(true)} className="border-blue-500 text-blue-500 hover:text-blue-600">
                     <Pill className="h-4 w-4 mr-2" />
-                   Prescribe Medication
+                    Prescribe Medication
+                </Button>
+                <Button onClick={() => setAdmitOpen(true)} className="bg-blue-500 hover:bg-blue-600">
+                    <Stethoscope className="h-4 w-4 mr-2" />
+                    Admit Patient
                 </Button>
             </div>
 
@@ -323,6 +335,16 @@ const RecordDetails = () => {
                 diagnosisId={patient.id}
                 open={prescOpen}
                 onOpenChange={setPrescOpen}
+            />
+            <LabTestForm
+                open={labTestOpen}
+                onOpenChange={setLabTestOpen}
+                diagnosisId={id}
+            />
+            <AdmitPatientForm
+                open={admitOpen}
+                onOpenChange={setAdmitOpen}
+                diagnosisId={id}
             />
         </div>
     );
