@@ -314,7 +314,7 @@ const RecordDetails = () => {
                 </Button>
                 <Button onClick={() => setPrescOpen(true)} className="bg-gray-400 text-white">
                     <Pill className="h-4 w-4 mr-2" />
-                    Do Prescription
+                   Prescribe Medication
                 </Button>
             </div>
 
