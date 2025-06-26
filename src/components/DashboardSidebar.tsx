@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse, Pill } from 'lucide-react';
+import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse, Pill, BedDouble } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -20,10 +20,12 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const getMenuItems = () => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
-      { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
-      { id: 'patients', label: 'Patients', icon: List, href: '/dashboard/patients' },
-      { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+      { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+      { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
       { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+      { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
+      { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+      { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
     ];
 
     switch (user?.role) {
