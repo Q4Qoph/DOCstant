@@ -263,7 +263,7 @@ const PrescriptionDetails = () => {
                     </Card>
 
                     {/* Patient Information */}
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <User className="h-5 w-5" />
@@ -312,10 +312,10 @@ const PrescriptionDetails = () => {
                                 </div>
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     {/* Vital Signs */}
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <Activity className="h-5 w-5" />
@@ -365,10 +365,10 @@ const PrescriptionDetails = () => {
                                 </div>
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     {/* Medical Information */}
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle>Medical Information</CardTitle>
                         </CardHeader>
@@ -394,7 +394,7 @@ const PrescriptionDetails = () => {
                                 </div>
                             )}
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </div>
 
                 {/* Actions Panel */}
