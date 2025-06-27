@@ -47,6 +47,7 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
                     testDate: new Date().toISOString().slice(0, 16),
                     diagnosisId: diagnosisId || ""
                 });
+                onOpenChange(false)
             }
         } catch (error: any) {
             toast.error(error.message || "Failed to schedule lab test");
