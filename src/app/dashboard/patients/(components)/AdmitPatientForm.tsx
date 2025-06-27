@@ -31,7 +31,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
         setIsLoading(true);
 
         try {
-            const response = await api.post("/api/AdmitPatient", formData);
+            const response = await api.post("/api/inpatient", formData);
 
             if (response.status === 200) {
                 toast.success("Patient admitted successfully");
@@ -41,6 +41,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
                     room: "",
                     bed: ""
                 });
+                onOpenChange(false)
             }
         } catch (error: any) {
             toast.error(error.message || "Failed to admit patient");

@@ -202,8 +202,6 @@ const RecordDetails = () => {
             </Card>
 
             {/* Vaccinations */}
-            {
-                patient.vaccinations.length > 0 &&
                 <Card className="mb-6 border-blue-200">
                     <CardHeader className=" border-b border-blue-200">
                         <CardTitle className=" flex items-center gap-2">
@@ -223,11 +221,8 @@ const RecordDetails = () => {
                         </div>
                     </CardContent>
                 </Card>
-            }
 
             {/* Examinations */}
-            {
-                patient.examinations.length > 0 &&
                 <Card className="mb-6 border-blue-200">
                     <CardHeader className="border-b border-blue-200">
                         <CardTitle className=" flex items-center gap-2">
@@ -249,11 +244,8 @@ const RecordDetails = () => {
                         ))}
                     </CardContent>
                 </Card>
-            }
 
             {/* Laboratory Results */}
-            {
-                patient.laboratoryResults &&
                 <Card className="mb-6 border-blue-200">
                     <CardHeader className="flex justify-between border-b border-blue-200">
                         <CardTitle className=" flex items-center gap-2">
@@ -270,7 +262,6 @@ const RecordDetails = () => {
                         </div>
                     </CardContent>
                 </Card>
-            }
 
             {/* Image Results */}
             {
