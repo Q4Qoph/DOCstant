@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Edit, Trash2, Phone, MapPin, User, Calendar, FileText, Activity, TestTube, Camera, Bot, Stethoscope, Save, Pill, Sparkles, Plus, Clock, DollarSign } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, Phone, MapPin, User, Calendar, FileText, Activity, TestTube, Camera, Bot, Stethoscope, Save, Pill, Sparkles, Plus, Clock, DollarSign, CreditCard } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
@@ -20,6 +20,7 @@ import LabTestForm from "../(components)/LabTestForm";
 import AdmitPatientForm from "../(components)/AdmitPatientForm";
 import TreatmentForm from "../(components)/TreatmentForm";
 import ExpenseForm from "../(components)/ExpenseForm";
+import { toast } from "sonner";
 
 // Types
 interface Treatment {
@@ -71,13 +72,23 @@ interface Expense {
     diagnosisId: string;
 }
 
+interface PaymentResponse {
+    url: string;
+    stripeSessionId: string;
+}
+
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 const getTreatments = (diagnosisId: string) => api.get(`/api/Treatment/${diagnosisId}`);
 const getExpenses = (diagnosisId: string) => api.get(`/api/Expense/${diagnosisId}`);
-const createTreatment = (data: { diagnosisId: string; description: string }) => 
+const createTreatment = (data: { diagnosisId: string; description: string }) =>
     api.post('/api/Treatment', data);
-const createExpense = (data: { expenseName: string; amount: number; diagnosisId: string }) => 
+const createExpense = (data: { expenseName: string; amount: number; diagnosisId: string }) =>
     api.post('/api/Expense', data);
+const createPayment = (diagnosisId: string): Promise<{ data: PaymentResponse }> =>
+    api.post(`/api/Payment/${diagnosisId}`, {
+        "approvedURL": "http://localhost:3000/dashboard/payment/success",
+        "cancelURL": "http://localhost:3000/dashboard/payment/cancelled"
+    });
 
 const RecordDetails = () => {
     const [prescOpen, setPrescOpen] = useState(false);
@@ -135,6 +146,17 @@ const RecordDetails = () => {
         },
     });
 
+    const createPaymentMutation = useMutation({
+        mutationFn: () => createPayment(id as string),
+        onSuccess: (response) => {
+            window.location.href = response.data.url;
+        },
+        onError: (error) => {
+            console.error('Payment error:', error);
+            toast.error('Failed to initiate payment. Please try again.');
+        },
+    });
+
     const onBack = () => {
         router.back();
     };
@@ -146,6 +168,16 @@ const RecordDetails = () => {
     const onDelete = () => {
         // Implement delete logic
     };
+
+    const handlePayment = () => {
+        if (!expenses || expenses.length === 0) {
+            toast.error('No expenses to pay for this patient.');
+            return;
+        }
+        createPaymentMutation.mutate();
+    };
+
+    const totalAmount = expenses?.reduce((sum: number, expense: Expense) => sum + expense.amount, 0) || 0;
 
     if (isLoading) {
         return <PatientDetailsSkeleton />;
@@ -361,8 +393,8 @@ const RecordDetails = () => {
                                 <Stethoscope className="h-5 w-5" />
                                 Treatments ({treatments?.length || 0})
                             </CardTitle>
-                            <Button 
-                                onClick={() => setTreatmentOpen(true)} 
+                            <Button
+                                onClick={() => setTreatmentOpen(true)}
                                 className="bg-blue-500 hover:bg-blue-600 text-white"
                             >
                                 <Plus className="h-4 w-4 mr-2" />
@@ -393,9 +425,9 @@ const RecordDetails = () => {
                                 <div className="text-center py-8 text-gray-500">
                                     <Stethoscope className="h-12 w-12 mx-auto mb-3 opacity-50" />
                                     <p>No treatments recorded yet</p>
-                                    <Button 
-                                        onClick={() => setTreatmentOpen(true)} 
-                                        variant="outline" 
+                                    <Button
+                                        onClick={() => setTreatmentOpen(true)}
+                                        variant="outline"
                                         className="mt-3"
                                     >
                                         Add First Treatment
@@ -415,17 +447,20 @@ const RecordDetails = () => {
                                 Expenses ({expenses?.length || 0})
                                 {expenses && expenses.length > 0 && (
                                     <Badge className="bg-blue-100 text-blue-800 border-blue-300 ml-2">
-                                        Total: ${expenses.reduce((sum: number, expense: Expense) => sum + expense.amount, 0).toFixed(2)}
+                                        Total: ${totalAmount.toFixed(2)}
                                     </Badge>
                                 )}
                             </CardTitle>
-                            <Button 
-                                onClick={() => setExpenseOpen(true)} 
-                                className="bg-blue-500 hover:bg-blue-600 text-white"
-                            >
-                                <Plus className="h-4 w-4 mr-2" />
-                                Add Expense
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    onClick={() => setExpenseOpen(true)}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                                >
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add Expense
+                                </Button>
+                                
+                            </div>
                         </CardHeader>
                         <CardContent className="p-6">
                             {expensesLoading ? (
@@ -435,7 +470,7 @@ const RecordDetails = () => {
                             ) : expenses && expenses.length > 0 ? (
                                 <div className="space-y-4">
                                     {expenses.map((expense: Expense, index: number) => (
-                                        <div key={expense.id} className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                        <div key={expense.id} className="p-4 rounded-lg border">
                                             <div className="flex justify-between items-start mb-2">
                                                 <h4 className="font-semibold text-lg">{expense.expenseName}</h4>
                                                 <Badge className="bg-green-100 text-green-800 border-green-300 text-lg font-semibold">
@@ -447,12 +482,26 @@ const RecordDetails = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div className="mt-6 p-4 rounded-lg border bg-gray-50">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-lg font-semibold text-blue-800">Total Amount:</span>
-                                            <span className="text-2xl font-bold text-blue-900">
-                                                ${expenses.reduce((sum: number, expense: Expense) => sum + expense.amount, 0).toFixed(2)}
+                                            <span className="text-lg font-semibold">Total Amount:</span>
+                                            <span className="text-2xl font-bold">
+                                                ${totalAmount.toFixed(2)}
                                             </span>
+                                        </div>
+                                        <div className="mt-3 flex justify-end">
+                                            <Button
+                                                onClick={handlePayment}
+                                                disabled={createPaymentMutation.isPending}
+                                                className="bg-green-600 hover:bg-green-700 text-white"
+                                            >
+                                                {createPaymentMutation.isPending ? (
+                                                    <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+                                                ) : (
+                                                    <CreditCard className="h-4 w-4 mr-2" />
+                                                )}
+                                                {createPaymentMutation.isPending ? 'Processing Payment...' : 'Pay with Stripe'}
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
@@ -460,9 +509,9 @@ const RecordDetails = () => {
                                 <div className="text-center py-8 text-gray-500">
                                     <DollarSign className="h-12 w-12 mx-auto mb-3 opacity-50" />
                                     <p>No expenses recorded yet</p>
-                                    <Button 
-                                        onClick={() => setExpenseOpen(true)} 
-                                        variant="outline" 
+                                    <Button
+                                        onClick={() => setExpenseOpen(true)}
+                                        variant="outline"
                                         className="mt-3"
                                     >
                                         Add First Expense
