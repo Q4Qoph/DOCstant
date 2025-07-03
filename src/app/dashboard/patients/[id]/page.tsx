@@ -270,7 +270,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                 </div>
 
                 {/* Main Content with Tabs */}
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200">
+                <div className="bg-white rounded-2xl border border-slate-200">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                         <div className="border-b border-slate-200 px-6 pt-6">
                             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-9 h-auto p-1 bg-slate-100 rounded-lg">
@@ -350,7 +350,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                 <div className="space-y-6">
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         {/* Patient Info Card */}
-                                        <Card className="border-slate-200 shadow-sm">
+                                        <Card className="border-slate-200 shadow-none">
                                             <CardHeader className="pb-3">
                                                 <CardTitle className="flex items-center gap-2 text-lg">
                                                     <User className="h-5 w-5 text-blue-600" />
@@ -391,7 +391,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                         </Card>
 
                                         {/* Contact Info Card */}
-                                        <Card className="border-slate-200 shadow-sm">
+                                        <Card className="border-slate-200 shadow-none">
                                             <CardHeader className="pb-3">
                                                 <CardTitle className="flex items-center gap-2 text-lg">
                                                     <Phone className="h-5 w-5 text-green-600" />
@@ -418,7 +418,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                     </div>
 
                                     {/* Vital Signs Card */}
-                                    <Card className="border-slate-200 shadow-sm">
+                                    <Card className="border-slate-200 shadow-none">
                                         <CardHeader className="pb-3">
                                             <CardTitle className="flex items-center gap-2 text-lg">
                                                 <Heart className="h-5 w-5 text-red-600" />
@@ -492,7 +492,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                             {/* Medical History Tab */}
                             <TabsContent value="medical-history" className="mt-0">
                                 <div className="space-y-6">
-                                    <Card className="border-slate-200 shadow-sm">
+                                    <Card className="border-slate-200 shadow-none">
                                         <CardHeader>
                                             <CardTitle className="flex items-center gap-2">
                                                 <FileText className="h-5 w-5 text-blue-600" />
@@ -509,7 +509,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                     </Card>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <Card className="border-red-200 shadow-sm">
+                                        <Card className="border-red-200 shadow-none">
                                             <CardHeader>
                                                 <CardTitle className="flex items-center gap-2 text-red-700">
                                                     <AlertCircle className="h-5 w-5" />
@@ -525,7 +525,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                             </CardContent>
                                         </Card>
 
-                                        <Card className="border-orange-200 shadow-sm">
+                                        <Card className="border-orange-200 shadow-none">
                                             <CardHeader>
                                                 <CardTitle className="flex items-center gap-2 text-orange-700">
                                                     <AlertCircle className="h-5 w-5" />
@@ -546,7 +546,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
 
                             {/* Vaccinations Tab */}
                             <TabsContent value="vaccinations" className="mt-0">
-                                <Card className="border-slate-200 shadow-sm">
+                                <Card className="border-slate-200 shadow-none">
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2">
                                             <Activity className="h-5 w-5 text-green-600" />
@@ -823,18 +823,18 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                         ) : reevaluations && reevaluations.length > 0 ? (
                                             <div className="space-y-6">
                                                 {reevaluations.map((reevaluation: any, index: number) => (
-                                                    <div key={reevaluation.id} className="bg-gradient-to-r from-blue-50 to-blue-50 p-6 rounded-lg border border-purple-200 shadow-sm">
+                                                    <div key={reevaluation.id} className="bg-gradient-to-r from-blue-50 to-blue-50 p-6 rounded-lg border border-blue-200 shadow-sm">
                                                         <div className="flex justify-between items-start mb-4">
                                                             <div>
-                                                                <h4 className="font-bold text-lg text-purple-800">
+                                                                <h4 className="font-bold text-lg text-blue-800">
                                                                     Reevaluation #{index + 1}
                                                                 </h4>
-                                                                <p className="text-sm text-purple-600">
+                                                                <p className="text-sm text-blue-600">
                                                                     {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                                                 </p>
                                                             </div>
                                                             <div className="flex gap-2">
-                                                                <Badge className="bg-purple-100 text-purple-800 border-purple-300">Follow-up</Badge>
+                                                                <Badge className="bg-blue-100 text-blue-800 border-blue-300">Follow-up</Badge>
                                                                 {reevaluation.isPregnant && (
                                                                     <Badge className="bg-pink-100 text-pink-800 border-pink-300">Pregnant</Badge>
                                                                 )}
@@ -842,15 +842,15 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                                         </div>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                                                             <div className="bg-white p-3 rounded-lg border border-purple-100">
-                                                                <h5 className="font-semibold text-purple-700 mb-2">Chief Complaint</h5>
+                                                                <h5 className="font-semibold text-blue-700 mb-2">Chief Complaint</h5>
                                                                 <p className="text-sm text-gray-700">{reevaluation.chiefComplaint}</p>
                                                             </div>
                                                             <div className="bg-white p-3 rounded-lg border border-purple-100">
-                                                                <h5 className="font-semibold text-purple-700 mb-2">Current Symptoms</h5>
+                                                                <h5 className="font-semibold text-blue-700 mb-2">Current Symptoms</h5>
                                                                 <p className="text-sm text-gray-700">{reevaluation.symptoms}</p>
                                                             </div>
                                                             <div className="bg-white p-3 rounded-lg border border-purple-100">
-                                                                <h5 className="font-semibold text-purple-700 mb-2">Vital Signs</h5>
+                                                                <h5 className="font-semibold text-blue-700 mb-2">Vital Signs</h5>
                                                                 <div className="text-sm text-gray-700 space-y-1">
                                                                     <div>BP: {reevaluation.bloodPresure}</div>
                                                                     <div>Temp: {reevaluation.temperature}</div>
@@ -860,7 +860,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                                         </div>
                                                         {reevaluation.laboratoryResults && (
                                                             <div className="bg-white p-3 rounded-lg border border-purple-100 mb-4">
-                                                                <h5 className="font-semibold text-purple-700 mb-2">Latest Lab Results</h5>
+                                                                <h5 className="font-semibold text-blue-700 mb-2">Latest Lab Results</h5>
                                                                 <p className="text-sm text-gray-700">{reevaluation.laboratoryResults}</p>
                                                             </div>
                                                         )}
@@ -878,12 +878,12 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
                                             </div>
                                         ) : (
                                             <div className="text-center py-12">
-                                                <div className="bg-gradient-to-br from-purple-100 to-blue-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
-                                                    <Activity className="h-12 w-12 text-purple-500" />
+                                                <div className="bg-gradient-to-br from-blue-100 to-blue-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                                                    <Activity className="h-12 w-12 text-blue-500" />
                                                 </div>
                                                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No Reevaluations Yet</h3>
                                                 <p className="text-gray-500 mb-4">Track patient progress with follow-up evaluations</p>
-                                                <Button onClick={() => setReevaluationOpen(true)} className="bg-purple-500 hover:bg-purple-600">
+                                                <Button onClick={() => setReevaluationOpen(true)} className="bg-blue-500 hover:bg-blue-600">
                                                     <Plus className="h-4 w-4 mr-2" />
                                                     Schedule First Reevaluation
                                                 </Button>

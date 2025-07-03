@@ -246,10 +246,10 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
 
     return (
         <Sheet open={open} onOpenChange={handleClose}>
-            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto">
+            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto p-4">
                 <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
-                        <Activity className="h-5 w-5 text-purple-500" />
+                        <Activity className="h-5 w-5 text-blue-500" />
                         Patient Reevaluation
                         <Clock className="h-4 w-4 text-gray-400 ml-2" />
                     </SheetTitle>
@@ -258,7 +258,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                     </SheetDescription>
                 </SheetHeader>
 
-                <div className="mt-6">
+                <div className="my-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                             <TabsList className="grid w-full grid-cols-4">
@@ -279,7 +279,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="name">Full Name *</Label>
                                                 <Input
                                                     id="name"
@@ -291,7 +291,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
                                             </div>
 
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="age">Age *</Label>
                                                 <Input
                                                     id="age"
@@ -306,7 +306,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="sex">Sex *</Label>
                                                 <Select value={formData.sex} onValueChange={(value) => handleInputChange("sex", value)}>
                                                     <SelectTrigger className={errors.sex ? "border-red-500" : ""}>
@@ -321,7 +321,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 {errors.sex && <p className="text-sm text-red-500 mt-1">{errors.sex}</p>}
                                             </div>
 
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="phoneNumber">Phone Number *</Label>
                                                 <Input
                                                     id="phoneNumber"
@@ -334,7 +334,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             </div>
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="idNumber">ID Number</Label>
                                             <Input
                                                 id="idNumber"
@@ -344,7 +344,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             />
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="address">Address</Label>
                                             <Textarea
                                                 id="address"
@@ -354,7 +354,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             />
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="department">Department</Label>
                                             <Select value={formData.department.toString()} onValueChange={(value) => handleInputChange("department", parseInt(value))}>
                                                 <SelectTrigger>
@@ -394,7 +394,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="chiefComplaint">Chief Complaint *</Label>
                                             <Textarea
                                                 id="chiefComplaint"
@@ -407,7 +407,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             {errors.chiefComplaint && <p className="text-sm text-red-500 mt-1">{errors.chiefComplaint}</p>}
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="symptoms">Current Symptoms *</Label>
                                             <Textarea
                                                 id="symptoms"
@@ -431,7 +431,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="temperature" className="flex items-center gap-2">
                                                     <Thermometer className="h-4 w-4" />
                                                     Temperature (°C)
@@ -447,7 +447,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 />
                                             </div>
 
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="bloodPresure" className="flex items-center gap-2">
                                                     <Heart className="h-4 w-4" />
                                                     Blood Pressure
@@ -463,7 +463,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="heartRate">Heart Rate (bpm)</Label>
                                                 <Input
                                                     id="heartRate"
@@ -475,7 +475,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 />
                                             </div>
 
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="respiratoryRate">Respiratory Rate (rpm)</Label>
                                                 <Input
                                                     id="respiratoryRate"
@@ -489,7 +489,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="weight" className="flex items-center gap-2">
                                                     <Weight className="h-4 w-4" />
                                                     Weight (kg)
@@ -503,7 +503,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 />
                                             </div>
 
-                                            <div>
+                                            <div className="space-y-2">
                                                 <Label htmlFor="height" className="flex items-center gap-2">
                                                     <Ruler className="h-4 w-4" />
                                                     Height (cm)
@@ -531,7 +531,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="medicalHistory">Medical History</Label>
                                             <Textarea
                                                 id="medicalHistory"
@@ -543,7 +543,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             />
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="allergies" className="flex items-center gap-2">
                                                 <AlertTriangle className="h-4 w-4 text-orange-500" />
                                                 Allergies
@@ -558,7 +558,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             />
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="toxicHabits">Toxic Habits</Label>
                                             <Textarea
                                                 id="toxicHabits"
@@ -578,12 +578,12 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                 <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2 text-lg">
-                                            <TestTube className="h-5 w-5 text-purple-500" />
+                                            <TestTube className="h-5 w-5 text-blue-500" />
                                             Test Results
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="laboratoryResults">Laboratory Results</Label>
                                             <Textarea
                                                 id="laboratoryResults"
@@ -595,7 +595,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                             />
                                         </div>
 
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="imageResults">Imaging Results</Label>
                                             <Textarea
                                                 id="imageResults"
@@ -637,7 +637,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
-                                        <div>
+                                        <div className="space-y-2">
                                             <Label htmlFor="aiResponse">AI Clinical Analysis</Label>
                                             <Textarea
                                                 id="aiResponse"
@@ -666,17 +666,17 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-purple-600 hover:bg-purple-700"
+                                className="bg-blue-600 hover:bg-blue-700"
                             >
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                        Saving Reevaluation...
+                                        Re-evaluating...
                                     </>
                                 ) : (
                                     <>
                                         <Activity className="h-4 w-4 mr-2" />
-                                        Save Reevaluation
+                                        Re-evaluate
                                     </>
                                 )}
                             </Button>
