@@ -161,8 +161,11 @@ const RecordDetails = () => {
                                     {patient?.name || 'Patient Details'}
                                 </h1>
                                 <p className="text-slate-600 mt-1">
-                                    ID: {patient?.idNumber} • {patient?.age} years old
+                                    ID: {patient?.idNumber} • {patient?.age} years old 
                                 </p>
+                                {/* <p className=" mt-1">
+                                    Phone {patient.phoneNumber}  • {patient.address}
+                                </p> */}
                             </div>
                         </div>
                         <div className="space-x-2">
@@ -278,7 +281,7 @@ const RecordDetails = () => {
 
                             {/* Examinations Tab */}
                             <TabsContent value="examinations" className="mt-0">
-                                <Card className="border-slate-200 shadow-sm">
+                                <Card className="shadow-none">
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2">
                                             <Stethoscope className="h-5 w-5 text-blue-600" />
@@ -315,7 +318,7 @@ const RecordDetails = () => {
                             {/* Treatments Tab */}
                             <TabsContent value="treatments" className="mt-0">
                                 {/* Treatments Tab Content */}
-                                <Card className="border-slate-200 shadow-sm">
+                                <Card className="shadow-none">
                                     <CardHeader className="flex justify-between border-b border-slate-200">
                                         <CardTitle className="flex items-center gap-2">
                                             <Target className="h-5 w-5 text-blue-600" />

@@ -11,74 +11,31 @@ const BasicInfo = ({ patient }: { patient: any }) => {
     return (
         <TabsContent value="basic-info" className="mt-0">
             <div className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Patient Info Card */}
-                    <Card className="border-slate-200 shadow-none">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <User className="h-5 w-5 text-blue-600" />
-                                Patient Information
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-2xl font-bold text-slate-900">{patient.name}</h3>
-                                <div className="flex gap-2">
-                                    {patient.isPregnant && (
-                                        <Badge className="bg-pink-100 text-pink-800 border-pink-300">
-                                            Pregnant
-                                        </Badge>
-                                    )}
-                                    <Badge variant="outline" className="text-slate-600">
-                                        {patient.sex}
-                                    </Badge>
-                                </div>
+                {/* Contact Info Card */}
+                <Card className="border-slate-200 shadow-none w-full">
+                    <CardHeader className="">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <Phone className="h-5 w-5 text-green-600" />
+                            Contact Information
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <Phone className="h-4 w-4 text-slate-500" />
+                            <div>
+                                <p className="text-sm text-slate-600">Phone</p>
+                                <p className="font-medium">{patient.phoneNumber}</p>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="flex items-center gap-3">
-                                    <Calendar className="h-4 w-4 text-slate-500" />
-                                    <div>
-                                        <p className="text-sm text-slate-600">Age</p>
-                                        <p className="font-medium">{patient.age} years</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <User className="h-4 w-4 text-slate-500" />
-                                    <div>
-                                        <p className="text-sm text-slate-600">ID Number</p>
-                                        <p className="font-medium">{patient.idNumber}</p>
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <MapPin className="h-4 w-4 text-slate-500 mt-0.5" />
+                            <div>
+                                <p className="text-sm text-slate-600">Address</p>
+                                <p className="font-medium text-slate-900">{patient.address}</p>
                             </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Contact Info Card */}
-                    <Card className="border-slate-200 shadow-none">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Phone className="h-5 w-5 text-green-600" />
-                                Contact Information
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <Phone className="h-4 w-4 text-slate-500" />
-                                <div>
-                                    <p className="text-sm text-slate-600">Phone</p>
-                                    <p className="font-medium">{patient.phoneNumber}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <MapPin className="h-4 w-4 text-slate-500 mt-0.5" />
-                                <div>
-                                    <p className="text-sm text-slate-600">Address</p>
-                                    <p className="font-medium text-slate-900">{patient.address}</p>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                        </div>
+                    </CardContent>
+                </Card>
 
                 {/* Vital Signs Card */}
                 <Card className="border-slate-200 shadow-none">
