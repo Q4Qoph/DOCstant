@@ -33,8 +33,8 @@ import {
 import { toast } from 'sonner';
 
 // Zod schema for user validation
-const userRoles = ['RN', 'GP', 'C', 0, 'L', 'admin'] as const;
-// const userRoles = ['RN', 'GP', 'C', 'P', 'L', 'admin'] as const;
+const userRoles = ['0', '1', '2', '3', '4', '5'] as const;
+
 
 const baseUserSchema = z.object({
   name: z.string()
@@ -53,45 +53,10 @@ const baseUserSchema = z.object({
   // department: z.string().optional(),
 });
 
-// Schema for creating new users (password required)
-const createUserSchema = baseUserSchema.extend({
-//   password: z.string()
-//     .min(8, 'Password must be at least 8 characters long')
-//     .regex(
-//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-//       'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-//     ),
-//   confirmPassword: z.string()
-// }).refine((data) => data.password === data.confirmPassword, {
-//   message: "Passwords do not match",
-//   path: ["confirmPassword"],
-});
 
-// Schema for editing users (password optional)
-const editUserSchema = baseUserSchema.extend({
-  password: z.string()
-    .optional()
-    .refine((password) => {
-      if (!password || password === '') return true; // Allow empty password
-      return password.length >= 8;
-    }, 'Password must be at least 8 characters long')
-    .refine((password) => {
-      if (!password || password === '') return true; // Allow empty password
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(password);
-    }, 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-  confirmPassword: z.string().optional()
-}).refine((data) => {
-  // Only validate password match if password is provided
-  if (!data.password || data.password === '') return true;
-  return data.password === data.confirmPassword;
-}, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
 
-type CreateUserFormData = z.infer<typeof createUserSchema>;
-// type CreateUserFormData = z.infer<typeof any>;
-type EditUserFormData = z.infer<typeof editUserSchema>;
+type CreateUserFormData = z.infer<typeof baseUserSchema>;
+type EditUserFormData = z.infer<typeof baseUserSchema>;
 type FormData = CreateUserFormData | EditUserFormData;
 
 const UserForm = ({ user, isOpen, onClose, onSave }: {
@@ -107,8 +72,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
     name: '',
     email: '',
     phone: '',
-    role: '' 
-    // role: '' as User['role'],
+    role: '' as User['role'],
     // password: '',
     // confirmPassword: ''
   });
@@ -122,8 +86,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: user.email,
         phone: user.phone,
         role: user.role,
-        // password: '',
-        // confirmPassword: ''
       });
     } else {
       setFormData({
@@ -131,8 +93,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: '',
         phone: '',
         role: '' as User['role'],
-        // password: '',
-        // confirmPassword: ''
       });
     }
     setErrors({});
@@ -148,8 +108,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
 
   const validateForm = (data: FormData): Record<string, string> => {
     try {
-      const schema = isEditing ? editUserSchema : createUserSchema;
-      schema.parse(data);
+      baseUserSchema.parse(data);
       return {};
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -175,14 +134,9 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
       if (Object.keys(validationErrors).length === 0) {
         const userData = {
           ...formData,
+          role: Number(formData.role),
         };
-        
-        // Remove confirmPassword and empty password for editing
-        // delete userData.confirmPassword;
-        // if (isEditing && (!userData.password || userData.password === '')) {
-        //   delete userData.password;
-        // }
-        
+
         await onSave(userData);
         onClose();
         toast.success(isEditing ? 'User updated successfully' : 'User created successfully');
@@ -195,13 +149,14 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
   };
 
   const roleLabels: Record<User['role'], string> = {
-    'RN': 'Receptionist/Nurse',
-    'GP': 'General Practitioner',
-    'C': 'Specialist',
-    '0': 'Pharmacist',
-    'L': 'Lab Technician',
-    'admin': 'Administrator'
+    '0': 'Receptionist',
+    '1': 'General Practitioner',
+    '2': 'Specialist',
+    '3': 'Pharmacist',
+    '4': 'Lab Technician',
+    '5': 'Admin',
   };
+
 
   return (
     <SheetContent className="w-[500px] sm:w-[540px] overflow-y-auto px-8 py-4">
@@ -270,12 +225,13 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="RN">Receptionist/Nurse</SelectItem>
-                <SelectItem value="GP">General Practitioner</SelectItem>
-                <SelectItem value="C">Specialist</SelectItem>
-                <SelectItem value="0">Pharmacist</SelectItem>
-                <SelectItem value="L">Lab Technician</SelectItem>
-                <SelectItem value="admin">Administrator</SelectItem>
+                <SelectItem value="0">Receptionist</SelectItem>
+                <SelectItem value="1">General Practitioner</SelectItem>
+                <SelectItem value="2">Specialist</SelectItem>
+                <SelectItem value="3">Pharmacist</SelectItem>
+                <SelectItem value="4">Lab Technician</SelectItem>
+                <SelectItem value="5">Admin</SelectItem>
+
               </SelectContent>
             </Select>
             {errors.role && <p className="text-sm text-red-500">{errors.role}</p>}
@@ -363,23 +319,23 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
 
         {/* Form Actions */}
         <div className="flex justify-end space-x-2 pt-6 border-t">
-          <Button 
-            type="button" 
-            variant="outline" 
+          <Button
+            type="button"
+            variant="outline"
             onClick={onClose}
             disabled={isSubmitting}
           >
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             className="bg-blue-600 hover:bg-blue-700"
             disabled={isSubmitting}
           >
             <Save className="h-4 w-4 mr-2" />
-            {isSubmitting 
-              ? (isEditing ? 'Updating...' : 'Creating...') 
+            {isSubmitting
+              ? (isEditing ? 'Updating...' : 'Creating...')
               : (isEditing ? 'Update User' : 'Create User')
             }
           </Button>

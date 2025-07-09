@@ -10,6 +10,7 @@ import { patientSchema } from "@/lib/schemas";
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import api from "@/lib/axios";
 import { toast } from "sonner";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
     const [isLoading, setIsLoading] = useState(false)
@@ -37,6 +38,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
 
         }
     );
+    const {sendNotification} = useNotifications()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,7 +49,17 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             // onSubmit(validatedData);
             const response = await api.post("/api/DiagnosisRecord", validatedData)
             if (response.status == 200) {
+                sendNotification({
+                    userId: "",
+                    title: "New patient",
+                    message: 'New patient',
+                    fromUserId: "",
+                    toUserId: '',
+                    fromDepartment: 'Reception',
+                    toDepartment: 'Pharmacy'
+                })
                 toast.success("Patient recorded successfuly");
+
                 setIsSheetOpen(false)
                 setFormData({
                     name: "",
