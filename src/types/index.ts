@@ -132,3 +132,8 @@ export interface PrescriptionRecord {
   createdAt: string
   updatedAt: string
 }
+
+
+export interface NotificationDropdownProps {
+  className?: string;
+}
