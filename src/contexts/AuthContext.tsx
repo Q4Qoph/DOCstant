@@ -6,6 +6,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import api from '@/lib/axios';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
     user: User | null;
@@ -13,6 +14,13 @@ interface AuthContextType {
     logout: () => void;
     isLoading: boolean;
     resetPassword: (password: string) => void;
+}
+interface DecodedToken {
+    name: string;
+    email: string;
+    role: string;
+    sub: string;
+    exp: number;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,11 +36,26 @@ export const useAuth = () => {
 const queryClient = new QueryClient();
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode<DecodedToken>(token);
+
+                if (decoded.exp * 1000 < Date.now()) {
+                    logout();
+                } else {
+                    console.log(decoded)
+                    setUser({ id: decoded.sub, name: decoded.name, email: decoded.email, role: decoded.role });
+                }
+            } catch (e) {
+                logout(); // Invalid token
+            }
+        }
     }, []);
 
     const login = async (email: string, password: string) => {

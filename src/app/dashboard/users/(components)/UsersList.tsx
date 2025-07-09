@@ -116,44 +116,46 @@ const UserManagement: React.FC = () => {
     console.log(editingUser)
   };
 
-  const handleSaveUser = (userData: any) => {
-    if (editingUser) {
-      // Update existing user
-      api.put(`/api/user/register${editingUser.id}`, userData)
-      toast.success('User updated successfully!');
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    } else {
-      // Add new user
-      api.post('/api/user/register', userData)
-      toast.success('User created successfully!');
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+  const handleSaveUser = async (userData: any) => {
+    try {
+      if (editingUser) {
+        // Update existing user
+        await api.put(`/api/user/${editingUser.id}`, userData)
+        toast.success('User updated successfully!');
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+      } else {
+        // Add new user
+        await api.post('/api/user/register', userData)
+        toast.success('User created successfully!');
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+      }
+    } catch (error) {
+      toast.error('Failed to save user. Please try again.');
     }
+
   };
   const handleEditUser = (user: User) => {
     setEditingUser(user);
     setIsSheetOpen(true);
   };
 
-  const roleLabels = {
-    'RN': 'Receptionist/Nurse',
-    'GP': 'General Practitioner',
-    'C': 'Specialist',
-    'P': 'Pharmacist',
-    'L': 'Lab Technician',
-    'admin': 'Administrator'
+  const roleLabels: Record<User['role'], string> = {
+    '0': 'Receptionist',
+    '1': 'General Practitioner',
+    '2': 'Specialist',
+    '3': 'Pharmacist',
+    '4': 'Lab Technician',
+    '5': 'Admin',
   };
 
-  const roleColors = {
-    'RN': 'bg-blue-100 text-blue-800',
-    'GP': 'bg-green-100 text-green-800',
-    'C': 'bg-purple-100 text-purple-800',
-    'P': 'bg-orange-100 text-orange-800',
-    'L': 'bg-cyan-100 text-cyan-800',
-    'admin': 'bg-red-100 text-red-800'
+  const roleColors: Record<number, string> = {
+    0: 'bg-blue-100 text-blue-800',
+    1: 'bg-green-100 text-green-800',
+    2: 'bg-purple-100 text-purple-800',
+    3: 'bg-orange-100 text-orange-800',
+    4: 'bg-cyan-100 text-cyan-800',
+    5: 'bg-red-100 text-red-800'
   };
-
-
-
 
   const handleRoleUpdate = (userId: string, newRole: User['role']) => {
 
@@ -165,8 +167,13 @@ const UserManagement: React.FC = () => {
     toast.success("User role has been successfully updated.")
   };
 
-  const handleDeleteUser = (userId: string) => {
-    toast.error('User has been successfully removed from the system.')
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await api.post('/api/user/delete', userId)
+      toast.error('User has been successfully removed from the system.')
+    } catch (error) {
+
+    }
   };
 
   const getInitials = (name: string) => {
@@ -349,12 +356,13 @@ const UserManagement: React.FC = () => {
                         </Badge>
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="RN">Receptionist/Nurse</SelectItem>
-                        <SelectItem value="GP">General Practitioner</SelectItem>
-                        <SelectItem value="C">Specialist</SelectItem>
-                        <SelectItem value="P">Pharmacist</SelectItem>
-                        <SelectItem value="L">Lab Technician</SelectItem>
-                        <SelectItem value="admin">Administrator</SelectItem>
+                        <SelectItem value="0">Receptionist/Nurse</SelectItem>
+                        <SelectItem value="1">General Practitioner</SelectItem>
+                        <SelectItem value="2">Specialist</SelectItem>
+                        <SelectItem value="3">Pharmacist</SelectItem>
+                        <SelectItem value="4">Lab Technician</SelectItem>
+                        <SelectItem value="5">Administrator</SelectItem>
+
                       </SelectContent>
                     </Select>
                   </TableCell>
