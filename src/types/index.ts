@@ -2,7 +2,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'RN' | 'GP' | 'C' | 'P' | 'L' | 'admin';
+  // role: 'RN' | 'GP' | 'C' | 0 | 'L' | 'admin';
+  role: any;
   phone: string;
 }
 

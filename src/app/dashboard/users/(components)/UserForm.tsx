@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { z } from 'zod';
+import { any, z } from 'zod';
 import { User } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,7 +33,8 @@ import {
 import { toast } from 'sonner';
 
 // Zod schema for user validation
-const userRoles = ['RN', 'GP', 'C', 'P', 'L', 'admin'] as const;
+const userRoles = ['RN', 'GP', 'C', 0, 'L', 'admin'] as const;
+// const userRoles = ['RN', 'GP', 'C', 'P', 'L', 'admin'] as const;
 
 const baseUserSchema = z.object({
   name: z.string()
@@ -49,21 +50,21 @@ const baseUserSchema = z.object({
   role: z.enum(userRoles, {
     errorMap: () => ({ message: 'Please select a valid role' })
   }),
-  department: z.string().optional(),
+  // department: z.string().optional(),
 });
 
 // Schema for creating new users (password required)
 const createUserSchema = baseUserSchema.extend({
-  password: z.string()
-    .min(8, 'Password must be at least 8 characters long')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-    ),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
+//   password: z.string()
+//     .min(8, 'Password must be at least 8 characters long')
+//     .regex(
+//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+//       'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+//     ),
+//   confirmPassword: z.string()
+// }).refine((data) => data.password === data.confirmPassword, {
+//   message: "Passwords do not match",
+//   path: ["confirmPassword"],
 });
 
 // Schema for editing users (password optional)
@@ -89,6 +90,7 @@ const editUserSchema = baseUserSchema.extend({
 });
 
 type CreateUserFormData = z.infer<typeof createUserSchema>;
+// type CreateUserFormData = z.infer<typeof any>;
 type EditUserFormData = z.infer<typeof editUserSchema>;
 type FormData = CreateUserFormData | EditUserFormData;
 
@@ -105,9 +107,10 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
     name: '',
     email: '',
     phone: '',
-    role: '' as User['role'],
-    password: '',
-    confirmPassword: ''
+    role: '' 
+    // role: '' as User['role'],
+    // password: '',
+    // confirmPassword: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,8 +122,8 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: user.email,
         phone: user.phone,
         role: user.role,
-        password: '',
-        confirmPassword: ''
+        // password: '',
+        // confirmPassword: ''
       });
     } else {
       setFormData({
@@ -128,8 +131,8 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         email: '',
         phone: '',
         role: '' as User['role'],
-        password: '',
-        confirmPassword: ''
+        // password: '',
+        // confirmPassword: ''
       });
     }
     setErrors({});
@@ -175,10 +178,10 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         };
         
         // Remove confirmPassword and empty password for editing
-        delete userData.confirmPassword;
-        if (isEditing && (!userData.password || userData.password === '')) {
-          delete userData.password;
-        }
+        // delete userData.confirmPassword;
+        // if (isEditing && (!userData.password || userData.password === '')) {
+        //   delete userData.password;
+        // }
         
         await onSave(userData);
         onClose();
@@ -195,7 +198,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
     'RN': 'Receptionist/Nurse',
     'GP': 'General Practitioner',
     'C': 'Specialist',
-    'P': 'Pharmacist',
+    '0': 'Pharmacist',
     'L': 'Lab Technician',
     'admin': 'Administrator'
   };
@@ -270,7 +273,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
                 <SelectItem value="RN">Receptionist/Nurse</SelectItem>
                 <SelectItem value="GP">General Practitioner</SelectItem>
                 <SelectItem value="C">Specialist</SelectItem>
-                <SelectItem value="P">Pharmacist</SelectItem>
+                <SelectItem value="0">Pharmacist</SelectItem>
                 <SelectItem value="L">Lab Technician</SelectItem>
                 <SelectItem value="admin">Administrator</SelectItem>
               </SelectContent>
@@ -280,7 +283,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         </div>
 
         {/* Security */}
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <h3 className="text-lg font-medium">
             {isEditing ? 'Change Password (Optional)' : 'Security *'}
           </h3>
@@ -349,7 +352,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
             </div>
             {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
           </div>
-        </div>
+        </div> */}
 
         {/* General Error */}
         {errors.general && (
