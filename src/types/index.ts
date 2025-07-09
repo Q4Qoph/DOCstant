@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'RN' | 'GP' | 'C' | 'P' | 'L' | 'admin';
+  role: any;
   phone: string;
 }
 
@@ -131,4 +131,9 @@ export interface PrescriptionRecord {
   approve: boolean
   createdAt: string
   updatedAt: string
+}
+
+
+export interface NotificationDropdownProps {
+  className?: string;
 }
