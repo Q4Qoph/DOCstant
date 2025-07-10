@@ -16,12 +16,12 @@ const DashboardTopbar: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
     const getRoleDisplayName = (role: string) => {
         switch (role) {
-            case 'RN': return 'Receptionist/Nurse';
-            case 'GP': return 'General Practitioner';
-            case 'C': return 'Specialist';
-            case 'P': return 'Pharmacist';
-            case 'L': return 'Lab Technician';
-            case 'admin': return 'Administrator';
+            case "0 ": return 'Receptionist/Nurse';
+            case '1': return 'General Practitioner';
+            case '2': return 'Specialist';
+            case '3': return 'Pharmacist';
+            case '4': return 'Lab Technician';
+            case '5': return 'Administrator';
             default: return role;
         }
     };
@@ -47,13 +47,6 @@ const DashboardTopbar: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
                 <div className="flex items-center space-x-4">
                     <NotificationDropdown />
-                    {/* <Button variant="ghost" size="sm" className="relative">
-                        <Bell className="h-4 w-4" />
-                        <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                            3
-                        </Badge>
-                    </Button> */}
-
                     <div className="text-right">
                         <p className="text-sm font-medium text-gray-800">{user?.name}</p>
                         <p className="text-xs text-gray-600">{getRoleDisplayName(user?.role || '')}</p>
