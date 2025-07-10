@@ -70,15 +70,6 @@ export const useNotifications = () => {
     },
     enabled: !!user?.id,
   })
-  // const fetchUnreadCount = useCallback(async () => {
-  //   try {
-  //     const response = await api.get(`/api/notification/unread-count/${user?.id}`)
-  //     return response.data.count
-  //   } catch (error) {
-  //     console.error("Failed to fetch unread count:", error)
-  //     return 0
-  //   }
-  // }, [user?.id])
 
   const {
     data: unreadCount = 0,
@@ -86,7 +77,7 @@ export const useNotifications = () => {
     queryKey: ["unread-count", user?.id],
     queryFn: async () => {
       const res = await api.get(`/api/notification/unread-count/${user?.id}`)
-      return res.data.count
+      return res.data.unreadCount
     },
     enabled: !!user?.id,
   })
@@ -171,18 +162,15 @@ export const useNotifications = () => {
 
       // Connection event handlers
       socket.on("connect", () => {
-        console.log("Socket.IO connected")
         setIsConnected(true)
         reconnectAttempts.current = 0
       })
 
       socket.on("disconnect", (reason) => {
-        console.log("Socket.IO disconnected:", reason)
         setIsConnected(false)
       })
 
       socket.on("connect_error", (error) => {
-        console.error("Socket.IO connection error:", error)
         setIsConnected(false)
       })
 
@@ -209,20 +197,17 @@ export const useNotifications = () => {
       })
 
       socket.on("reconnect_attempt", (attemptNumber) => {
-        console.log("Socket.IO reconnection attempt:", attemptNumber)
         reconnectAttempts.current = attemptNumber
       })
 
       socket.on("reconnect_error", (error) => {
-        console.error("Socket.IO reconnection error:", error)
+        // console.error("Socket.IO reconnection error:", error)
       })
 
       socket.on("reconnect_failed", () => {
-        console.error("Socket.IO reconnection failed")
         setIsConnected(false)
       })
     } catch (error) {
-      console.error("Failed to connect Socket.IO:", error)
       setIsConnected(false)
     }
   }, [])

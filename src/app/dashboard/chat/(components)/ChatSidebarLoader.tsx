@@ -7,7 +7,7 @@ export function ChatSidebarLoader() {
             <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
                 <div className="p-4 border-b border-gray-200">
                     <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
-                    <p className="flex text-nowrap items-center text-sm text-gray-500"><Skeleton className="h-3 w-3" /> contacts</p>
+                    <div className="flex text-nowrap items-center gap-2 text-sm text-gray-500"><Skeleton className="h-3 w-3" /> contacts</div>
                 </div>
                 <div className="space-y-4">
                     <div className="space-y-3">
