@@ -17,7 +17,7 @@ export default function NotificationsPage() {
     markAsRead,
   } = useNotifications()
 
-  const filteredNotifications = notifications.filter((notification) => {
+  const filteredNotifications = notifications.filter((notification: any) => {
     if (filter === "unread") return !notification.read
     if (filter === "read") return notification.read
     return true
