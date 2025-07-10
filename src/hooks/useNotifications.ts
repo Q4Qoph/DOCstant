@@ -18,6 +18,7 @@ export const useNotifications = () => {
   const { user } = useAuth()
   const socketRef = useRef<Socket | null>(null)
   const [notifications, setNotifications] = useState<Notification[]>([])
+  const [unreadCount, setUnreadCount] = useState(0)
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -49,6 +50,16 @@ export const useNotifications = () => {
       setIsLoading(false)
     }
   }, [])
+
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await api.get(`/api/notification/unread-count/${user?.id}`)
+      return response.data.count
+    } catch (error) {
+      console.error("Failed to fetch unread count:", error)
+      return 0
+    }
+  }, [user?.id])
 
   // Mark notification as read
   const markAsRead = useCallback(async (id: string) => {
@@ -199,6 +210,7 @@ export const useNotifications = () => {
   // Initialize: Fetch notifications and connect socket
   useEffect(() => {
     fetchNotifications()
+    fetchUnreadCount().then(setUnreadCount)
     connectSocket()
 
     // Cleanup on unmount
@@ -244,9 +256,6 @@ export const useNotifications = () => {
   const refreshNotifications = useCallback(() => {
     fetchNotifications()
   }, [fetchNotifications])
-
-  // Get unread count
-  const unreadCount = notifications.filter((n) => !n.read).length
 
   return {
     notifications,
