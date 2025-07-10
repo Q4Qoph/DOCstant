@@ -78,7 +78,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ className =
                 <p>No notifications yet</p>
               </div>
             ) : (
-              previewNotifications.map((notification) => (
+              previewNotifications.map((notification: any) => (
                 <NotificationCard
                   key={notification.id}
                   notification={notification}

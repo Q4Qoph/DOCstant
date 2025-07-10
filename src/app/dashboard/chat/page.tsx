@@ -6,6 +6,7 @@ import { ChatSidebar } from "./(components)/ChatSidebar"
 import { ChatArea } from "./(components)/ChatArea"
 import { useNotifications } from "@/hooks/useNotifications"
 import api from "@/lib/axios"
+import { useQuery } from "@tanstack/react-query"
 
 interface User {
   id: string
@@ -21,27 +22,26 @@ interface Message {
   timestamp: Date
   senderName: string
 }
+const fetchUsers = async () => {
+  const res = await api.get("/api/user/users")
+  return res.data as User[]
+}
 
 export default function ChatPage() {
   const { user } = useAuth()
   const { socket, isConnected } = useNotifications()
-  const [users, setUsers] = useState<User[]>([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
   // Fetch users
-  const fetchUsers = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      const res = await api.get("/api/user/users")
-      setUsers(res.data)
-    } catch (err) {
-      console.error("Failed to fetch users", err)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const { data: usersData = [], isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+    enabled: !!user?.id
+  })
+
+  const users = usersData.filter((u) => u.id !== user?.id)
+
 
   // Load chat history
   const loadChat = useCallback(() => {
@@ -128,13 +128,6 @@ export default function ChatPage() {
     }
   }, [user?.id, socket, selectedUser])
 
-  // Initial fetch
-  useEffect(() => {
-    if (user?.id) {
-      fetchUsers()
-    }
-  }, [user?.id, fetchUsers])
-
   // Load chat on user select
   useEffect(() => {
     if (selectedUser) {
@@ -142,13 +135,6 @@ export default function ChatPage() {
     }
   }, [selectedUser, loadChat])
 
-  if (!user) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <p>Please log in to access chat</p>
-      </div>
-    )
-  }
 
   return (
     <div className="flex h-full bg-gray-50">
@@ -161,7 +147,7 @@ export default function ChatPage() {
       <ChatArea
         selectedUser={selectedUser}
         messages={messages}
-        currentUserId={user.id}
+        currentUserId={user!.id}
         onSendMessage={handleSendMessage}
         isConnected={isConnected}
       />
