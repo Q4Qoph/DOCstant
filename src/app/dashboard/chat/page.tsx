@@ -7,6 +7,7 @@ import { ChatArea } from "./(components)/ChatArea"
 import { useNotifications } from "@/hooks/useNotifications"
 import api from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
+import { ChatSidebarLoader } from "./(components)/ChatSidebarLoader"
 
 interface User {
   id: string
@@ -135,6 +136,9 @@ export default function ChatPage() {
     }
   }, [selectedUser, loadChat])
 
+ if (!user) {
+    return <ChatSidebarLoader/>
+  }
 
   return (
     <div className="flex h-full bg-gray-50">
@@ -147,7 +151,7 @@ export default function ChatPage() {
       <ChatArea
         selectedUser={selectedUser}
         messages={messages}
-        currentUserId={user!.id}
+        currentUserId={user.id}
         onSendMessage={handleSendMessage}
         isConnected={isConnected}
       />
