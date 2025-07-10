@@ -5,6 +5,7 @@ import axios from "axios"
 import { io, type Socket } from "socket.io-client"
 import api from "@/lib/axios"
 import { useAuth } from "@/contexts/AuthContext"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export interface Notification {
   id: string
@@ -17,114 +18,136 @@ export interface Notification {
 export const useNotifications = () => {
   const { user } = useAuth()
   const socketRef = useRef<Socket | null>(null)
-  const [notifications, setNotifications] = useState<Notification[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
+  // const [notifications, setNotifications] = useState<Notification[]>([])
   const [isConnected, setIsConnected] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // const [isLoading, setIsLoading] = useState(true)
+  // const [error, setError] = useState<string | null>(null)
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const reconnectAttempts = useRef(0)
 
+  const queryClient = useQueryClient()
   // Fetch notifications from API
-  const fetchNotifications = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
+  // const fetchNotifications = useCallback(async () => {
+  //   try {
+  //     setIsLoading(true)
+  //     setError(null)
 
-      const response = await api.get(`/api/notification/my-notifications/${user?.id}`, {
-      })
+  //     const response = await api.get(`/api/notification/my-notifications/${user?.id}`, {
+  //     })
 
-      const fetchedNotifications: Notification[] = response.data.map((item: any) => ({
+  //     const fetchedNotifications: Notification[] = response.data.map((item: any) => ({
+  //       id: item.id,
+  //       message: item.message,
+  //       type: item.type || "info",
+  //       timestamp: new Date(item.timestamp || item.createdAt),
+  //       read: item.read || false,
+  //     }))
+
+  //     setNotifications(fetchedNotifications)
+  //   } catch (error) {
+  //     console.error("Error fetching notifications:", error)
+  //     setError("Failed to fetch notifications")
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }, [])
+  const {
+    data: notifications = [],
+    isLoading,
+    error,
+    refetch: refreshNotifications,
+  } = useQuery({
+    queryKey: ["notifications", user?.id],
+    queryFn: async () => {
+      const res = await api.get(`/api/notification/my-notifications/${user?.id}`)
+      return res.data.map((item: any) => ({
         id: item.id,
         message: item.message,
         type: item.type || "info",
         timestamp: new Date(item.timestamp || item.createdAt),
         read: item.read || false,
       }))
+    },
+    enabled: !!user?.id,
+  })
+  // const fetchUnreadCount = useCallback(async () => {
+  //   try {
+  //     const response = await api.get(`/api/notification/unread-count/${user?.id}`)
+  //     return response.data.count
+  //   } catch (error) {
+  //     console.error("Failed to fetch unread count:", error)
+  //     return 0
+  //   }
+  // }, [user?.id])
 
-      setNotifications(fetchedNotifications)
-    } catch (error) {
-      console.error("Error fetching notifications:", error)
-      setError("Failed to fetch notifications")
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const {
+    data: unreadCount = 0,
+  } = useQuery({
+    queryKey: ["unread-count", user?.id],
+    queryFn: async () => {
+      const res = await api.get(`/api/notification/unread-count/${user?.id}`)
+      return res.data.count
+    },
+    enabled: !!user?.id,
+  })
 
-  const fetchUnreadCount = useCallback(async () => {
-    try {
-      const response = await api.get(`/api/notification/unread-count/${user?.id}`)
-      return response.data.count
-    } catch (error) {
-      console.error("Failed to fetch unread count:", error)
-      return 0
-    }
-  }, [user?.id])
+  // Mark as read
+  const markAsReadMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await api.put(`/api/notifications/${id}/mark-read`)
+      return id
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] })
+      queryClient.invalidateQueries({ queryKey: ["unread-count", user?.id] })
+    },
+  })
 
-  // Mark notification as read
-  const markAsRead = useCallback(async (id: string) => {
-    try {
-      await api.put(
-        `/api/notifications/${id}/mark-read`,
-        {},
-      )
-
-      setNotifications((prev) =>
-        prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-      )
-    } catch (error) {
-      console.error("Error marking notification as read:", error)
-    }
-  }, [])
-
-  // Mark all notifications as read
-  const markAllAsRead = useCallback(async () => {
-    try {
-      await api.put(
-        "/api/notifications/read-all",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+  // Mark all as read
+  const markAllAsReadMutation = useMutation({
+    mutationFn: async () => {
+      await api.put("/api/notifications/read-all", {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      )
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] })
+      queryClient.invalidateQueries({ queryKey: ["unread-count", user?.id] })
+    },
+  })
 
-      setNotifications((prev) => prev.map((notification) => ({ ...notification, read: true })))
-    } catch (error) {
-      console.error("Error marking all notifications as read:", error)
-    }
-  }, [])
-
-  // Delete notification
-  const deleteNotification = useCallback(async (id: string) => {
-    try {
+  // Delete a notification
+  const deleteNotificationMutation = useMutation({
+    mutationFn: async (id: string) => {
       await axios.delete(`/api/notifications/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
+      return id
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] })
+    },
+  })
 
-      setNotifications((prev) => prev.filter((notification) => notification.id !== id))
-    } catch (error) {
-      console.error("Error deleting notification:", error)
-    }
-  }, [])
-
-  // Clear all notifications
-  const clearAllNotifications = useCallback(async () => {
-    try {
+  // Clear all
+  const clearAllMutation = useMutation({
+    mutationFn: async () => {
       await axios.delete("/api/notifications", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] })
+      queryClient.invalidateQueries({ queryKey: ["unread-count", user?.id] })
+    },
+  })
 
-      setNotifications([])
-    } catch (error) {
-      console.error("Error clearing all notifications:", error)
-    }
-  }, [])
 
   const connectSocket = useCallback(() => {
     try {
@@ -163,23 +186,20 @@ export const useNotifications = () => {
         setIsConnected(false)
       })
 
-      // Listen for new notification events and APPEND to existing notifications
+      // Listen for new notification events 
       socket.on("new_notification", (data) => {
-        try {
-          const newNotification: Notification = {
-            id: data.id || Date.now().toString(),
-            message: data.message || "New notification",
-            type: data.type || "info",
-            timestamp: new Date(data.timestamp || Date.now()),
-            read: false,
-          }
-
-          // Append new notification to the beginning of the list
-          setNotifications((prev) => [newNotification, ...prev])
-        } catch (error) {
-          console.error("Error processing notification:", error)
+        const newNotification: Notification = {
+          id: data.id || Date.now().toString(),
+          message: data.message || "New notification",
+          type: data.type || "info",
+          timestamp: new Date(data.timestamp || Date.now()),
+          read: false,
         }
+
+        queryClient.setQueryData<Notification[]>(["notifications", user?.id], (old = []) => [newNotification, ...old])
+        queryClient.invalidateQueries({ queryKey: ["unread-count", user?.id] })
       })
+
 
       // Handle reconnection events
       socket.on("reconnect", (attemptNumber) => {
@@ -209,8 +229,6 @@ export const useNotifications = () => {
 
   // Initialize: Fetch notifications and connect socket
   useEffect(() => {
-    fetchNotifications()
-    fetchUnreadCount().then(setUnreadCount)
     connectSocket()
 
     // Cleanup on unmount
@@ -223,7 +241,7 @@ export const useNotifications = () => {
         socketRef.current = null
       }
     }
-  }, [fetchNotifications, connectSocket])
+  }, [connectSocket])
 
   const sendNotification = useCallback(
     (data: {
@@ -252,10 +270,6 @@ export const useNotifications = () => {
     connectSocket()
   }, [connectSocket])
 
-  // Refresh notifications manually
-  const refreshNotifications = useCallback(() => {
-    fetchNotifications()
-  }, [fetchNotifications])
 
   return {
     notifications,
@@ -263,13 +277,14 @@ export const useNotifications = () => {
     isConnected,
     isLoading,
     error,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-    clearAllNotifications,
+    markAsRead: markAsReadMutation.mutate,
+    markAllAsRead: markAllAsReadMutation.mutate,
+    deleteNotification: deleteNotificationMutation.mutate,
+    clearAllNotifications: clearAllMutation.mutate,
     reconnect,
     sendNotification,
     refreshNotifications,
-    socket: socketRef.current
+    socket: socketRef.current,
   }
+
 }

@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface User {
     id: string
@@ -27,7 +28,7 @@ export function ChatSidebar({ users, selectedUser, onUserSelect, isLoading = fal
         <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
             <div className="p-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
-                <p className="text-sm text-gray-500">{isLoading ? "Loading..." : `${users.length} contacts`}</p>
+                <p className="flex text-nowrap items-center text-sm text-gray-500">{isLoading ? <Skeleton className="h-3 w-3" /> : `${users.length} `}contacts</p>
             </div>
 
             <ScrollArea className="flex-1">
