@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { io, type Socket } from "socket.io-client"
-import api from "@/lib/axios"
 import { useAuth } from "@/contexts/AuthContext"
 import { ChatSidebar } from "./(components)/ChatSidebar"
 import { ChatArea } from "./(components)/ChatArea"
+import { useNotifications } from "@/hooks/useNotifications"
+import api from "@/lib/axios"
 
 interface User {
   id: string
@@ -24,194 +24,123 @@ interface Message {
 
 export default function ChatPage() {
   const { user } = useAuth()
-  const socketRef = useRef<Socket | null>(null)
+  const { socket, isConnected } = useNotifications()
   const [users, setUsers] = useState<User[]>([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [isConnected, setIsConnected] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Connect to socket
-  const connectSocket = useCallback(() => {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_WS_URL
-      if (!baseUrl) {
-        throw new Error("NEXT_PUBLIC_WS_URL is not defined")
-      }
-
-      console.log("Connecting to Socket.IO for chat:", baseUrl)
-      const socket = io(baseUrl, {
-        autoConnect: true,
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        timeout: 20000,
-        forceNew: true,
-      })
-
-      socketRef.current = socket
-
-      // Connection event handlers
-      socket.on("connect", () => {
-        console.log("Chat Socket.IO connected")
-        setIsConnected(true)
-        // Join user's room for receiving messages
-        if (user?.id) {
-          socket.emit("join_user_room", user.id)
-        }
-      })
-
-      socket.on("disconnect", (reason) => {
-        console.log("Chat Socket.IO disconnected:", reason)
-        setIsConnected(false)
-      })
-
-      socket.on("connect_error", (error) => {
-        console.error("Chat Socket.IO connection error:", error)
-        setIsConnected(false)
-      })
-
-      // Listen for new messages
-      socket.on("new_message", (messageData) => {
-        try {
-          const newMessage: Message = {
-            id: messageData.id || Date.now().toString(),
-            senderId: messageData.senderId,
-            receiverId: messageData.receiverId,
-            content: messageData.content,
-            timestamp: new Date(messageData.timestamp || Date.now()),
-            senderName: messageData.senderName || "User",
-          }
-
-          // Only add message if it's for the current conversation
-          if (
-            (newMessage.senderId === selectedUser?.id && newMessage.receiverId === user?.id) ||
-            (newMessage.senderId === user?.id && newMessage.receiverId === selectedUser?.id)
-          ) {
-            setMessages((prev) => [...prev, newMessage])
-          }
-        } catch (error) {
-          console.error("Error processing message:", error)
-        }
-      })
-
-      // Listen for user online status updates
-      socket.on("user_online", (userId: string) => {
-        setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, isOnline: true } : u)))
-      })
-
-      socket.on("user_offline", (userId: string) => {
-        setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, isOnline: false } : u)))
-      })
-    } catch (error) {
-      console.error("Failed to connect Socket.IO:", error)
-      setIsConnected(false)
-    }
-  }, [user?.id, selectedUser?.id])
-
-  // Fetch users from database
+  // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await api.get("/api/user/users")
-      setUsers(response.data)
-    } catch (error) {
-      console.error("Failed to fetch users:", error)
-      // Mock data fallback
+      const res = await api.get("/api/user/users")
+      setUsers(res.data)
+    } catch (err) {
+      console.error("Failed to fetch users", err)
     } finally {
       setIsLoading(false)
     }
   }, [])
 
-  // Fetch messages for selected user
-  const fetchMessages = useCallback(
-    async (userId: string) => {
-      try {
-        const response = await api.get(`/api/messages/${userId}`)
-        setMessages(response.data)
-      } catch (error) {
-        console.error("Failed to fetch messages:", error)
-        // Mock data fallback
-        setMessages([
-          {
-            id: "1",
-            senderId: user?.id || "current-user",
-            receiverId: userId,
-            content: "Hey there! How are you doing?",
-            timestamp: new Date(Date.now() - 3600000),
-            senderName: "You",
-          },
-          {
-            id: "2",
-            senderId: userId,
-            receiverId: user?.id || "current-user",
-            content: "Hi! I'm doing great, thanks for asking!",
-            timestamp: new Date(Date.now() - 3000000),
-            senderName: users.find((u) => u.id === userId)?.name || "User",
-          },
-        ])
-      }
-    },
-    [user?.id, users],
-  )
+  // Load chat history
+  const loadChat = useCallback(() => {
+    if (user?.id && selectedUser && socket) {
+      socket.emit("load_chat", {
+        userA: user.id,
+        userB: selectedUser.id,
+      })
+    }
+  }, [user?.id, selectedUser, socket])
 
   // Handle user selection
-  const handleUserSelect = useCallback(
-    (selectedUser: User) => {
-      setSelectedUser(selectedUser)
-      fetchMessages(selectedUser.id)
-    },
-    [fetchMessages],
-  )
+  const handleUserSelect = useCallback((u: User) => {
+    setSelectedUser(u)
+  }, [])
 
-  // Send message via socket
+  // Send message
   const handleSendMessage = useCallback(
     (content: string) => {
-      if (!selectedUser || !socketRef.current || !user?.id) return
+      if (!user || !selectedUser || !socket) return
 
-      const messageData = {
+      const newMessage: Message = {
         id: Date.now().toString(),
         senderId: user.id,
         receiverId: selectedUser.id,
         content,
         timestamp: new Date(),
-        senderName: `${user.name}` || "You",
-      }
-
-      // Emit message through socket
-      socketRef.current.emit("send_message", messageData)
-
-      // Add message to local state immediately
-      const newMessage: Message = {
-        ...messageData,
         senderName: "You",
       }
-      setMessages((prev) => [...prev, newMessage])
 
-      // Optionally save to database via API
-      api.post("/api/messages", messageData).catch((error) => {
-        console.error("Failed to save message to database:", error)
+      // Emit to server
+      socket.emit("chat_message", {
+        senderId: user.id,
+        receiverId: selectedUser.id,
+        content,
       })
+
+      // Optimistically add to UI
+      setMessages((prev) => [...prev, newMessage])
     },
-    [selectedUser, user],
+    [user, selectedUser, socket],
   )
 
-  // Initialize
+  // Setup socket listeners
+  useEffect(() => {
+    if (!user?.id || !socket) return
+
+    socket.emit("register", user.id)
+
+    const handleReceiveMessage = (data: { senderId: string; message: string }) => {
+      if (!selectedUser) return
+      if (data.senderId !== selectedUser.id) return
+
+      const msg: Message = {
+        id: Date.now().toString(),
+        senderId: data.senderId,
+        receiverId: user.id,
+        content: data.message,
+        timestamp: new Date(),
+        senderName: selectedUser.name,
+      }
+
+      setMessages((prev) => [...prev, msg])
+    }
+
+    const handleChatHistory = (records: any[]) => {
+      const formatted: Message[] = records.map((msg) => ({
+        id: `${msg.SenderId}-${msg.ReceiverId}-${Date.now()}-${Math.random()}`,
+        senderId: msg.SenderId,
+        receiverId: msg.ReceiverId,
+        content: msg.Content,
+        timestamp: new Date(msg.CreatedAt),
+        senderName: msg.SenderId === user.id ? "You" : selectedUser?.name || "User",
+      }))
+      setMessages(formatted)
+    }
+
+    socket.on("receive_message", handleReceiveMessage)
+    socket.on("chat_history", handleChatHistory)
+
+    return () => {
+      socket.off("receive_message", handleReceiveMessage)
+      socket.off("chat_history", handleChatHistory)
+    }
+  }, [user?.id, socket, selectedUser])
+
+  // Initial fetch
   useEffect(() => {
     if (user?.id) {
       fetchUsers()
-      connectSocket()
     }
+  }, [user?.id, fetchUsers])
 
-    // Cleanup on unmount
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect()
-        socketRef.current = null
-      }
+  // Load chat on user select
+  useEffect(() => {
+    if (selectedUser) {
+      loadChat()
     }
-  }, [user?.id, fetchUsers, connectSocket])
+  }, [selectedUser, loadChat])
 
   if (!user) {
     return (
@@ -222,12 +151,13 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-full bg-gray-50">
       <ChatSidebar
-       users={users} 
-       selectedUser={selectedUser} 
-       onUserSelect={handleUserSelect}
-        isLoading={isLoading} />
+        users={users}
+        selectedUser={selectedUser}
+        onUserSelect={handleUserSelect}
+        isLoading={isLoading}
+      />
       <ChatArea
         selectedUser={selectedUser}
         messages={messages}

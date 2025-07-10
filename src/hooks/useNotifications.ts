@@ -261,5 +261,6 @@ export const useNotifications = () => {
     reconnect,
     sendNotification,
     refreshNotifications,
+    socket: socketRef.current
   }
 }
