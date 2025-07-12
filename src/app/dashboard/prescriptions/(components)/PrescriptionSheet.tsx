@@ -18,6 +18,9 @@ import api from "@/lib/axios"
 import { Loader2 } from "lucide-react"
 import { z } from "zod"
 import { toast } from "sonner"
+import { useDepartmentUsers } from "@/hooks/useDepartmentUsers"
+import { useNotifications } from "@/hooks/useNotifications"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface PrescriptionFormProps {
   diagnosisId: string
@@ -33,6 +36,9 @@ const prescriptionSchema = z.object({
 })
 
 const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionFormProps) => {
+  const { data: pharmacists } = useDepartmentUsers(3);
+  const { sendNotification } = useNotifications()
+  const { user } = useAuth()
   const [drugName, setDrugName] = useState("")
   const [quantity, setQuantity] = useState("")
   const [medicineDosage, setMedicineDosage] = useState("")
@@ -65,6 +71,14 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
     try {
       await api.post("/api/prescription", result.data)
       toast.success("Prescription saved successfully.")
+      sendNotification({
+        title: "Medication Approval Request",
+        message: "A prescription has been submitted for patient _. Please review and approve the medication request.",
+        fromUserId: user!.id,
+        fromDepartment: 0,
+        toDepartment: 2,
+        toUserIds: pharmacists.map((u: any) => u.id),
+      })
       onOpenChange(false)
     } catch (error) {
     } finally {

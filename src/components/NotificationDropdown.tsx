@@ -36,7 +36,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ className =
 
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {
-      markAsRead(notification.id)
+      markAsRead(notification.id, notification.toUserId)
     }
     setIsOpen(false)
   }
@@ -71,7 +71,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ className =
           </div>
 
           {/* Preview Notifications */}
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-64 overflow-y-auto p-4 space-y-3">
             {previewNotifications.length === 0 ? (
               <div className="p-6 text-center text-gray-500">
                 <Bell className="h-8 w-8 mx-auto mb-2 text-gray-300" />

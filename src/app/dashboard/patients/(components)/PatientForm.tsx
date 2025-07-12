@@ -11,8 +11,13 @@ import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/compo
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
+    const { data: specialists } = useDepartmentUsers(2);
+    const { sendNotification } = useNotifications()
+    const { user } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState(
@@ -38,7 +43,6 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
 
         }
     );
-    const {sendNotification} = useNotifications()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,17 +53,15 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             // onSubmit(validatedData);
             const response = await api.post("/api/DiagnosisRecord", validatedData)
             if (response.status == 200) {
-                sendNotification({
-                    userId: "",
-                    title: "New patient",
-                    message: 'New patient',
-                    fromUserId: "",
-                    toUserId: '',
-                    fromDepartment: 'Reception',
-                    toDepartment: 'Pharmacy'
-                })
                 toast.success("Patient recorded successfuly");
-
+                sendNotification({
+                    title: "Patient Registration Alert",
+                    message: "Reception has registered a new patient. Please proceed with the required pharmacy protocols.",
+                    fromUserId: user!.id,
+                    fromDepartment: 0,
+                    toDepartment: 2,
+                    toUserIds: specialists.map((u: any) => u.id),
+                });
                 setIsSheetOpen(false)
                 setFormData({
                     name: "",
@@ -239,7 +241,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     />
                     <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
                 </div>
-<div className="space-y-2">
+                <div className="space-y-2">
                     <Label htmlFor="weight">Weight (kg)</Label>
                     <Input
                         id="weight"
