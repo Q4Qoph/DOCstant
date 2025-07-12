@@ -8,6 +8,9 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { ParamValue } from "next/dist/server/request/params";
+import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LabTestFormProps {
     open: boolean
@@ -16,6 +19,9 @@ interface LabTestFormProps {
 }
 
 export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTestFormProps) {
+    const { data: specialists } = useDepartmentUsers(2);
+    const { sendNotification } = useNotifications()
+    const { user } = useAuth()
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
@@ -47,6 +53,14 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
                     testDate: new Date().toISOString().slice(0, 16),
                     diagnosisId: diagnosisId || ""
                 });
+                sendNotification({
+                    title: "Test Results Ready",
+                    message: "Laboratory tests have been completed for the assigned patient. Please review the results and proceed with the clinical evaluation.",
+                    fromUserId: user!.id,
+                    fromDepartment: 3,
+                    toDepartment: 2,
+                    toUserIds: specialists.map((u: any) => u.id),
+                })
                 onOpenChange(false)
             }
         } catch (error: any) {

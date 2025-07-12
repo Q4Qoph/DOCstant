@@ -15,8 +15,9 @@ import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
-    const { user } = useAuth()
     const { data: specialists } = useDepartmentUsers(2);
+    const { sendNotification } = useNotifications()
+    const { user } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState(
@@ -42,7 +43,6 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
 
         }
     );
-    const { sendNotification } = useNotifications()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
