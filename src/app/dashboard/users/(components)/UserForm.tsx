@@ -73,8 +73,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
     email: '',
     phone: '',
     role: '' as User['role'],
-    // password: '',
-    // confirmPassword: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,7 +83,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        role: user.role,
+        role: user.role.toString(),
       });
     } else {
       setFormData({

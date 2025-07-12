@@ -76,7 +76,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
         message: "A prescription has been submitted for patient _. Please review and approve the medication request.",
         fromUserId: user!.id,
         fromDepartment: 0,
-        toDepartment: 2,
+        toDepartment: 3,
         toUserIds: pharmacists.map((u: any) => u.id),
       })
       onOpenChange(false)
