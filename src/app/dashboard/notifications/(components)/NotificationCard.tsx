@@ -1,14 +1,28 @@
 "use client"
 
 import type React from "react"
-
-import { Check, Trash2 } from "lucide-react"
+import { Check, Trash2, Bell, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { Notification } from "@/hooks/useNotifications"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+
+interface Notification {
+    id: string
+    title: string
+    message: string
+    timestamp: Date
+    read: boolean
+    toUserId: string
+    type?: "info" | "success" | "warning" | "error"
+}
 
 interface NotificationCardProps {
     notification: Notification
-    onMarkAsRead: (id: string) => void
+    onMarkAsRead: (id: string, userId: string) => void
     onDelete?: (id: string) => void
     onClick?: () => void
     showActions?: boolean
@@ -21,19 +35,6 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
     onClick,
     showActions = true,
 }) => {
-    const getNotificationIcon = (type: Notification["type"]) => {
-        switch (type) {
-            case "success":
-                return <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            case "error":
-                return <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            case "warning":
-                return <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-            default:
-                return <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-        }
-    }
-
     const formatTime = (timestamp: Date) => {
         const now = new Date()
         const diff = now.getTime() - timestamp.getTime()
@@ -47,53 +48,129 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
         return "Just now"
     }
 
+    const getNotificationVariant = () => {
+        if (!notification.read) return "default"
+        return "secondary"
+    }
+
     return (
-        <div
-            className={`p-4 border-b border-gray-100 hover:bg-gray-50 ${onClick ? "cursor-pointer" : ""
-                } ${!notification.read ? "bg-blue-50" : ""}`}
-            onClick={onClick}
-        >
-            <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 mt-1">{getNotificationIcon(notification.type)}</div>
-                <div className="flex-1 min-w-0">
-                    <p className={`text-sm ${!notification.read ? "font-medium text-gray-900" : "text-gray-700"}`}>
-                        {notification.message}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">{formatTime(notification.timestamp)}</p>
-                </div>
-                {showActions && (
-                    <div className="flex items-center space-x-1">
-                        {!notification.read && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onMarkAsRead(notification.id)
-                                }}
-                                className="h-6 w-6 p-0"
-                                title="Mark as read"
-                            >
-                                <Check className="h-3 w-3" />
-                            </Button>
-                        )}
-                        {onDelete && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onDelete(notification.id)
-                                }}
-                                className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
-                                title="Delete notification"
-                            >
-                                <Trash2 className="h-3 w-3" />
-                            </Button>
-                        )}
-                    </div>
+        <TooltipProvider>
+            <Card
+                className={cn(
+                    "shadow-none",
+                    onClick && "cursor-pointer",
+                    !notification.read && "bg-gradient-to-r from-blue-50/80 to-transparent border-l-4 border-l-blue-500",
                 )}
-            </div>
-        </div>
+                onClick={onClick}
+            >
+                <div className="px-5">
+                    <div className="flex items-start gap-3">
+                        {/* Notification Avatar */}
+                        <Avatar className={cn("h-8 w-8 transition-colors")}>
+                            <AvatarFallback className={cn("border-0 text-yellow-600 bg-yellow-100")}>
+                                <Bell className="h-4 w-4" />
+                            </AvatarFallback>
+                        </Avatar>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0 space-y-2">
+                            <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                    <h4
+                                        className={cn(
+                                            "text-sm font-medium leading-tight",
+                                            !notification.read ? "text-foreground" : "text-muted-foreground",
+                                        )}
+                                    >
+                                        {notification.title}
+                                    </h4>
+                                    {!notification.read && (
+                                        <Badge variant={getNotificationVariant()} className="h-5 px-1.5 text-xs">
+                                            New
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                {/* Actions */}
+                                {showActions && (
+                                    <div
+                                        className={cn(
+                                            "flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                                            !notification.read && "opacity-100",
+                                        )}
+                                    >
+                                        {!notification.read && (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onMarkAsRead(notification.id, notification.toUserId)
+                                                        }}
+                                                        className={cn(
+                                                            "h-8 w-8 p-0 rounded-full",
+                                                            "hover:bg-green-100 hover:text-green-700",
+                                                            "focus:bg-green-100 focus:text-green-700",
+                                                            "transition-colors duration-200",
+                                                        )}
+                                                    >
+                                                        <Check className="h-3.5 w-3.5" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Mark as read</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )}
+
+                                        {onDelete && (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onDelete(notification.id)
+                                                        }}
+                                                        className={cn(
+                                                            "h-8 w-8 p-0 rounded-full",
+                                                            "hover:bg-red-100 hover:text-red-700",
+                                                            "focus:bg-red-100 focus:text-red-700",
+                                                            "transition-colors duration-200",
+                                                        )}
+                                                    >
+                                                        <Trash2 className="h-3.5 w-3.5" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Delete notification</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            <p
+                                className={cn(
+                                    "text-sm leading-relaxed",
+                                    !notification.read ? "text-foreground/80" : "text-muted-foreground",
+                                )}
+                            >
+                                {notification.message}
+                            </p>
+
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground/70">
+                                <Clock className="h-3 w-3" />
+                                <span className="font-medium">{formatTime(notification.timestamp)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        </TooltipProvider>
     )
 }

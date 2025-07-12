@@ -37,6 +37,7 @@ const queryClient = new QueryClient();
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any | null>(null);
+    const [departmentUsers, setDepartmentUsers] = useState<Record<string, User[]>>({});
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 

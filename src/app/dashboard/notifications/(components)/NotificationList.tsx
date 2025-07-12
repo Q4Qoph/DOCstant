@@ -8,7 +8,7 @@ import { NotificationCard } from "./NotificationCard"
 
 interface NotificationListProps {
     notifications: Notification[]
-    onMarkAsRead: (id: string) => void
+    onMarkAsRead: (id: string, userId: string) => void
 }
 
 export const NotificationList: React.FC<NotificationListProps> = ({ notifications, onMarkAsRead }) => {
@@ -25,7 +25,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="space-y-4">
             {notifications.map((notification, index) => (
                 <div key={notification.id} className={index === notifications.length - 1 ? "" : "border-b border-gray-100"}>
                     <NotificationCard
