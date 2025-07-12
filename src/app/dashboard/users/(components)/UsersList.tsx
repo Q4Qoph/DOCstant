@@ -120,7 +120,7 @@ const UserManagement: React.FC = () => {
     try {
       if (editingUser) {
         // Update existing user
-        await api.put(`/api/user/${editingUser.id}`, userData)
+        await api.put(`/api/User/update/${editingUser.id}`, userData)
         toast.success('User updated successfully!');
         queryClient.invalidateQueries({ queryKey: ['users'] });
       } else {
@@ -157,22 +157,23 @@ const UserManagement: React.FC = () => {
     5: 'bg-red-100 text-red-800'
   };
 
-  const handleRoleUpdate = (userId: string, newRole: User['role']) => {
-
-
-    // toast({
-    //   title: "Role Updated",
-    //   description: "User role has been successfully updated.",
-    // });
-    toast.success("User role has been successfully updated.")
+  const handleRoleUpdate = async (userId: string, newRole: User['role']) => {
+    try {
+      await api.put(`/api/User/update/${userId}/role`, { role: newRole });
+      toast.success("User role has been successfully updated.");
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    } catch (error) {
+      toast.error("Failed to update user role.");
+    }
   };
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      await api.post('/api/user/delete', userId)
-      toast.error('User has been successfully removed from the system.')
+      await api.delete(`/api/User/${userId}`);
+      toast.success('User has been successfully removed from the system.');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     } catch (error) {
-
+      toast.error('Failed to delete user.');
     }
   };
 

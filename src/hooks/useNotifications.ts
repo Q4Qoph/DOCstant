@@ -9,8 +9,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export interface Notification {
   id: string
+  title: string
   message: string
-  type: "info" | "success" | "warning" | "error"
+  toUserId: string
   timestamp: Date
   read: boolean
 }
@@ -62,10 +63,11 @@ export const useNotifications = () => {
       const res = await api.get(`/api/notification/my-notifications/${user?.id}`)
       return res.data.map((item: any) => ({
         id: item.id,
+        title: item.title,
         message: item.message,
-        type: item.type || "info",
-        timestamp: new Date(item.timestamp || item.createdAt),
-        read: item.read || false,
+        toUserId: item.toUserId,
+        timestamp: new Date(item.createdAt),
+        read: item.isRead || false,
       }))
     },
     enabled: !!user?.id,
@@ -84,9 +86,13 @@ export const useNotifications = () => {
 
   // Mark as read
   const markAsReadMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await api.put(`/api/notifications/${id}/mark-read`)
-      return id
+    mutationFn: async ({ id, userId }: { id: string; userId: string }) => {
+      console.log(id, userId);
+
+      await api.put(`/api/notification/${id}/mark-read`, null, {
+        params: { userId },
+      });
+      return { id, userId };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] })
@@ -178,9 +184,10 @@ export const useNotifications = () => {
       socket.on("new_notification", (data) => {
         const newNotification: Notification = {
           id: data.id || Date.now().toString(),
-          message: data.message || "New notification",
-          type: data.type || "info",
-          timestamp: new Date(data.timestamp || Date.now()),
+          title: data.title,
+          message: data.message,
+          toUserId: data.toUserId,
+          timestamp: new Date(data.createdAt),
           read: false,
         }
 
@@ -230,13 +237,12 @@ export const useNotifications = () => {
 
   const sendNotification = useCallback(
     (data: {
-      userId: string
       title: string
       message: string
       fromUserId: string
-      toUserId: string
-      fromDepartment: string
-      toDepartment: string
+      toUserIds: string[]
+      fromDepartment: number
+      toDepartment: number
     }) => {
       if (socketRef.current && socketRef.current.connected) {
         socketRef.current.emit("notify", data)
@@ -262,7 +268,8 @@ export const useNotifications = () => {
     isConnected,
     isLoading,
     error,
-    markAsRead: markAsReadMutation.mutate,
+    markAsRead: (id: string, userId: string) =>
+      markAsReadMutation.mutate({ id, userId }),
     markAllAsRead: markAllAsReadMutation.mutate,
     deleteNotification: deleteNotificationMutation.mutate,
     clearAllNotifications: clearAllMutation.mutate,

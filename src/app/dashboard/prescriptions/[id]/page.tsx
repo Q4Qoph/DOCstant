@@ -29,6 +29,9 @@ import {
 import api from "@/lib/axios"
 import { toast } from "sonner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useDepartmentUsers } from "@/hooks/useDepartmentUsers"
+import { useNotifications } from "@/hooks/useNotifications"
+import { useAuth } from "@/contexts/AuthContext"
 
 const fetchMedications = async () => {
     const response = await api.get("/api/inventory");
@@ -36,6 +39,9 @@ const fetchMedications = async () => {
 };
 
 const PrescriptionDetails = () => {
+    const { data: specialists } = useDepartmentUsers(2);
+    const { sendNotification } = useNotifications()
+    const { user } = useAuth()
     const params = useParams()
     const router = useRouter()
     const queryClient = useQueryClient()
@@ -100,23 +106,44 @@ const PrescriptionDetails = () => {
             let data: any = null
             let config: any = {}
 
+            let response;
+
             switch (action) {
                 case "approve":
                 case "reject":
                     endpoint = `/${action}/${prescriptionId}`;
                     config.params = { comment, receptionistId };
-                    return (await api.put(endpoint, null, config)).data;
+                    response = (await api.put(endpoint, null, config)).data;
+
+                    sendNotification({
+                        title: action === "approve" ? "Medication Approved" : "Medication Rejected",
+                        message:
+                            action === "approve"
+                                ? `Prescription #${prescriptionId} has been approved.`
+                                : `Prescription #${prescriptionId} was rejected. Reason: "${comment}"`,
+                        fromUserId: user!.id,
+                        fromDepartment: 3,
+                        toDepartment: 2,
+                        toUserIds: [receptionistId],
+                    });
+                    return response;
 
                 case "assign":
                     endpoint = `/api/receptionist/${prescriptionId}/assignnurse`;
                     data = { nurseId, name: nurseName };
-                    return (await api.put(endpoint, data)).data;
+                    response = (await api.put(endpoint, data)).data;
+                    return response;
 
                 case "administer":
                     endpoint = `/api/receptionist/administerMeds`;
                     data = { description: comment, administeredMedId: medicationId };
-                    return (await api.post(endpoint, data)).data;
+                    response = (await api.post(endpoint, data)).data;
+                    return response;
+
+                default:
+                    throw new Error(`Unknown action: ${action}`);
             }
+
 
         },
         onSuccess: (data, variables) => {
