@@ -13,7 +13,8 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     isLoading: boolean;
-    resetPassword: (password: string) => void;
+    forgetPassword: (email: string) => void;
+    resetPassword: (token: string, password: string, confirmPassword: string) => void;
 }
 interface DecodedToken {
     name: string;
@@ -37,7 +38,6 @@ const queryClient = new QueryClient();
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any | null>(null);
-    const [departmentUsers, setDepartmentUsers] = useState<Record<string, User[]>>({});
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
@@ -54,7 +54,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     setUser({ id: decoded.sub, name: decoded.name, email: decoded.email, role: decoded.role });
                 }
             } catch (e) {
-                logout(); // Invalid token
+                logout();
             }
         }
     }, []);
@@ -67,7 +67,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 { email, password }
             );
 
-            // const user = response.data.user;
+            const user = response.data
+            setUser({ id: user.id, name: user.name })
             const token = response.data.token;
 
             localStorage.setItem("token", token);
@@ -89,10 +90,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setIsLoading(false);
         }
     };
-
-    const resetPassword = async (newPassword: string) => {
+    // Returs a token
+    const forgetPassword = async (email: string) => {
 
     }
+
+    // Actual password reset
+    const resetPassword = async (token: string, password: string, confirmPassword: string) => {
+
+    }
+
     const logout = () => {
         setUser(null);
         localStorage.clear();
@@ -101,7 +108,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthContext.Provider value={{ user, login, logout, isLoading, resetPassword }}>
+            <AuthContext.Provider
+                value={{ user, login, logout, isLoading, forgetPassword, resetPassword }}>
                 {children}
             </AuthContext.Provider>
         </QueryClientProvider>
