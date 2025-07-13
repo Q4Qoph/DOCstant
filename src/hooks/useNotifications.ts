@@ -27,31 +27,7 @@ export const useNotifications = () => {
   const reconnectAttempts = useRef(0)
 
   const queryClient = useQueryClient()
-  // Fetch notifications from API
-  // const fetchNotifications = useCallback(async () => {
-  //   try {
-  //     setIsLoading(true)
-  //     setError(null)
 
-  //     const response = await api.get(`/api/notification/my-notifications/${user?.id}`, {
-  //     })
-
-  //     const fetchedNotifications: Notification[] = response.data.map((item: any) => ({
-  //       id: item.id,
-  //       message: item.message,
-  //       type: item.type || "info",
-  //       timestamp: new Date(item.timestamp || item.createdAt),
-  //       read: item.read || false,
-  //     }))
-
-  //     setNotifications(fetchedNotifications)
-  //   } catch (error) {
-  //     console.error("Error fetching notifications:", error)
-  //     setError("Failed to fetch notifications")
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }, [])
   const {
     data: notifications = [],
     isLoading,

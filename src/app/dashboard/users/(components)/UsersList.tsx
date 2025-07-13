@@ -146,7 +146,7 @@ const UserManagement: React.FC = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone.includes(searchTerm);
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole;
+    const matchesRole = filterRole === 'all' || user.role == filterRole;
 
     return matchesSearch && matchesRole;
   });
@@ -197,7 +197,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Doctors</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'GP' || u.role === 'C').length}
+                  {users.filter((u: User) => u.role === 2 || u.role === 3).length}
                 </p>
               </div>
             </div>
@@ -213,7 +213,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Nurses</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'RN').length}
+                  {users.filter((u: User) => u.role === 0).length}
                 </p>
               </div>
             </div>
@@ -227,9 +227,9 @@ const UserManagement: React.FC = () => {
                 <span className="text-purple-600 font-semibold text-sm">ST</span>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Support Staff</p>
+                <p className="text-sm font-medium text-gray-600">Lab Technicians</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'P' || u.role === 'L').length}
+                  {users.filter((u: User) => u.role === 4).length}
                 </p>
               </div>
             </div>
@@ -258,12 +258,12 @@ const UserManagement: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value="RN">Receptionist/Nurse</SelectItem>
-                  <SelectItem value="GP">General Practitioner</SelectItem>
-                  <SelectItem value="C">Specialist</SelectItem>
-                  <SelectItem value="P">Pharmacist</SelectItem>
-                  <SelectItem value="L">Lab Technician</SelectItem>
-                  <SelectItem value="admin">Administrator</SelectItem>
+                  <SelectItem value="0">Receptionist/Nurse</SelectItem>
+                  <SelectItem value="1">General Practitioner</SelectItem>
+                  <SelectItem value="2">Specialist</SelectItem>
+                  <SelectItem value="3">Pharmacist</SelectItem>
+                  <SelectItem value="4">Lab Technician</SelectItem>
+                  <SelectItem value="5">Administrator</SelectItem>
                 </SelectContent>
               </Select>
             </div>
