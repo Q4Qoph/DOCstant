@@ -53,50 +53,6 @@ import UserManagementSkeleton from '../loading';
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
-  // const [users, setUsers] = useState<User[]>([
-  //   {
-  //     id: '1',
-  //     name: 'Dr. Sarah Johnson',
-  //     email: 'dr.johnson@hospital.com',
-  //     role: 'GP',
-  //     phone: '+1234567890',
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Nurse Mary Wilson',
-  //     email: 'nurse.wilson@hospital.com',
-  //     role: 'RN',
-  //     phone: '+1234567891'
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Dr. Michael Brown',
-  //     email: 'dr.brown@hospital.com',
-  //     role: 'C',
-  //     phone: '+1234567892',
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Pharmacist John Davis',
-  //     email: 'pharmacist.davis@hospital.com',
-  //     role: 'P',
-  //     phone: '+1234567893'
-  //   },
-  //   {
-  //     id: '5',
-  //     name: 'Lab Tech Lisa Garcia',
-  //     email: 'lab.garcia@hospital.com',
-  //     role: 'L',
-  //     phone: '+1234567894'
-  //   },
-  //   {
-  //     id: '6',
-  //     name: 'Admin Robert Lee',
-  //     email: 'admin@hospital.com',
-  //     role: 'admin',
-  //     phone: '+1234567895'
-  //   }
-  // ]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
 
@@ -157,9 +113,9 @@ const UserManagement: React.FC = () => {
     5: 'bg-red-100 text-red-800'
   };
 
-  const handleRoleUpdate = async (userId: string, newRole: User['role']) => {
+  const handleRoleUpdate = async (user: User, newRole: User['role']) => {
     try {
-      await api.put(`/api/User/update/${userId}/role`, { role: newRole });
+      await api.put(`/api/User/update/${user.id}`, { ...user, role: Number(newRole) });
       toast.success("User role has been successfully updated.");
       queryClient.invalidateQueries({ queryKey: ['users'] });
     } catch (error) {
@@ -190,7 +146,7 @@ const UserManagement: React.FC = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone.includes(searchTerm);
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole;
+    const matchesRole = filterRole === 'all' || user.role == filterRole;
 
     return matchesSearch && matchesRole;
   });
@@ -241,7 +197,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Doctors</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'GP' || u.role === 'C').length}
+                  {users.filter((u: User) => u.role === 2 || u.role === 3).length}
                 </p>
               </div>
             </div>
@@ -257,7 +213,7 @@ const UserManagement: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Nurses</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'RN').length}
+                  {users.filter((u: User) => u.role === 0).length}
                 </p>
               </div>
             </div>
@@ -271,9 +227,9 @@ const UserManagement: React.FC = () => {
                 <span className="text-purple-600 font-semibold text-sm">ST</span>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Support Staff</p>
+                <p className="text-sm font-medium text-gray-600">Lab Technicians</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u: User) => u.role === 'P' || u.role === 'L').length}
+                  {users.filter((u: User) => u.role === 4).length}
                 </p>
               </div>
             </div>
@@ -302,12 +258,12 @@ const UserManagement: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value="RN">Receptionist/Nurse</SelectItem>
-                  <SelectItem value="GP">General Practitioner</SelectItem>
-                  <SelectItem value="C">Specialist</SelectItem>
-                  <SelectItem value="P">Pharmacist</SelectItem>
-                  <SelectItem value="L">Lab Technician</SelectItem>
-                  <SelectItem value="admin">Administrator</SelectItem>
+                  <SelectItem value="0">Receptionist/Nurse</SelectItem>
+                  <SelectItem value="1">General Practitioner</SelectItem>
+                  <SelectItem value="2">Specialist</SelectItem>
+                  <SelectItem value="3">Pharmacist</SelectItem>
+                  <SelectItem value="4">Lab Technician</SelectItem>
+                  <SelectItem value="5">Administrator</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -349,7 +305,7 @@ const UserManagement: React.FC = () => {
                   <TableCell>
                     <Select
                       value={user.role}
-                      onValueChange={(value: User['role']) => handleRoleUpdate(user.id, value)}
+                      onValueChange={(value: User['role']) => handleRoleUpdate(user, value)}
                     >
                       <SelectTrigger className="w-40">
                         <Badge className={roleColors[user.role]}>
