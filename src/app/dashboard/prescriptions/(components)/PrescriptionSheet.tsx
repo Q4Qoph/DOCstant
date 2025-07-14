@@ -71,14 +71,20 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
     try {
       await api.post("/api/prescription", result.data)
       toast.success("Prescription saved successfully.")
-      sendNotification({
-        title: "Medication Approval Request",
-        message: "A prescription has been submitted for patient _. Please review and approve the medication request.",
-        fromUserId: user!.id,
-        fromDepartment: 0,
-        toDepartment: 3,
-        toUserIds: pharmacists.map((u: any) => u.id),
-      })
+      if (pharmacists && pharmacists.length > 0) {
+        sendNotification({
+          title: "Medication Approval Request",
+          message: `A prescription has been submitted. Please <a href="/patients/diagnosis/${diagnosisId}" class="text-blue-600 underline">review and approve</a> the medication request.`,
+          fromUserId: user!.id,
+          fromDepartment: 0,
+          toDepartment: 3,
+          toUserIds: pharmacists.map((u: any) => u.id),
+        });
+
+      } else {
+        toast.warning("No pharmacists available to notify. Please follow up with the pharmacy department manually.");
+      }
+
       onOpenChange(false)
     } catch (error) {
     } finally {

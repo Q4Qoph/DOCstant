@@ -54,14 +54,18 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             const response = await api.post("/api/DiagnosisRecord", validatedData)
             if (response.status == 200) {
                 toast.success("Patient recorded successfuly");
-                sendNotification({
-                    title: "Patient Registration Alert",
-                    message: "Reception has registered a new patient. Please proceed with the required pharmacy protocols.",
-                    fromUserId: user!.id,
-                    fromDepartment: 0,
-                    toDepartment: 2,
-                    toUserIds: specialists.map((u: any) => u.id),
-                });
+                if (specialists && specialists.length > 0) {
+                    sendNotification({
+                        title: "Patient Registration Alert",
+                        message: "Reception has registered a new patient. Please proceed with the required pharmacy protocols.",
+                        fromUserId: user!.id,
+                        fromDepartment: 0,
+                        toDepartment: 2,
+                        toUserIds: specialists.map((u: any) => u.id),
+                    });
+                } else {
+                    toast.warning("No specialists available to notify. Please inform the responsible department manually or by chat.");
+                }
                 setIsSheetOpen(false)
                 setFormData({
                     name: "",
