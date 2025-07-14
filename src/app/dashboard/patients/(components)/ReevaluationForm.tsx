@@ -654,7 +654,7 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                             </TabsContent>
                         </Tabs>
 
-                        <div className="flex justify-end space-x-4 pt-4 border-t">
+                        <div className="flex space-x-4 pt-4 border-t">
                             <Button
                                 type="button"
                                 variant="outline"

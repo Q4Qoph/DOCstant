@@ -67,7 +67,7 @@ export default function InventoryPage() {
               Add Item
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetContent className="sm:max-w-[900px] w-full">
             <SheetHeader>
               <SheetTitle>{editingItem ? "Edit Item" : "Add New Item"}</SheetTitle>
               <SheetDescription>

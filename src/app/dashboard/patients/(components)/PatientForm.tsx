@@ -99,7 +99,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
     };
 
     return (
-        <SheetContent className="w-[500px] sm:w-[800px] overflow-y-auto px-8 py-4">
+        <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
             <SheetHeader className="p-0">
                 <SheetTitle>New patient</SheetTitle>
                 <SheetDescription>
@@ -165,26 +165,28 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                         {errors.idNumber && <p className="text-red-500 text-sm mt-1">{errors.idNumber}</p>}
                     </div>
                 </div>
+                <div className="grid grid-cols-2 gap-4">
 
-                <div className="space-y-2">
-                    <Label htmlFor="address" className="">Address</Label>
-                    <Textarea
-                        id="address"
-                        value={formData.address}
-                        onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.address ? 'border-red-500' : ''}`}
-                    />
-                    {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="chiefComplaint">Chief Complaint</Label>
-                    <Textarea
-                        id="chiefComplaint"
-                        value={formData.chiefComplaint}
-                        onChange={(e) => setFormData(prev => ({ ...prev, chiefComplaint: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.chiefComplaint ? 'border-red-500' : ''}`}
-                    />
-                    {errors.chiefComplaint && <p className="text-red-500 text-sm mt-1">{errors.chiefComplaint}</p>}
+                    <div className="space-y-2">
+                        <Label htmlFor="address" className="">Address</Label>
+                        <Textarea
+                            id="address"
+                            value={formData.address}
+                            onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.address ? 'border-red-500' : ''}`}
+                        />
+                        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="chiefComplaint">Chief Complaint</Label>
+                        <Textarea
+                            id="chiefComplaint"
+                            value={formData.chiefComplaint}
+                            onChange={(e) => setFormData(prev => ({ ...prev, chiefComplaint: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.chiefComplaint ? 'border-red-500' : ''}`}
+                        />
+                        {errors.chiefComplaint && <p className="text-red-500 text-sm mt-1">{errors.chiefComplaint}</p>}
+                    </div>
                 </div>
 
                 <div className="space-y-2">
@@ -241,73 +243,77 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     />
                     <Label htmlFor="isPregnant" className="">Is Pregnant</Label>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="weight">Weight (kg)</Label>
-                    <Input
-                        id="weight"
-                        value={formData.weight}
-                        onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.weight ? 'border-red-500' : ''}`}
-                    />
-                    {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="weight">Weight (kg)</Label>
+                        <Input
+                            id="weight"
+                            value={formData.weight}
+                            onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.weight ? 'border-red-500' : ''}`}
+                        />
+                        {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="height">Height (cm)</Label>
+                        <Input
+                            id="height"
+                            value={formData.height}
+                            onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.height ? 'border-red-500' : ''}`}
+                        />
+                        {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="temperature">Temperature (°C)</Label>
+                        <Input
+                            id="temperature"
+                            value={formData.temperature}
+                            onChange={(e) => setFormData(prev => ({ ...prev, temperature: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.temperature ? 'border-red-500' : ''}`}
+                        />
+                        {errors.temperature && <p className="text-red-500 text-sm mt-1">{errors.temperature}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="bloodPresure">Blood Pressure</Label>
+                        <Input
+                            id="bloodPresure"
+                            value={formData.bloodPresure}
+                            onChange={(e) => setFormData(prev => ({ ...prev, bloodPresure: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.bloodPresure ? 'border-red-500' : ''}`}
+                        />
+                        {errors.bloodPresure && <p className="text-red-500 text-sm mt-1">{errors.bloodPresure}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="respiratoryRate">Respiratory Rate</Label>
+                        <Input
+                            id="respiratoryRate"
+                            value={formData.respiratoryRate}
+                            onChange={(e) => setFormData(prev => ({ ...prev, respiratoryRate: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.respiratoryRate ? 'border-red-500' : ''}`}
+                        />
+                        {errors.respiratoryRate && <p className="text-red-500 text-sm mt-1">{errors.respiratoryRate}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="heartRate">Heart Rate</Label>
+                        <Input
+                            id="heartRate"
+                            value={formData.heartRate}
+                            onChange={(e) => setFormData(prev => ({ ...prev, heartRate: e.target.value }))}
+                            className={`border-blue-200 focus:border-blue-500 ${errors.heartRate ? 'border-red-500' : ''}`}
+                        />
+                        {errors.heartRate && <p className="text-red-500 text-sm mt-1">{errors.heartRate}</p>}
+                    </div>
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="height">Height (cm)</Label>
-                    <Input
-                        id="height"
-                        value={formData.height}
-                        onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.height ? 'border-red-500' : ''}`}
-                    />
-                    {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="temperature">Temperature (°C)</Label>
-                    <Input
-                        id="temperature"
-                        value={formData.temperature}
-                        onChange={(e) => setFormData(prev => ({ ...prev, temperature: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.temperature ? 'border-red-500' : ''}`}
-                    />
-                    {errors.temperature && <p className="text-red-500 text-sm mt-1">{errors.temperature}</p>}
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="bloodPresure">Blood Pressure</Label>
-                    <Input
-                        id="bloodPresure"
-                        value={formData.bloodPresure}
-                        onChange={(e) => setFormData(prev => ({ ...prev, bloodPresure: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.bloodPresure ? 'border-red-500' : ''}`}
-                    />
-                    {errors.bloodPresure && <p className="text-red-500 text-sm mt-1">{errors.bloodPresure}</p>}
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="respiratoryRate">Respiratory Rate</Label>
-                    <Input
-                        id="respiratoryRate"
-                        value={formData.respiratoryRate}
-                        onChange={(e) => setFormData(prev => ({ ...prev, respiratoryRate: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.respiratoryRate ? 'border-red-500' : ''}`}
-                    />
-                    {errors.respiratoryRate && <p className="text-red-500 text-sm mt-1">{errors.respiratoryRate}</p>}
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="heartRate">Heart Rate</Label>
-                    <Input
-                        id="heartRate"
-                        value={formData.heartRate}
-                        onChange={(e) => setFormData(prev => ({ ...prev, heartRate: e.target.value }))}
-                        className={`border-blue-200 focus:border-blue-500 ${errors.heartRate ? 'border-red-500' : ''}`}
-                    />
-                    {errors.heartRate && <p className="text-red-500 text-sm mt-1">{errors.heartRate}</p>}
-                </div>
                 {/* Form Actions */}
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex gap-3 pt-4">
                     <Button
                         type="button"
                         onClick={onCancel}

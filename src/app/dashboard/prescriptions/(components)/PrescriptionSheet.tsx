@@ -88,7 +88,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-[500px] sm:w-[800px] overflow-y-auto px-8 py-4">
+      <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
         <SheetHeader className="p-0">
           <SheetTitle>Prescribe Medication</SheetTitle>
           <SheetDescription>Fill in the prescription details below.</SheetDescription>
@@ -123,21 +123,23 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
             />
           </div>
         </div>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </SheetClose>
-          <Button
-            className="bg-blue-600 hover:bg-blue-700"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin mr-2" />
-            ) : null}
-            {loading ? "Submitting..." : "Submit"}
-          </Button>
-        </SheetFooter>
+        <div>
+          <SheetFooter className="flex flex-row p-0">
+            <SheetClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </SheetClose>
+            <Button
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : null}
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
+          </SheetFooter>
+        </div>
       </SheetContent>
     </Sheet>
   )

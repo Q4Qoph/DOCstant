@@ -257,7 +257,7 @@ const ExpenseForm = ({
 
     return (
         <Sheet open={open} onOpenChange={handleClose}>
-            <SheetContent className="w-[500px] sm:w-[600px] overflow-y-auto px-8 py-4 ">
+            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4 ">
                 <SheetHeader className="p-0">
                     <SheetTitle className="flex items-center gap-2">
                         <DollarSign className="h-5 w-5 text-blue-500" />
@@ -312,18 +312,19 @@ const ExpenseForm = ({
                         </div>
                     )}
                     
-                    <SheetFooter className="mt-6 p-0">
+                    <SheetFooter className="flex flex-row mt-6 p-0">
                         <Button
                             type="button"
                             variant="outline"
                             onClick={handleClose}
                             disabled={isLoading}
+                            className="w-fit"
                         >
                             Cancel
                         </Button>
                         <Button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-600"
+                            className="w-fit bg-blue-500 hover:bg-blue-600"
                             disabled={isLoading}
                         >
                             {isLoading ? (

@@ -43,7 +43,7 @@ export default function EditPatientForm({ initialData, onCancel }: any) {
         }
     );
     const isEditing = !!initialData;
-const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,9 +52,9 @@ const queryClient = useQueryClient()
         try {
             const validatedData = diagnosisSchema.parse(formData);
             const response = await api.put(`/api/DiagnosisRecord/${initialData.id}`, validatedData)
-            if(response.status == 200){
+            if (response.status == 200) {
                 toast.success("Patient diagnosis record updated successfully!")
-                queryClient.invalidateQueries({queryKey: ["patient",  initialData.id]})
+                queryClient.invalidateQueries({ queryKey: ["patient", initialData.id] })
                 onCancel()
             }
 
@@ -115,7 +115,7 @@ const queryClient = useQueryClient()
     };
 
     return (
-        <SheetContent className="w-[500px] sm:w-[800px] overflow-y-auto px-8 py-4">
+        <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
             <SheetHeader className="p-0">
                 <SheetTitle>{isEditing ? 'Update diagnosis record' : 'Create new diagnosis record'}</SheetTitle>
                 <SheetDescription>
