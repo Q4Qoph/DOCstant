@@ -19,9 +19,10 @@ export interface Patient {
   emergencyContact: string;
   isPregnant?: boolean;
   pregnancyWeeks?: number;
-  department: 'internal-medicine' | 'surgery' | 'paediatrics' | 'obs-gyn' | 'geriatrics';
+  department: 0 | 1 | 2 | 3 | 4 | 5;
   assignedDoctor?: string;
   aiResponse: string
+  comments: string
   createdAt: string;
   updatedAt: string;
 }

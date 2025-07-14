@@ -6,6 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Bot, Sparkles } from "lucide-react"
 import api from "@/lib/axios"
 import { Patient } from "@/types"
+import { cn } from "@/lib/utils"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import rehypeRaw from "rehype-raw"
+import { toast } from "sonner"
 
 const AI = ({ patient }: { patient: Patient }) => {
     const queryClient = useQueryClient()
@@ -15,9 +20,10 @@ const AI = ({ patient }: { patient: Patient }) => {
         try {
             setLoading(true)
             await api.post("/api/ai", null, { params: { id: patient.id } })
+            toast.success("Analysis complete!")
             await queryClient.invalidateQueries({ queryKey: ["patient", patient.id] })
         } catch (error) {
-            console.error("Failed to generate AI analysis:", error)
+            toast.error("Failed to generate AI diagnosis. Please try again.");
         } finally {
             setLoading(false)
         }
@@ -25,7 +31,7 @@ const AI = ({ patient }: { patient: Patient }) => {
 
     return (
         <TabsContent value="ai-analysis" className="mt-0">
-            {patient.aiResponse ? (
+            {patient.comments ? (
                 <Card className="shadow-none">
                     <CardHeader className="flex justify-between border-b border-slate-200">
                         <CardTitle className="flex items-center gap-2">
@@ -37,13 +43,24 @@ const AI = ({ patient }: { patient: Patient }) => {
                             onClick={handleGenerateAnalysis}
                             disabled={loading}
                         >
-                            <Sparkles className="h-4 w-4 mr-2" />
-                            {loading ? "Generating..." : "Get Diagnosis"}
+                            <Sparkles className={cn(
+                                "h-4 w-4 mr-2",
+                                loading && "animate-spin"
+                            )} />
+                            {loading ? "Regenerating..." : "Regenerate Diagnosis"}
                         </Button>
                     </CardHeader>
                     <CardContent className="p-6">
-                        <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <p className="text-gray-700 whitespace-pre-wrap">{patient.aiResponse}</p>
+                        <div className={cn("bg-gray-50 p-4 rounded-lg border border-gray-200", loading && "opacity-20 animate-pulse")}>
+                            <div className="prose prose-sm text-gray-700 max-w-none">
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw]}
+                                >
+                                    {patient.comments}
+                                </ReactMarkdown>
+                            </div>
+
                         </div>
                     </CardContent>
                 </Card>
@@ -58,7 +75,10 @@ const AI = ({ patient }: { patient: Patient }) => {
                                 onClick={handleGenerateAnalysis}
                                 disabled={loading}
                             >
-                                <Sparkles className="h-4 w-4 mr-2" />
+                                <Sparkles className={cn(
+                                    "h-4 w-4 mr-2",
+                                    loading && "animate-spin"
+                                )} />
                                 {loading ? "Generating..." : "Generate AI Analysis"}
                             </Button>
                         </div>
