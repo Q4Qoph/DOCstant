@@ -40,11 +40,13 @@ export default function LabTests() {
       {isLoading ? (
         <PatientsRecordSkeleton />
       ) : labTests.length === 0 ? (
-        <Card>
-          <CardContent className="text-center p-8">
-            <p className="font-semibold text-lg">No lab tests found.</p>
-          </CardContent>
-        </Card>
+        <div className="grid gap-4 px-8">
+          <Card>
+            <CardContent className="text-center p-8">
+              <p className="font-semibold text-lg">No lab tests found.</p>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
         <div className="grid gap-4 px-8">
           {labTests.map((test: any) => (

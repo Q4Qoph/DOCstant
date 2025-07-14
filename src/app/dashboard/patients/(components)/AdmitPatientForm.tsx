@@ -58,7 +58,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="w-[500px] sm:w-[600px] overflow-y-auto px-8 py-4">
+            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
                 <SheetHeader className="p-0">
                     <SheetTitle>Admit Patient</SheetTitle>
                     <SheetDescription>
@@ -109,7 +109,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
                     </div>
 
                     {/* Form Actions */}
-                    <div className="flex justify-end gap-3 pt-4">
+                    <div className="flex gap-3 pt-4">
                         <SheetClose asChild>
                             <Button variant="outline" disabled={isLoading}>Cancel</Button>
                         </SheetClose>

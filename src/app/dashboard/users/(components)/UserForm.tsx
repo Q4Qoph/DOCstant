@@ -1,13 +1,10 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { any, z } from 'zod';
+import { z } from 'zod';
 import { User } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -157,8 +154,8 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
 
 
   return (
-    <SheetContent className="w-[500px] sm:w-[540px] overflow-y-auto px-8 py-4">
-      <SheetHeader>
+    <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
+      <SheetHeader className='p-0'>
         <SheetTitle>{isEditing ? 'Edit User' : 'Add New User'}</SheetTitle>
         <SheetDescription>
           {isEditing ? 'Update user information and permissions' : 'Create a new user account with appropriate role and permissions'}
@@ -236,78 +233,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
           </div>
         </div>
 
-        {/* Security */}
-        {/* <div className="space-y-4">
-          <h3 className="text-lg font-medium">
-            {isEditing ? 'Change Password (Optional)' : 'Security *'}
-          </h3>
-
-          <div className="space-y-2">
-            <Label htmlFor="password">
-              {isEditing ? 'New Password (leave blank to keep current)' : 'Password *'}
-            </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={formData.password || ''}
-                onChange={(e) => handleInputChange('password', e.target.value)}
-                placeholder={isEditing ? 'Enter new password' : 'Enter password'}
-                className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                disabled={isSubmitting}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={isSubmitting}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
-                ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
-                )}
-              </button>
-            </div>
-            {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
-            {!isEditing && (
-              <p className="text-xs text-gray-500">
-                Password must be at least 8 characters with uppercase, lowercase, number, and special character
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">
-              {isEditing ? 'Confirm New Password' : 'Confirm Password *'}
-            </Label>
-            <div className="relative">
-              <Input
-                id="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
-                value={formData.confirmPassword || ''}
-                onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                placeholder="Confirm password"
-                className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
-                disabled={isSubmitting}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isSubmitting}
-              >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
-                ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
-                )}
-              </button>
-            </div>
-            {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword}</p>}
-          </div>
-        </div> */}
-
         {/* General Error */}
         {errors.general && (
           <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
@@ -316,7 +241,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
         )}
 
         {/* Form Actions */}
-        <div className="flex justify-end space-x-2 pt-6 border-t">
+        <div className="flex  space-x-2 pt-6 border-t">
           <Button
             type="button"
             variant="outline"
