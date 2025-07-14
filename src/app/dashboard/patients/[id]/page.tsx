@@ -3,19 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
-    ArrowLeft, Edit, Trash2, Phone, MapPin, User, Calendar, FileText,
-    Activity, TestTube, Camera, Bot, Stethoscope, Save, Pill, Sparkles,
-    Plus, Clock, DollarSign, CreditCard, Heart, Thermometer, Weight,
-    Ruler, Target, AlertCircle
+    Edit, Trash2, FileText,
+    Activity, TestTube, Bot, Stethoscope, Save, Pill, Sparkles,
+    Plus, Clock,
+    Target, AlertCircle
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key, useState } from "react";
+import { Key, useState } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
@@ -24,56 +23,14 @@ import PrescriptionSheet from "../../prescriptions/(components)/PrescriptionShee
 import LabTestForm from "../(components)/LabTestForm";
 import AdmitPatientForm from "../(components)/AdmitPatientForm";
 import TreatmentForm from "../(components)/TreatmentForm";
-import ReevaluationForm from "../(components)/ReevaluationForm";
-import ExpenseForm from "../(components)/ExpenseForm";
-import { toast } from "sonner";
 import PatientTabs from "./(components)/PatientTabs";
 import BasicInfo from "./(components)/BasicInfo";
 import Reevaluate from "./(components)/Reevaluate";
 import Expenses from "./(components)/Expenses";
+import { Treatment } from "@/types";
+import AI from "./(components)/AI";
 
 // Types
-interface Treatment {
-    id: number;
-    diagnosisRecord: {
-        id: string;
-        name: string;
-        age: number;
-        sex: string;
-        phoneNumber: string;
-        chiefComplaint: string;
-        weight: string;
-        height: string;
-        temperature: string;
-        bloodPresure: string;
-        respiratoryRate: string;
-        heartRate: string;
-        symptoms: string;
-        address: string;
-        idNumber: string;
-        medicalHistory: string;
-        allergies: string;
-        toxicHabits: string;
-        vaccinations: any[];
-        treatments: string[];
-        inpatient: any[];
-        expenses: any[];
-        payments: any[];
-        isPregnant: boolean;
-        prescriptions: any[];
-        examinations: any[];
-        labtests: any[];
-        reevaluation: any[];
-        laboratoryResults: string;
-        department: number;
-        imageResults: string;
-        aiResponse: string;
-        comments: string;
-    };
-    diagnosisId: string;
-    description: string;
-}
-
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
 const getTreatments = (diagnosisId: string) => api.get(`/api/Treatment/${diagnosisId}`);
 const createTreatment = (data: { diagnosisId: string; description: string }) =>
@@ -110,9 +67,6 @@ const RecordDetails = () => {
         queryFn: () => getTreatments(id as string).then((res) => res.data),
         enabled: !!id,
     });
-
-
-
 
     const createTreatmentMutation = useMutation({
         mutationFn: createTreatment,
@@ -161,7 +115,7 @@ const RecordDetails = () => {
                                     {patient?.name || 'Patient Details'}
                                 </h1>
                                 <p className="text-slate-600 mt-1">
-                                    ID: {patient?.idNumber} • {patient?.age} years old 
+                                    ID: {patient?.idNumber} • {patient?.age} years old
                                 </p>
                                 {/* <p className=" mt-1">
                                     Phone {patient.phoneNumber}  • {patient.address}
@@ -386,44 +340,7 @@ const RecordDetails = () => {
                             </TabsContent>
 
                             {/* AI Analysis Tab */}
-                            <TabsContent value="ai-analysis" className="mt-0">
-                                {patient.aiResponse ? (
-                                    <Card className="shadow-none">
-                                        <CardHeader className="flex justify-between border-b border-slate-200">
-                                            <CardTitle className="flex items-center gap-2">
-                                                <Bot className="h-5 w-5 text-blue-600" />
-                                                AI Analysis & Response
-                                            </CardTitle>
-                                            <Button className="bg-blue-500 hover:bg-blue-600">
-                                                <Sparkles className="h-4 w-4 mr-2" />
-                                                Get Diagnosis
-                                            </Button>
-                                        </CardHeader>
-                                        <CardContent className="p-6">
-                                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                                <p className="text-gray-700 whitespace-pre-wrap">{patient.aiResponse}</p>
-                                            </div>
-                                            <Button variant="outline" className="border-blue-500 text-blue-500 hover:text-blue-600 mt-4">
-                                                <Save className="h-4 w-4 mr-2" />
-                                                Save Diagnosis
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
-                                ) : (
-                                    <Card className="shadow-none">
-                                        <CardContent className="p-6">
-                                            <div className="text-center py-8 text-gray-500">
-                                                <Bot className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                                                <p>No AI analysis available</p>
-                                                <Button className="bg-blue-500 hover:bg-blue-600 mt-3">
-                                                    <Sparkles className="h-4 w-4 mr-2" />
-                                                    Generate AI Analysis
-                                                </Button>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                )}
-                            </TabsContent>
+                            <AI patient={patient} />
 
                             {/* Reevaluations Tab */}
                             <Reevaluate id={id} patient={patient} />

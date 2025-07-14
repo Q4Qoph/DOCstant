@@ -21,6 +21,7 @@ export interface Patient {
   pregnancyWeeks?: number;
   department: 'internal-medicine' | 'surgery' | 'paediatrics' | 'obs-gyn' | 'geriatrics';
   assignedDoctor?: string;
+  aiResponse: string
   createdAt: string;
   updatedAt: string;
 }
@@ -136,4 +137,45 @@ export interface PrescriptionRecord {
 
 export interface NotificationDropdownProps {
   className?: string;
+}
+
+export interface Treatment {
+  id: number;
+  diagnosisRecord: {
+    id: string;
+    name: string;
+    age: number;
+    sex: string;
+    phoneNumber: string;
+    chiefComplaint: string;
+    weight: string;
+    height: string;
+    temperature: string;
+    bloodPresure: string;
+    respiratoryRate: string;
+    heartRate: string;
+    symptoms: string;
+    address: string;
+    idNumber: string;
+    medicalHistory: string;
+    allergies: string;
+    toxicHabits: string;
+    vaccinations: any[];
+    treatments: string[];
+    inpatient: any[];
+    expenses: any[];
+    payments: any[];
+    isPregnant: boolean;
+    prescriptions: any[];
+    examinations: any[];
+    labtests: any[];
+    reevaluation: any[];
+    laboratoryResults: string;
+    department: number;
+    imageResults: string;
+    aiResponse: string;
+    comments: string;
+  };
+  diagnosisId: string;
+  description: string;
 }
