@@ -178,7 +178,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
                 </div>
             </div>
 
-            <div className="flex gap-2 pt-4 justify-end">
+            <div className="flex gap-2 pt-4">
                 {onCancel && (
                     <Button type="button" variant="outline" onClick={onCancel}>
                         Cancel

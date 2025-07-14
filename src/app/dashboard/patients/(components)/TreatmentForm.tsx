@@ -187,7 +187,7 @@ const TreatmentForm = ({
 
     return (
         <Sheet open={open} onOpenChange={handleClose}>
-            <SheetContent className="w-[500px] sm:w-[600px] overflow-y-auto px-8 py-4">
+            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
                 <SheetHeader className="p-0">
                     <SheetTitle className="flex items-center gap-2">
                         <Stethoscope className="h-5 w-5 text-blue-500" />
@@ -214,7 +214,7 @@ const TreatmentForm = ({
                         )}
                     </div>
                     
-                    <SheetFooter className="mt-6 p-0">
+                    <SheetFooter className="flex flex-row mt-6 p-0">
                         <Button
                             type="button"
                             variant="outline"
