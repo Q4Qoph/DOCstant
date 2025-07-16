@@ -53,14 +53,19 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
                     testDate: new Date().toISOString().slice(0, 16),
                     diagnosisId: diagnosisId || ""
                 });
-                sendNotification({
-                    title: "Test Results Ready",
-                    message: "Laboratory tests have been completed for the assigned patient. Please review the results and proceed with the clinical evaluation.",
-                    fromUserId: user!.id,
-                    fromDepartment: 3,
-                    toDepartment: 2,
-                    toUserIds: specialists.map((u: any) => u.id),
-                })
+                if (specialists && specialists.length > 0) {
+                    sendNotification({
+                        title: "Test Results Ready",
+                        message: `Laboratory tests have been completed. Please <a href="/dashboard/patients/${diagnosisId}" class="text-blue-600 underline">review the results</a> and proceed with the clinical evaluation.`,
+                        fromUserId: user!.id,
+                        fromDepartment: 3,
+                        toDepartment: 2,
+                        toUserIds: specialists.map((u: any) => u.id),
+                    });
+                } else {
+                    toast.warning("No specialists available to notify. Please follow up with the clinical team manually.");
+                }
+
                 onOpenChange(false)
             }
         } catch (error: any) {

@@ -41,7 +41,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                     </CardTitle>
                     <Button onClick={() => setReevaluationOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
                         <Plus className="h-4 w-4 mr-2" />
-                        Schedule Reevaluation
+                        Re-evaluate Patient
                     </Button>
                 </CardHeader>
                 <CardContent className="p-6">
