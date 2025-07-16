@@ -13,10 +13,15 @@ export interface InventoryItem {
     id: number
     itemCode: string
     name: string
+    genericName: string
+    brand: string
+    presentation: string
+    expiryDate: string // ISO string (e.g., from `new Date().toISOString()`)
     quantity: number
     price: number
     supplier: string
 }
+
 
 interface InventoryFormProps {
     item?: InventoryItem | null
@@ -38,10 +43,15 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
     const [formData, setFormData] = useState({
         itemCode: "",
         name: "",
+        genericName: "",
+        brand: "",
+        presentation: "",
+        expiryDate: "",
         quantity: 0,
         price: 0,
         supplier: "",
     })
+
 
     const createMutation = useMutation({
         mutationFn: createItem,
@@ -53,6 +63,10 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
             setFormData({
                 itemCode: "",
                 name: "",
+                genericName: "",
+                brand: "",
+                presentation: "",
+                expiryDate: "",
                 quantity: 0,
                 price: 0,
                 supplier: "",
@@ -80,6 +94,10 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
             setFormData({
                 itemCode: item.itemCode,
                 name: item.name,
+                genericName: item.genericName,
+                brand: item.brand,
+                presentation: item.presentation,
+                expiryDate: item.expiryDate,
                 quantity: item.quantity,
                 price: item.price,
                 supplier: item.supplier,
@@ -88,12 +106,17 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
             setFormData({
                 itemCode: "",
                 name: "",
+                genericName: "",
+                brand: "",
+                presentation: "",
+                expiryDate: "",
                 quantity: 0,
                 price: 0,
                 supplier: "",
             })
         }
     }, [item])
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -116,7 +139,17 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4 px-6">
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="genericName">Generic Name</Label>
+                    <Input
+                        id="genericName"
+                        value={formData.genericName}
+                        onChange={(e) => handleInputChange("genericName", e.target.value)}
+                        placeholder="Enter generic name"
+                        required
+                    />
+                </div>
                 <div className="space-y-2">
                     <Label htmlFor="itemCode">Item Code</Label>
                     <Input
@@ -129,15 +162,38 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="brand">Brand</Label>
                     <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
-                        placeholder="Enter item name"
+                        id="brand"
+                        value={formData.brand}
+                        onChange={(e) => handleInputChange("brand", e.target.value)}
+                        placeholder="Enter brand"
                         required
                     />
                 </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="presentation">Presentation</Label>
+                    <Input
+                        id="presentation"
+                        value={formData.presentation}
+                        onChange={(e) => handleInputChange("presentation", e.target.value)}
+                        placeholder="Enter presentation"
+                        required
+                    />
+                </div>
+
+                <div className="space-y-2 col-span-2">
+                    <Label htmlFor="expiryDate">Expiry Date</Label>
+                    <Input
+                        id="expiryDate"
+                        type="datetime-local"
+                        value={formData.expiryDate}
+                        onChange={(e) => handleInputChange("expiryDate", e.target.value)}
+                        required
+                    />
+                </div>
+
 
                 <div className="space-y-2">
                     <Label htmlFor="quantity">Quantity</Label>

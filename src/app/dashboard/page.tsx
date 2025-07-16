@@ -10,6 +10,7 @@ import {
   UserPlus,
   Pill,
 } from "lucide-react"
+import Link from "next/link"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -28,10 +29,12 @@ const Dashboard = () => {
             <p className="text-gray-600 mt-1">Welcome back, {user?.name || "User"}! Here's what's happening today.</p>
           </div>
           <div className="flex items-center gap-4">
-            <Button size="sm" className="bg-blue-500">
-              <Plus className="h-4 w-4 mr-2" />
-              New Patient
-            </Button>
+            <Link href="/dashboard/patients">
+              <Button size="sm" className="bg-blue-500">
+                <Plus className="h-4 w-4 mr-2" />
+                New Patient
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -47,16 +50,18 @@ const Dashboard = () => {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-3  gap-4">
                 {quickActions.map((action, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-                  >
-                    <div className={`p-3 rounded-lg ${action.color}`}>
-                      <action.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <span className="text-sm font-medium text-center">{action.title}</span>
-                  </Button>
+                  <Link href={action.href}>
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+                    >
+                      <div className={`p-3 rounded-lg ${action.color}`}>
+                        <action.icon className="h-6 w-6 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-center">{action.title}</span>
+                    </Button>
+                  </Link>
                 ))}
               </div>
             </CardContent>
@@ -106,7 +111,7 @@ const Dashboard = () => {
               <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Nitifications</p>
+                  <p className="text-sm font-medium text-gray-900">Notifications</p>
                   <p className="text-xs text-gray-600">System Online</p>
                 </div>
               </div>
@@ -136,14 +141,18 @@ const Dashboard = () => {
               <p className="text-sm text-gray-600">Check out our documentation and tutorials</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <FileText className="h-4 w-4 mr-2" />
-                Documentation
-              </Button>
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
+              <Link href="/dashboard/docs">
+                <Button variant="outline" size="sm">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Documentation
+                </Button>
+              </Link>
+              <Link href="/dashboard/settings">
+                <Button variant="outline" size="sm">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
