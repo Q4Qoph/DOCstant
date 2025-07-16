@@ -54,13 +54,13 @@ interface ReevaluationFormProps {
     isLoading?: boolean;
 }
 
-const ReevaluationForm = ({ 
-    open, 
-    onOpenChange, 
-    diagnosisId, 
+const ReevaluationForm = ({
+    open,
+    onOpenChange,
+    diagnosisId,
     patientData,
-    onSubmit, 
-    isLoading = false 
+    onSubmit,
+    isLoading = false
 }: ReevaluationFormProps) => {
     const [formData, setFormData] = useState<ReevaluationFormData>({
         name: "",
@@ -361,12 +361,13 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                     <SelectValue placeholder="Select department" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="0">General Medicine</SelectItem>
-                                                    <SelectItem value="1">Cardiology</SelectItem>
-                                                    <SelectItem value="2">Pediatrics</SelectItem>
-                                                    <SelectItem value="3">Orthopedics</SelectItem>
-                                                    <SelectItem value="4">Neurology</SelectItem>
-                                                    <SelectItem value="5">Emergency</SelectItem>
+                                                    <SelectItem value="0">Receptionist</SelectItem>
+                                                    <SelectItem value="1">General Practitioner</SelectItem>
+                                                    <SelectItem value="2">Specialist</SelectItem>
+                                                    <SelectItem value="3">Pharmacist</SelectItem>
+                                                    <SelectItem value="4">Lab Technician</SelectItem>
+                                                    <SelectItem value="5">Admin</SelectItem>
+
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -671,12 +672,12 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                        Re-evaluating...
+                                        Saving Re-evaluation...
                                     </>
                                 ) : (
                                     <>
                                         <Activity className="h-4 w-4 mr-2" />
-                                        Re-evaluate
+                                        Save Re-evalutation
                                     </>
                                 )}
                             </Button>

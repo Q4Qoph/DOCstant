@@ -10,7 +10,7 @@ export default function PatientTabs() {
     { value: "vaccinations", icon: Activity, label: "Vaccinations", shortLabel: "Vaccines" },
     { value: "examinations", icon: Stethoscope, label: "Examinations", shortLabel: "Exams" },
     { value: "treatments", icon: Target, label: "Treatments", shortLabel: "Treatment" },
-    { value: "expenses", icon: DollarSign, label: "Expenses", shortLabel: "Expenses" },
+    { value: "expenses", icon: DollarSign, label: "Expenses & Payments", shortLabel: "Expenses" },
     { value: "laboratory", icon: TestTube, label: "Laboratory", shortLabel: "Lab" },
     { value: "ai-analysis", icon: Bot, label: "AI Analysis", shortLabel: "AI" },
     { value: "reevaluations", icon: Clock, label: "Re-evaluations", shortLabel: "Re-eval" },
