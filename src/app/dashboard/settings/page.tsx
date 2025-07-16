@@ -1,6 +1,6 @@
 const SettingsPage = () => {
   return (
-    <div>SettingsPage</div>
+    <div className="p-6">SettingsPage</div>
   )
 }
 

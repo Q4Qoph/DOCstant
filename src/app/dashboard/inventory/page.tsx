@@ -14,6 +14,10 @@ export interface InventoryItem {
   id: number
   itemCode: string
   name: string
+  genericName: string
+  brand: string
+  presentation: string
+  expiryDate: string
   quantity: number
   price: number
   supplier: string
@@ -22,7 +26,7 @@ export interface InventoryItem {
 const fetchInventory = async () => {
   const response = await api.get("/api/inventory")
   return response.data
- 
+
 }
 
 export default function InventoryPage() {
