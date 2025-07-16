@@ -72,15 +72,15 @@ const PrescriptionDetails = () => {
             // const response = await api.get(`/api/prescription/${prescriptionId}`)
             // return response.data
             return {
-                "id": 4,
+                "id": 1,
                 "record": null,
-                "diagnosisId": "df706e57-7bc4-4a32-3417-08ddaffb5030",
-                "drugName": "Brofen",
-                "quantity": 1,
-                "medicineDosage": "1 X 3",
-                "comments": "Test",
+                "diagnosisId": "29db31f3-ff53-4506-6750-08ddba5952bf",
+                "drugName": "Brufen",
+                "quantity": 7,
+                "medicineDosage": "1 X3",
+                "comments": "test",
                 "approve": true,
-                "createdAt": "2025-06-20T16:14:50.8540575",
+                "createdAt": "2025-07-16T20:05:58.1633997",
                 "updatedAt": "0001-01-01T00:00:00"
             }
         },
@@ -175,8 +175,8 @@ const PrescriptionDetails = () => {
             if (actionType) {
                 updatePrescriptionMutation.mutate({
                     action,
-                    nurseId: "28f2027d-ba08-4625-6c7b-08ddb0107047",
-                    nurseName: "joe",
+                    nurseId: user?.id,
+                    nurseName: user?.name,
                 })
             }
         } else if (action == 'administer') {
