@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, User, Lock, Shield } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, Shield, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
@@ -79,10 +79,17 @@ const LoginForm = () => {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-blue-500 hover:bg-blue-600  text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing In...' : 'Sign In'}
+            {isLoading ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Signing In...
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
 
           <div className="mt-2">
