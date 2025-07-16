@@ -7,14 +7,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { jwtDecode } from 'jwt-decode';
+import { AxiosResponse } from 'axios';
 
 interface AuthContextType {
     user: User | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     isLoading: boolean;
-    forgetPassword: (email: string) => void;
-    resetPassword: (token: string, password: string, confirmPassword: string) => void;
+    forgetPassword: (email: string) => Promise<AxiosResponse>;
+    resetPassword: (token: string, password: string, confirmPassword: string) => Promise<void>;
 }
 interface DecodedToken {
     name: string;
@@ -90,19 +91,62 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setIsLoading(false);
         }
     };
-    // Returs a token
-    const forgetPassword = async (email: string) => {
 
+    // Returns a token
+    const forgetPassword = async (email: string) => {
+        setIsLoading(true);
+        try {
+            const response = await api.post(
+                `/api/User/forgotPassword`,
+                { email }
+            );
+
+            // Store the token temporarily for password reset
+            if (response.data && response.data.length > 0) {
+                const resetToken = response.data[0].passwordResetToken;
+                if (resetToken) {
+                    sessionStorage.setItem("resetToken", resetToken);
+                    toast.success("Reset token sent! Please check your email.");
+                } else {
+                    toast.error("No reset token received. Please try again.");
+                }
+            }
+            return response;
+        } catch (error: any) {
+            const message = error.response?.data || error.message || "An unexpected error occurred";
+            toast.error(`Failed to send reset email: ${message}`);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     // Actual password reset
     const resetPassword = async (token: string, password: string, confirmPassword: string) => {
+        setIsLoading(true);
+        try {
+            const response = await api.post(
+                `/api/User/resetPassword`,
+                { token, password, confirmPassword }
+            );
 
+            // Clear the reset token from session storage
+            sessionStorage.removeItem("resetToken");
+            toast.success("Password reset successfully!");
+            router.push("/login");
+        } catch (error: any) {
+            const message = error.response?.data || error.message || "An unexpected error occurred";
+            toast.error(`Password reset failed: ${message}`);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const logout = () => {
         setUser(null);
         localStorage.clear();
+        sessionStorage.clear();
         router.replace('/login')
     };
 
