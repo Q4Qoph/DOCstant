@@ -1,13 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import api from "@/lib/axios";
 import PatientsRecordSkeleton from "../patients/loading";
+import LabTestForm from "./(components)/LabTestForm";
 
 export default function LabTests() {
   const router = useRouter();
@@ -24,8 +25,16 @@ export default function LabTests() {
     },
   });
 
+  const [editTest, setEditTest] = useState<any | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+
   const onView = (id: string) => {
     router.push(`/dashboard/labtests/${id}`);
+  };
+
+  const onEdit = (test: any) => {
+    setEditTest(test);
+    setFormOpen(true);
   };
 
   return (
@@ -66,6 +75,14 @@ export default function LabTests() {
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
+                    <Button
+                      onClick={() => onEdit(test)}
+                      variant="outline"
+                      size="sm"
+                      className="border-yellow-300 hover:bg-yellow-50"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </CardHeader>
@@ -97,6 +114,18 @@ export default function LabTests() {
             </Card>
           ))}
         </div>
+      )}
+
+      {formOpen && (
+        <LabTestForm
+          open={formOpen}
+          onOpenChange={(open) => {
+            setFormOpen(open);
+            if (!open) setEditTest(null);
+          }}
+          diagnosisId={editTest?.diagnosisId}
+          labTest={editTest}
+        />
       )}
     </div>
   );

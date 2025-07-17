@@ -20,7 +20,7 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
 import PrescriptionSheet from "../../prescriptions/(components)/PrescriptionSheet";
-import LabTestForm from "../(components)/LabTestForm";
+import LabTestForm from "../../labtests/(components)/LabTestForm";
 import AdmitPatientForm from "../(components)/AdmitPatientForm";
 import TreatmentForm from "../(components)/TreatmentForm";
 import PatientTabs from "./(components)/PatientTabs";
