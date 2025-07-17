@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+    Sheet, SheetClose, SheetContent,
+    SheetDescription, SheetHeader, SheetTitle
+} from "@/components/ui/sheet";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { ParamValue } from "next/dist/server/request/params";
@@ -13,23 +16,50 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface LabTestFormProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
     diagnosisId?: ParamValue;
+    labTest?: {
+        id: number;
+        testName: string;
+        cost: number;
+        testDate: string;
+        diagnosisId: string;
+    };
 }
 
-export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTestFormProps) {
+export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }: LabTestFormProps) {
+    const isEditing = !!labTest;
     const { data: specialists } = useDepartmentUsers(2);
-    const { sendNotification } = useNotifications()
-    const { user } = useAuth()
+    const { sendNotification } = useNotifications();
+    const { user } = useAuth();
+
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
         testName: "",
         cost: 0,
-        testDate: new Date().toISOString().slice(0, 16), // Format for datetime-local input
+        testDate: new Date().toISOString().slice(0, 16),
         diagnosisId: diagnosisId || ""
     });
+
+    useEffect(() => {
+        if (labTest) {
+            setFormData({
+                testName: labTest.testName,
+                cost: labTest.cost,
+                testDate: labTest.testDate.slice(0, 16),
+                diagnosisId: labTest.diagnosisId
+            });
+        } else {
+            setFormData({
+                testName: "",
+                cost: 0,
+                testDate: new Date().toISOString().slice(0, 16),
+                diagnosisId: diagnosisId || ""
+            });
+        }
+    }, [labTest, diagnosisId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,39 +67,38 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
         setIsLoading(true);
 
         try {
-            const submitData = {
+            const payload = {
                 ...formData,
                 testDate: new Date(formData.testDate).toISOString(),
                 cost: Number(formData.cost)
             };
 
-            const response = await api.post("/api/LabTest", submitData);
+            const response = isEditing
+                ? await api.put(`/api/LabTest/${labTest!.id}`, payload)
+                : await api.post("/api/LabTest", payload);
 
             if (response.status === 200) {
-                toast.success("Lab test scheduled successfully");
-                setFormData({
-                    testName: "",
-                    cost: 0,
-                    testDate: new Date().toISOString().slice(0, 16),
-                    diagnosisId: diagnosisId || ""
-                });
-                if (specialists && specialists.length > 0) {
-                    sendNotification({
-                        title: "Test Results Ready",
-                        message: `Laboratory tests have been completed. Please <a href="/dashboard/patients/${diagnosisId}" class="text-blue-600 underline">review the results</a> and proceed with the clinical evaluation.`,
-                        fromUserId: user!.id,
-                        fromDepartment: 3,
-                        toDepartment: 2,
-                        toUserIds: specialists.map((u: any) => u.id),
-                    });
-                } else {
-                    toast.warning("No specialists available to notify. Please follow up with the clinical team manually.");
+                toast.success(`Lab test ${isEditing ? "updated" : "scheduled"} successfully`);
+
+                if (!isEditing) {
+                    if (specialists && specialists.length > 0) {
+                        sendNotification({
+                            title: "Tests submitted",
+                            message: `Laboratory tests have been completed. Please <a href="/dashboard/patients/${diagnosisId}" class="text-blue-600 underline">review the results</a> and proceed with the clinical evaluation.`,
+                            fromUserId: user!.id,
+                            fromDepartment: 3,
+                            toDepartment: 2,
+                            toUserIds: specialists.map((u: any) => u.id),
+                        });
+                    } else {
+                        toast.warning("No specialists available to notify. Please follow up with the clinical team manually.");
+                    }
                 }
 
-                onOpenChange(false)
+                onOpenChange(false);
             }
         } catch (error: any) {
-            toast.error(error.message || "Failed to schedule lab test");
+            toast.error(error.message || `Failed to ${isEditing ? "update" : "create"} lab test`);
             const fieldErrors: Record<string, string> = {};
             error.errors?.forEach((err: any) => {
                 const path = err.path.join(".");
@@ -83,11 +112,13 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="sm:max-w-[900px] w-full  overflow-y-auto px-8 py-4">
+            <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
                 <SheetHeader className="p-0">
-                    <SheetTitle>Record Lab Test</SheetTitle>
+                    <SheetTitle>{isEditing ? "Update Lab Test" : "Record Lab Test"}</SheetTitle>
                     <SheetDescription>
-                        Log a laboratory test performed or prescribed for the patient.
+                        {isEditing
+                            ? "Modify the details of an existing laboratory test."
+                            : "Log a laboratory test performed or prescribed for the patient."}
                     </SheetDescription>
                 </SheetHeader>
 
@@ -134,7 +165,6 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
                         {errors.testDate && <p className="text-red-500 text-sm mt-1">{errors.testDate}</p>}
                     </div>
 
-                    {/* Form Actions */}
                     <div className="flex gap-3 pt-4">
                         <SheetClose asChild>
                             <Button variant="outline" disabled={isLoading}>Cancel</Button>
@@ -145,7 +175,9 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId }: LabTest
                             disabled={isLoading}
                             className="bg-blue-600 hover:bg-blue-700 text-white"
                         >
-                            {isLoading ? "Saving..." : "Record Test"}
+                            {isLoading
+                                ? isEditing ? "Saving..." : "Recording..."
+                                : isEditing ? "Update Test" : "Record Test"}
                         </Button>
                     </div>
                 </form>
