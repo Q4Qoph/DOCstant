@@ -25,6 +25,25 @@ export interface Patient {
   comments: string
   createdAt: string;
   updatedAt: string;
+  name: string
+  age: number
+  sex: string
+  chiefComplaint: string
+  weight: string
+  height: string
+  temperature: string
+  bloodPresure: string
+  respiratoryRate: string
+  heartRate: string
+  symptoms: string
+  idNumber: string
+  medicalHistory: string
+  allergies: string
+  toxicHabits: string
+  vaccinations: Array<{ vaccineName: string }>
+  examinations: Array<{ physicalExamination: string; technique: number }>
+  laboratoryResults: string
+  imageResults: string
 }
 
 export interface VitalSigns {
