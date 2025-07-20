@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <AppProvider>
           {children}
-          <Toaster richColors />
+          <Toaster richColors position="top-right" closeButton/>
         </AppProvider>
       </body>
     </html>
