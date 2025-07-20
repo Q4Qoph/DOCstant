@@ -29,6 +29,7 @@ import Reevaluate from "./(components)/Reevaluate";
 import Expenses from "./(components)/Expenses";
 import { Treatment } from "@/types";
 import AI from "./(components)/AI";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -352,20 +353,49 @@ const RecordDetails = () => {
                 <div className="flex gap-2 mt-8">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button
+                            {/* <Button
                                 onClick={onEdit}
                                 className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                disabled={!!patient.comments}
                             >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Update
-                            </Button>
+                            </Button> */}
+                            {patient.comments ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <Button
+                                                onClick={onEdit}
+                                                disabled
+                                                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                            >
+                                                <Edit className="h-4 w-4 mr-2" />
+                                                Update
+                                            </Button>
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Editing this record is disabled!, to make further changes please do a re-evealuation.
+                                    </TooltipContent>
+                                </Tooltip>
+                            ) : (
+                                <Button
+                                    onClick={onEdit}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                >
+                                    <Edit className="h-4 w-4 mr-2" />
+                                    Update
+                                </Button>
+                            )}
+
                         </SheetTrigger>
                         <EditPatientForm
                             initialData={patient}
                             onCancel={() => setIsSheetOpen(false)}
                         />
                     </Sheet>
-                    <AlertDialog>
+                    {/* <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button
                                 variant="outline"
@@ -392,7 +422,7 @@ const RecordDetails = () => {
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
-                    </AlertDialog>
+                    </AlertDialog> */}
                 </div>
 
                 {/* Modals and Sheets */}
@@ -418,7 +448,6 @@ const RecordDetails = () => {
                     onSubmit={(data) => createTreatmentMutation.mutate(data)}
                     isLoading={createTreatmentMutation.isPending}
                 />
-
             </div>
         </div>
     );
