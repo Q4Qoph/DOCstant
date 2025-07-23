@@ -29,6 +29,8 @@ import Reevaluate from "./(components)/Reevaluate";
 import Expenses from "./(components)/Expenses";
 import { Treatment } from "@/types";
 import AI from "./(components)/AI";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import TestnResults from "./(components)/TestnResults";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -39,7 +41,6 @@ const createTreatment = (data: { diagnosisId: string; description: string }) =>
 
 const RecordDetails = () => {
     const [prescOpen, setPrescOpen] = useState(false);
-    const [labTestOpen, setLabTestOpen] = useState(false);
     const [admitOpen, setAdmitOpen] = useState(false);
     const [treatmentOpen, setTreatmentOpen] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -320,24 +321,7 @@ const RecordDetails = () => {
                             <Expenses id={id} />
 
                             {/* Laboratory Results Tab */}
-                            <TabsContent value="laboratory" className="mt-0">
-                                <Card className="border-slate-200 shadow-none">
-                                    <CardHeader className="flex justify-between border-b border-slate-200">
-                                        <CardTitle className="flex items-center gap-2">
-                                            <TestTube className="h-5 w-5 text-blue-600" />
-                                            Laboratory Results
-                                        </CardTitle>
-                                        <Button onClick={() => setLabTestOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
-                                            Add Test
-                                        </Button>
-                                    </CardHeader>
-                                    <CardContent className="p-6">
-                                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                                            <p className="text-gray-700 whitespace-pre-wrap">{patient.laboratoryResults}</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                            <TestnResults id={id} />
 
                             {/* AI Analysis Tab */}
                             <AI patient={patient} />
@@ -352,20 +336,49 @@ const RecordDetails = () => {
                 <div className="flex gap-2 mt-8">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button
+                            {/* <Button
                                 onClick={onEdit}
                                 className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                disabled={!!patient.comments}
                             >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Update
-                            </Button>
+                            </Button> */}
+                            {patient.comments ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <Button
+                                                onClick={onEdit}
+                                                disabled
+                                                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                            >
+                                                <Edit className="h-4 w-4 mr-2" />
+                                                Update
+                                            </Button>
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Editing this record is disabled!, to make further changes please do a re-evealuation.
+                                    </TooltipContent>
+                                </Tooltip>
+                            ) : (
+                                <Button
+                                    onClick={onEdit}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                                >
+                                    <Edit className="h-4 w-4 mr-2" />
+                                    Update
+                                </Button>
+                            )}
+
                         </SheetTrigger>
                         <EditPatientForm
                             initialData={patient}
                             onCancel={() => setIsSheetOpen(false)}
                         />
                     </Sheet>
-                    <AlertDialog>
+                    {/* <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button
                                 variant="outline"
@@ -392,7 +405,7 @@ const RecordDetails = () => {
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
-                    </AlertDialog>
+                    </AlertDialog> */}
                 </div>
 
                 {/* Modals and Sheets */}
@@ -401,11 +414,7 @@ const RecordDetails = () => {
                     open={prescOpen}
                     onOpenChange={setPrescOpen}
                 />
-                <LabTestForm
-                    open={labTestOpen}
-                    onOpenChange={setLabTestOpen}
-                    diagnosisId={id}
-                />
+                
                 <AdmitPatientForm
                     open={admitOpen}
                     onOpenChange={setAdmitOpen}
@@ -418,7 +427,6 @@ const RecordDetails = () => {
                     onSubmit={(data) => createTreatmentMutation.mutate(data)}
                     isLoading={createTreatmentMutation.isPending}
                 />
-
             </div>
         </div>
     );

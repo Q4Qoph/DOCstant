@@ -14,6 +14,7 @@ import { ParamValue } from "next/dist/server/request/params";
 import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LabTestFormProps {
     open: boolean;
@@ -42,6 +43,8 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
         testDate: new Date().toISOString().slice(0, 16),
         diagnosisId: diagnosisId || ""
     });
+
+    const queryClient = useQueryClient()
 
     useEffect(() => {
         if (labTest) {
@@ -79,7 +82,7 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
 
             if (response.status === 200) {
                 toast.success(`Lab test ${isEditing ? "updated" : "scheduled"} successfully`);
-
+                queryClient.invalidateQueries({queryKey: ["labTests", diagnosisId]})
                 if (!isEditing) {
                     if (specialists && specialists.length > 0) {
                         sendNotification({
