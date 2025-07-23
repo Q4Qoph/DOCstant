@@ -30,6 +30,7 @@ import Expenses from "./(components)/Expenses";
 import { Treatment } from "@/types";
 import AI from "./(components)/AI";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import TestnResults from "./(components)/TestnResults";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -40,7 +41,6 @@ const createTreatment = (data: { diagnosisId: string; description: string }) =>
 
 const RecordDetails = () => {
     const [prescOpen, setPrescOpen] = useState(false);
-    const [labTestOpen, setLabTestOpen] = useState(false);
     const [admitOpen, setAdmitOpen] = useState(false);
     const [treatmentOpen, setTreatmentOpen] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -321,24 +321,7 @@ const RecordDetails = () => {
                             <Expenses id={id} />
 
                             {/* Laboratory Results Tab */}
-                            <TabsContent value="laboratory" className="mt-0">
-                                <Card className="border-slate-200 shadow-none">
-                                    <CardHeader className="flex justify-between border-b border-slate-200">
-                                        <CardTitle className="flex items-center gap-2">
-                                            <TestTube className="h-5 w-5 text-blue-600" />
-                                            Laboratory Results
-                                        </CardTitle>
-                                        <Button onClick={() => setLabTestOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
-                                            Add Test
-                                        </Button>
-                                    </CardHeader>
-                                    <CardContent className="p-6">
-                                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                                            <p className="text-gray-700 whitespace-pre-wrap">{patient.laboratoryResults}</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                            <TestnResults id={id} />
 
                             {/* AI Analysis Tab */}
                             <AI patient={patient} />
@@ -431,11 +414,7 @@ const RecordDetails = () => {
                     open={prescOpen}
                     onOpenChange={setPrescOpen}
                 />
-                <LabTestForm
-                    open={labTestOpen}
-                    onOpenChange={setLabTestOpen}
-                    diagnosisId={id}
-                />
+                
                 <AdmitPatientForm
                     open={admitOpen}
                     onOpenChange={setAdmitOpen}
