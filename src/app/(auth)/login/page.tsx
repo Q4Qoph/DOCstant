@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, User, Lock, Shield, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, Loader } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
@@ -84,7 +84,7 @@ const LoginForm = () => {
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <Loader className="h-5 w-5 animate-spin" />
                 Signing In...
               </>
             ) : (

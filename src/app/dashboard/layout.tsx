@@ -4,14 +4,28 @@ import DashboardSidebar from "@/components/DashboardSidebar";
 import DashboardTopbar from "@/components/DashboardTopbar";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { Patient } from "@/types";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import DashboardLoader from "./loading";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-    const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState('dashboard');
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [checked, setChecked] = useState(false);
+    const { user, hydrating } = useAuth();
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!hydrating) {
+            if (!user) {
+                router.replace("/login");
+            } else {
+                setChecked(true);
+            }
+        }
+    }, [user, hydrating, router]);
+
+    if (hydrating || !checked) return <DashboardLoader />;
 
     return (
         <div className="flex h-screen bg-gray-50">

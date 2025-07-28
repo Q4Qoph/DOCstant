@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -97,7 +97,7 @@ const ResetPasswordForm = () => {
         >
           {isLoading ? (
             <>
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader className="h-5 w-5 animate-spin" />
               Resetting...
             </>
           ) : (

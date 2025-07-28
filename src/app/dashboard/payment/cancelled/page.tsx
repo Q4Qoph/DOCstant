@@ -4,10 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const PaymentCancelled = () => {
     const router = useRouter();
+
+    useEffect(() => {
+        const sid = localStorage.getItem("sid");
+
+        if (sid) {
+            localStorage.removeItem("sid");
+            router.replace("/");
+        } else {
+            router.replace("/dashboard/patients");
+        }
+    }, [router]);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-rose-50 flex items-center justify-center p-4">
