@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { jwtDecode } from 'jwt-decode';
-import { AxiosResponse } from 'axios';
 import { ParamValue } from 'next/dist/server/request/params';
 
 interface AuthContextType {
@@ -17,6 +16,7 @@ interface AuthContextType {
     isLoading: boolean;
     forgetPassword: (email: string) => void;
     resetPassword: (token: ParamValue, password: string, confirmPassword: string) => Promise<void>;
+    hydrating: boolean; 
 }
 interface DecodedToken {
     name: string;
@@ -41,6 +41,8 @@ const queryClient = new QueryClient();
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [hydrating, setHydrating] = useState(true);
+
     const router = useRouter()
 
     useEffect(() => {
@@ -52,13 +54,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 if (decoded.exp * 1000 < Date.now()) {
                     logout();
                 } else {
-                    console.log(decoded)
                     setUser({ id: decoded.sub, name: decoded.name, email: decoded.email, role: decoded.role });
                 }
             } catch (e) {
                 logout();
             }
         }
+        setHydrating(false)
     }, []);
 
     const login = async (email: string, password: string) => {
@@ -136,7 +138,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return (
         <QueryClientProvider client={queryClient}>
             <AuthContext.Provider
-                value={{ user, login, logout, isLoading, forgetPassword, resetPassword }}>
+                value={{ user, login, logout, isLoading, forgetPassword, resetPassword, hydrating }}>
                 {children}
             </AuthContext.Provider>
         </QueryClientProvider>

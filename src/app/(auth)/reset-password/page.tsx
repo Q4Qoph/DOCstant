@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Check, Loader2, Mail } from "lucide-react";
+import { Check, Loader, Mail } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -68,7 +68,7 @@ const ForgotPasswordForm = () => {
                 >
                     {isLoading ? (
                         <>
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <Loader className="h-5 w-5 animate-spin" />
                             Sending...
                         </>
                     ) : isSent ? (

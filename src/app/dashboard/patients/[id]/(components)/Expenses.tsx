@@ -57,6 +57,7 @@ const Expenses = ({ id }: { id: any }) => {
     const createPaymentMutation = useMutation({
         mutationFn: () => createPayment(id as string),
         onSuccess: (response) => {
+            localStorage.setItem("sid", response.data.stripeSessionId)
             window.location.href = response.data.url
         },
         onError: (error) => {
