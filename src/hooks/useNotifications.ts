@@ -19,10 +19,7 @@ export interface Notification {
 export const useNotifications = () => {
   const { user } = useAuth()
   const socketRef = useRef<Socket | null>(null)
-  // const [notifications, setNotifications] = useState<Notification[]>([])
   const [isConnected, setIsConnected] = useState(false)
-  // const [isLoading, setIsLoading] = useState(true)
-  // const [error, setError] = useState<string | null>(null)
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const reconnectAttempts = useRef(0)
 
@@ -63,8 +60,6 @@ export const useNotifications = () => {
   // Mark as read
   const markAsReadMutation = useMutation({
     mutationFn: async ({ id, userId }: { id: string; userId: string }) => {
-      console.log(id, userId);
-
       await api.put(`/api/notification/${id}/mark-read`, null, {
         params: { userId },
       });
@@ -129,7 +124,8 @@ export const useNotifications = () => {
         throw new Error("NEXT_PUBLIC_WS_URL is not defined")
       }
 
-      console.log("Connecting to Socket.IO:", baseUrl)
+      console.log("Connecting to Socket.IO...")
+
       const socket = io(baseUrl, {
         autoConnect: true,
         reconnection: true,
@@ -166,11 +162,9 @@ export const useNotifications = () => {
           timestamp: new Date(data.createdAt),
           read: false,
         }
-
         queryClient.setQueryData<Notification[]>(["notifications", user?.id], (old = []) => [newNotification, ...old])
         queryClient.invalidateQueries({ queryKey: ["unread-count", user?.id] })
       })
-
 
       // Handle reconnection events
       socket.on("reconnect", (attemptNumber) => {
@@ -184,7 +178,7 @@ export const useNotifications = () => {
       })
 
       socket.on("reconnect_error", (error) => {
-        // console.error("Socket.IO reconnection error:", error)
+        console.error("Socket.IO reconnection error:", error)
       })
 
       socket.on("reconnect_failed", () => {

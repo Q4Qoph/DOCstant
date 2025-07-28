@@ -14,11 +14,13 @@ import Link from "next/link"
 
 const Dashboard = () => {
   const { user } = useAuth()
+
   const quickActions = [
     { title: "Register Patient", icon: UserPlus, color: "bg-blue-500", href: "/dashboard/patients" },
     { title: "Admitted Patients", icon: FileText, color: "bg-purple-500", href: "/dashboard/admitted-patients" },
     { title: "Prescriptions", icon: Pill, color: "bg-orange-500", href: "/dashboard/prescriptions" },
   ]
+  
   return (
     <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
