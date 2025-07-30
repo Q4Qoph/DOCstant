@@ -2,25 +2,20 @@
 
 import { useAuth } from "@/contexts/AuthContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Plus, FileText, Settings, UserPlus, Pill } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Plus,
-  FileText,
-  Settings,
-  UserPlus,
-  Pill,
-} from "lucide-react"
 import Link from "next/link"
+import MetricsCards from "@/components/MetricsCards"
+import UserRolesBreakdownCard from "@/components/UserRolesBreakdownCard"
 
 const Dashboard = () => {
   const { user } = useAuth()
-
   const quickActions = [
     { title: "Register Patient", icon: UserPlus, color: "bg-blue-500", href: "/dashboard/patients" },
     { title: "Admitted Patients", icon: FileText, color: "bg-purple-500", href: "/dashboard/admitted-patients" },
     { title: "Prescriptions", icon: Pill, color: "bg-orange-500", href: "/dashboard/prescriptions" },
   ]
-  
+
   return (
     <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -40,7 +35,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Today's Schedule */}
+          {/* Quick Actions */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -50,14 +45,10 @@ const Dashboard = () => {
               <CardDescription>Frequently used hospital management tasks</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3  gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {quickActions.map((action, index) => (
-                  <Link href={action.href}>
-                    <Button
-                      key={index}
-                      variant="ghost"
-                      className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-                    >
+                  <Link href={action.href} key={index}>
+                    <Button variant="ghost" className="h-auto p-4 flex flex-col items-center gap-2 hover:bg-gray-50">
                       <div className={`p-3 rounded-lg ${action.color}`}>
                         <action.icon className="h-6 w-6 text-white" />
                       </div>
@@ -68,7 +59,6 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-
           {/* Recent Activity */}
           <Card>
             <CardHeader>
@@ -93,48 +83,21 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+        {/* Key Metrics */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />
-              System Status
+              Key Metrics
             </CardTitle>
-            <CardDescription>Hospital management system overview</CardDescription>
+            <CardDescription>Overview of hospital operational data</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Patient Records</p>
-                  <p className="text-xs text-gray-600">System Online</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Notifications</p>
-                  <p className="text-xs text-gray-600">System Online</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Billing</p>
-                  <p className="text-xs text-gray-600">System Online</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Pharmacy</p>
-                  <p className="text-xs text-gray-600">System Online</p>
-                </div>
-              </div>
-            </div>
+            <MetricsCards />
           </CardContent>
         </Card>
-
+        {/* User Roles Breakdown */}
+        <UserRolesBreakdownCard /> {/* New component for user roles */}
         {/* Bottom Action Bar */}
         <Card>
           <CardContent className="flex items-center justify-between p-6">
