@@ -40,7 +40,7 @@ interface PrescribedPatient {
     nurseId: string | null
     name: string
     diagnosisId: string
-    medicationDescription: any[]
+    medicationDescriptions: any[]
     createdTime: string
 }
 
@@ -409,10 +409,10 @@ export default function PrescriptionDashboard() {
                     filtered = filtered.filter((patient: any) => patient.patientDetails?.isPregnant)
                     break
                 case "has-medications":
-                    filtered = filtered.filter((patient) => patient.medicationDescription?.length > 0)
+                    filtered = filtered.filter((patient) => patient.medicationDescriptions?.length > 0)
                     break
                 case "no-medications":
-                    filtered = filtered.filter((patient) => !patient.medicationDescription?.length)
+                    filtered = filtered.filter((patient) => !patient.medicationDescriptions?.length)
                     break
             }
         }
@@ -956,7 +956,7 @@ export default function PrescriptionDashboard() {
                                                 </div>
                                                 <div className="text-right">
                                                     <Badge variant="outline" className="mb-2">
-                                                        {patient.medicationDescription?.length || 0} medication(s)
+                                                        {patient.medicationDescriptions?.length || 0} medication(s)
                                                     </Badge>
                                                     <p className="text-xs text-gray-500">Prescribed: {formatDate(patient.createdTime)}</p>
                                                     {patient.nurseId === receptionistId && (
@@ -1007,13 +1007,13 @@ export default function PrescriptionDashboard() {
                                                 </div>
                                             )}
 
-                                            {patient.medicationDescription && patient.medicationDescription.length > 0 && (
+                                            {patient.medicationDescriptions && patient.medicationDescriptions.length > 0 && (
                                                 <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                                                     <h4 className="text-sm font-medium text-green-800 mb-2">💊 Prescribed Medications:</h4>
                                                     <div className="space-y-1">
-                                                        {patient.medicationDescription.map((med: any, index: number) => (
+                                                        {patient.medicationDescriptions.map((med: any, index: number) => (
                                                             <div key={index} className="text-sm text-green-700">
-                                                                • {typeof med === "string" ? med : JSON.stringify(med)}
+                                                                • {med.description}
                                                             </div>
                                                         ))}
                                                     </div>
