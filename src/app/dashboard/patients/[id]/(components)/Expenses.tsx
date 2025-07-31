@@ -11,6 +11,7 @@ import { CreditCard, DollarSign, Plus, Bitcoin, History, Wallet, Receipt } from 
 import { useState } from "react"
 import { toast } from "sonner"
 import ExpenseForm from "../../(components)/ExpenseForm"
+import axios from "axios"
 
 const getExpenses = (diagnosisId: string) => api.get(`/api/Expense/${diagnosisId}`)
 const getPayments = (diagnosisId: string) => api.get(`/api/Payment/${diagnosisId}`)
@@ -18,17 +19,32 @@ const getPayments = (diagnosisId: string) => api.get(`/api/Payment/${diagnosisId
 const createExpense = (data: { expenseName: string; amount: number; diagnosisId: string }) =>
     api.post("/api/Expense", data)
 
+const getAmountPayable = (diagnosisId: string) =>
+    api.get(`/api/payment/payments/${diagnosisId}`);
+
 const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
     api.post(`/api/Payment/${diagnosisId}`, {
-        approvedURL: "http://localhost:3000/dashboard/payment/success",
-        cancelURL: "http://localhost:3000/dashboard/payment/cancelled",
+        approvedURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/success`,
+        cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
     })
 
-const createCryptoPayment = (diagnosisId: string): Promise<{ data: any }> =>
-    api.post(`/api/Payment/crypto/${diagnosisId}`, {
-        successURL: "http://localhost:3000/dashboard/payment/crypto-success",
-        cancelURL: "http://localhost:3000/dashboard/payment/crypto-cancelled",
-    })
+const createCryptoPayment = ({
+    amount,
+    diagnosisId,
+    currency,
+}: {
+    amount: number;
+    diagnosisId: string;
+    currency: string;
+}): Promise<{ data: any }> =>
+    axios.post(`${process.env.NEXT_PUBLIC_CRYPTO_BASE_URL}/checkout`, {
+        diagnosisId: diagnosisId,
+        amount,
+        currency,
+        redirect_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/crypto-success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/crypto-cancelled`,
+    });
+
 
 const Expenses = ({ id }: { id: any }) => {
     const [expenseOpen, setExpenseOpen] = useState(false)
@@ -67,15 +83,20 @@ const Expenses = ({ id }: { id: any }) => {
     })
 
     const createCryptoPaymentMutation = useMutation({
-        mutationFn: () => createCryptoPayment(id as string),
+        mutationFn: (payload: {
+            amount: number
+            currency: string
+            diagnosisId: string
+        }) => createCryptoPayment(payload),
         onSuccess: (response) => {
-            window.location.href = response.data.url
+            window.location.href = response.data.charge.hosted_url
         },
         onError: (error) => {
             console.error("Crypto payment error:", error)
             toast.error("Feature coming soon!")
         },
     })
+
 
     const handleStripePayment = () => {
         if (!expenses || expenses.length === 0) {
@@ -85,13 +106,27 @@ const Expenses = ({ id }: { id: any }) => {
         createPaymentMutation.mutate()
     }
 
-    const handleCryptoPayment = () => {
+    const handleCryptoPayment = async () => {
         if (!expenses || expenses.length === 0) {
             toast.error("No expenses to pay for this patient.")
             return
         }
-        createCryptoPaymentMutation.mutate()
+
+        try {
+            const response = await getAmountPayable(id as string)
+            const payload = {
+                amount: response.data,
+                currency: "USD",
+                diagnosisId: id,
+            }
+            console.log(payload)
+            createCryptoPaymentMutation.mutate(payload)
+        } catch (error) {
+            console.error("Error fetching payable amount:", error)
+            toast.error("Failed to retrieve payment details.")
+        }
     }
+
 
     const totalAmount = expenses?.reduce((sum: number, expense: any) => sum + expense.amount, 0) || 0
     const totalPaid = payments
