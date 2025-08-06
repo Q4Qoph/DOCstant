@@ -16,7 +16,7 @@ export const Hero = () => {
       </div>
 
       {/* Floating Elements */}
-      <div className="absolute top-20 left-10 animate-float">
+      {/* <div className="absolute top-20 left-10 animate-float">
         <div className="glass rounded-full p-4">
           <Sparkles className="h-8 w-8 text-white" />
         </div>
@@ -30,16 +30,16 @@ export const Hero = () => {
         <div className="glass rounded-full p-4">
           <Clock className="h-8 w-8 text-white" />
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center pt-[10%]">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center space-x-2 glass rounded-full px-6 py-3 text-white/90">
+          {/* <div className="inline-flex items-center space-x-2 glass rounded-full px-6 py-3 text-white/90">
             <Sparkles className="h-5 w-5" />
             <span className="text-sm font-medium">Next-Generation Pharmacy SaaS</span>
-          </div>
+          </div> */}
 
           {/* Main Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
@@ -67,7 +67,7 @@ export const Hero = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg font-semibold"
+              className="border-white/30  hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg font-semibold"
             >
               Book Demo
             </Button>

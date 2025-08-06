@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Menu, X, Activity, Bot } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,20 +25,13 @@ export const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-background/95 backdrop-blur-md shadow-soft' : 'bg-transparent'
-    }`}>
+    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-background/95 backdrop-blur-md shadow-soft' : 'bg-transparent'
+      }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="relative">
-              <Activity className="h-8 w-8 text-primary" />
-              <Bot className="h-4 w-4 text-accent absolute -top-1 -right-1" />
-            </div>
-            <span className="text-xl md:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Docstant
-            </span>
+          <div className="flex items-center justify-center">
+            <Image src="/logo.png" alt="HIMS Logo" width={200} height={32} />
           </div>
 
           {/* Desktop Navigation */}
@@ -54,12 +49,16 @@ export const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" className="text-foreground hover:text-primary">
-              Sign In
-            </Button>
-            <Button className="bg-gradient-primary shadow-medium hover:shadow-glow transition-all duration-300">
-              Get Started
-            </Button>
+            <Link href="/login">
+              <Button variant="ghost" className="text-foreground hover:text-primary">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button className="bg-gradient-primary shadow-medium hover:shadow-glow transition-all duration-300">
+                Get Started
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,9 +87,11 @@ export const Header = () => {
                 </a>
               ))}
               <div className="pt-4 space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  Sign In
-                </Button>
+                <Link href="/login">
+                  <Button variant="ghost" className="w-full justify-start">
+                    Sign In
+                  </Button>
+                </Link>
                 <Button className="w-full bg-gradient-primary">
                   Get Started
                 </Button>
