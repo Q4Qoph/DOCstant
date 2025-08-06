@@ -1,18 +1,18 @@
 "use client"
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { User, FileText, Activity, Stethoscope, Target, TestTube, Bot, Clock, DollarSign } from "lucide-react"
 
 export default function PatientTabs() {
   const tabs = [
     { value: "basic-info", icon: User, label: "Basic Info", shortLabel: "Info" },
     { value: "medical-history", icon: FileText, label: "Medical History", shortLabel: "Medical" },
-    { value: "vaccinations", icon: Activity, label: "Vaccinations", shortLabel: "Vaccines" },
     { value: "examinations", icon: Stethoscope, label: "Examinations", shortLabel: "Exams" },
-    { value: "treatments", icon: Target, label: "Treatments", shortLabel: "Treatment" },
-    { value: "expenses", icon: DollarSign, label: "Expenses & Payments", shortLabel: "Expenses" },
+    { value: "vaccinations", icon: Activity, label: "Vaccinations", shortLabel: "Vaccines" },
     { value: "laboratory", icon: TestTube, label: "Laboratory", shortLabel: "Lab" },
     { value: "ai-analysis", icon: Bot, label: "AI Analysis", shortLabel: "AI" },
+    { value: "treatments", icon: Target, label: "Treatments", shortLabel: "Treatment" },
+    { value: "expenses", icon: DollarSign, label: "Expenses & Payments", shortLabel: "Expenses" },
     { value: "reevaluations", icon: Clock, label: "Re-evaluations", shortLabel: "Re-eval" },
   ]
 
