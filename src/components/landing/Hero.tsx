@@ -12,7 +12,7 @@ export const Hero = () => {
           alt="Modern AI-powered pharmacy"
           className="w-full h-full object-cover"
         /> */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-accent/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-600/70 to-[hsl(var(--accent)/0.8)] p-6 rounded-lg text-white"></div>
       </div>
 
       {/* Floating Elements */}
@@ -44,7 +44,7 @@ export const Hero = () => {
           {/* Main Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
             Scale Your Pharmacy
-            <span className="block bg-gradient-to-r from-white to-primary-glow bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-white to-[#60a5fa] bg-clip-text text-transparent">
               With AI Intelligence
             </span>
           </h1>
