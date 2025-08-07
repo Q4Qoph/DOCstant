@@ -13,6 +13,7 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
+
 export default function EditPatientForm({ initialData, onCancel }: any) {
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -91,28 +92,6 @@ export default function EditPatientForm({ initialData, onCancel }: any) {
         }));
     };
 
-    const addExamination = () => {
-        setFormData(prev => ({
-            ...prev,
-            examinations: [...prev.examinations, { physicalExamination: "", technique: 0 }]
-        }));
-    };
-
-    const removeExamination = (index: number) => {
-        setFormData(prev => ({
-            ...prev,
-            examinations: prev.examinations.filter((_, i) => i !== index)
-        }));
-    };
-
-    const updateExamination = (index: number, field: string, value: string | number) => {
-        setFormData(prev => ({
-            ...prev,
-            examinations: prev.examinations.map((exam, i) =>
-                i === index ? { ...exam, [field]: value } : exam
-            )
-        }));
-    };
 
     return (
         <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
@@ -362,86 +341,6 @@ export default function EditPatientForm({ initialData, onCancel }: any) {
                         </div>
                     ))}
                     {errors.vaccinations && <p className="text-red-500 text-sm mt-1">{errors.vaccinations}</p>}
-                </div>
-
-                {/* Examinations */}
-                <div>
-                    <div className="flex justify-between items-center mb-3 space-y-2">
-                        <Label className=" text-lg font-semibold">Examinations</Label>
-                        <Button
-                            type="button"
-                            onClick={addExamination}
-                            variant="outline"
-                            size="sm"
-                            className="border-blue-300  hover:bg-blue-50"
-                        >
-                            <Plus className="h-4 w-4 mr-1" />
-                            Add Examination
-                        </Button>
-                    </div>
-                    {formData.examinations.map((examination, index) => (
-                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3 p-3 border border-blue-200 rounded">
-                            <div >
-                                <Label className=" text-sm ">Physical Examination</Label>
-                                <Textarea
-                                    value={examination.physicalExamination}
-                                    onChange={(e) => updateExamination(index, 'physicalExamination', e.target.value)}
-                                    placeholder="Physical examination details"
-                                    className="border-blue-200 focus:border-blue-500"
-                                />
-                            </div>
-                            <div>
-                                <Label className=" text-sm">Technique</Label>
-                                <Input
-                                    type="number"
-                                    value={examination.technique}
-                                    onChange={(e) => updateExamination(index, 'technique', parseInt(e.target.value) || 0)}
-                                    placeholder="Technique"
-                                    className="border-blue-200 focus:border-blue-500"
-                                />
-                            </div>
-                            {formData.examinations.length > 1 && (
-                                <div className="md:col-span-2">
-                                    <Button
-                                        type="button"
-                                        onClick={() => removeExamination(index)}
-                                        variant="outline"
-                                        size="sm"
-                                        className="border-red-300 text-red-700 hover:bg-red-50"
-                                    >
-                                        <Trash2 className="h-4 w-4 mr-1" />
-                                        Remove Examination
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                    {errors.examinations && <p className="text-red-500 text-sm mt-1">{errors.examinations}</p>}
-                </div>
-
-                {/* Results */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label htmlFor="laboratoryResults" className="">Laboratory Results</Label>
-                        <Textarea
-                            id="laboratoryResults"
-                            value={formData.laboratoryResults}
-                            onChange={(e) => setFormData(prev => ({ ...prev, laboratoryResults: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.laboratoryResults ? 'border-red-500' : ''}`}
-                        />
-                        {errors.laboratoryResults && <p className="text-red-500 text-sm mt-1">{errors.laboratoryResults}</p>}
-                    </div>
-
-                    <div>
-                        <Label htmlFor="imageResults" className="">Image Results</Label>
-                        <Textarea
-                            id="imageResults"
-                            value={formData.imageResults}
-                            onChange={(e) => setFormData(prev => ({ ...prev, imageResults: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.imageResults ? 'border-red-500' : ''}`}
-                        />
-                        {errors.imageResults && <p className="text-red-500 text-sm mt-1">{errors.imageResults}</p>}
-                    </div>
                 </div>
 
                 {/* Form Actions */}

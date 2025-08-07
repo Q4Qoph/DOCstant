@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Shield, Clock } from "lucide-react";
-import heroImage from "@/assets/pharmacy-hero.jpg";
+import heroImage from "@/assets/healthcare-hero.jpg";
 
 export const Hero = () => {
   return (
@@ -9,7 +9,7 @@ export const Hero = () => {
       <div className="absolute inset-0">
         {/* <img 
           src={heroImage} 
-          alt="Modern AI-powered pharmacy"
+          alt="Modern AI-powered healthcare technology"
           className="w-full h-full object-cover"
         /> */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-600/70 to-[hsl(var(--accent)/0.8)] p-6 rounded-lg text-white"></div>
@@ -38,21 +38,21 @@ export const Hero = () => {
           {/* Badge */}
           {/* <div className="inline-flex items-center space-x-2 glass rounded-full px-6 py-3 text-white/90">
             <Sparkles className="h-5 w-5" />
-            <span className="text-sm font-medium">Next-Generation Pharmacy SaaS</span>
+            <span className="text-sm font-medium">Cutting-Edge Healthcare Technology</span>
           </div> */}
 
           {/* Main Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-            Scale Your Pharmacy
+            Transform Healthcare
             <span className="block bg-gradient-to-r from-white to-[#60a5fa] bg-clip-text text-transparent">
-              With AI Intelligence
+              With Smart Solutions
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            Transform your pharmacy operations with Docstant's AI-powered platform. 
-            Automate workflows, reduce costs, and deliver exceptional patient experiences at scale.
+            Revolutionize your medical practice with Docstant's advanced technology platform. 
+            Streamline operations, reduce daily inconveniences, and deliver exceptional patient care at scale.
           </p>
 
           {/* CTA Buttons */}
@@ -76,16 +76,16 @@ export const Hero = () => {
           {/* Trust Indicators */}
           <div className="pt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-white">500+</div>
-              <div className="text-white/80">Pharmacies Using</div>
+              <div className="text-3xl font-bold text-white">1000+</div>
+              <div className="text-white/80">Healthcare Providers</div>
             </div>
             <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-white">40%</div>
-              <div className="text-white/80">Cost Reduction</div>
+              <div className="text-3xl font-bold text-white">45%</div>
+              <div className="text-white/80">Efficiency Improvement</div>
             </div>
             <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-white">2.5x</div>
-              <div className="text-white/80">Efficiency Boost</div>
+              <div className="text-3xl font-bold text-white">3x</div>
+              <div className="text-white/80">Faster Operations</div>
             </div>
           </div>
         </div>

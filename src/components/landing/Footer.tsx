@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  Activity, 
-  Bot, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
+import {
+  Activity,
+  Bot,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
   Linkedin,
   ArrowRight
 } from "lucide-react";
@@ -20,11 +20,11 @@ export const Footer = () => {
     {
       title: "Services",
       links: [
-        "AI Health Consultation",
-        "Patient Registration", 
-        "Medication Management",
-        "Health Monitoring",
-        "Express Service"
+        "Healthcare AI Solutions",
+        "Practice Management",
+        "Workflow Automation",
+        "Analytics & Reporting",
+        "Enterprise Support"
       ]
     },
     {
@@ -59,18 +59,18 @@ export const Footer = () => {
   return (
     <footer className="bg-[linear-gradient(to_bottom_right,_#2563eb,_#8058f8)] text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Newsletter Section */}
         <div className="py-16 border-b border-white/20">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Stay Updated with PharmAI+ News
+              Stay Updated with Docstant News
             </h3>
             <p className="text-xl text-white/90 mb-8">
-              Get the latest updates on AI healthcare innovations and exclusive offers.
+              Get the latest updates on healthcare technology innovations and exclusive insights.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-              <Input 
+              <Input
                 placeholder="Enter your email"
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40"
               />
@@ -85,7 +85,7 @@ export const Footer = () => {
         {/* Main Footer Content */}
         <div className="py-16">
           <div className="grid lg:grid-cols-5 gap-12">
-            
+
             {/* Brand Section */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center space-x-2">
@@ -93,27 +93,27 @@ export const Footer = () => {
                   <Activity className="h-10 w-10 text-white" />
                   <Bot className="h-5 w-5 text-accent-glow absolute -top-1 -right-1" />
                 </div>
-                <span className="text-3xl font-bold">PharmAI+</span>
+                <span className="text-3xl font-bold">Docstant</span>
               </div>
-              
+
               <p className="text-white/80 text-lg leading-relaxed">
-                Revolutionizing healthcare through AI-powered pharmacy services. 
-                Making quality healthcare accessible, efficient, and personalized for everyone.
+                Revolutionizing healthcare through cutting-edge technology solutions.
+                Making medical operations efficient, streamlined, and accessible for practitioners everywhere.
               </p>
 
               {/* Contact Info */}
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-accent-glow" />
-                  <span>info@pharmai.com</span>
+                  <span>contact@intl-coltium.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-accent-glow" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+1 (758) 486-9802</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-accent-glow" />
-                  <span>123 Healthcare Ave, Medical District</span>
+                  <span>15164-00509, Langata Hardy, Nairobi</span>
                 </div>
               </div>
 
@@ -138,7 +138,7 @@ export const Footer = () => {
                 <ul className="space-y-3">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <a 
+                      <a
                         href="#"
                         className="text-white/80 hover:text-white transition-colors duration-200"
                       >
@@ -156,7 +156,7 @@ export const Footer = () => {
         <div className="py-8 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-white/80">
-              © 2024 PharmAI+. All rights reserved.
+              © 2024 Docstant. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-white/80 hover:text-white transition-colors">

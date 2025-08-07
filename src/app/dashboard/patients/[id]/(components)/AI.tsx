@@ -31,7 +31,7 @@ const AI = ({ patient }: { patient: Patient }) => {
 
     return (
         <TabsContent value="ai-analysis" className="mt-0">
-            {patient.comments ? (
+            {patient.aiResponse ? (
                 <Card className="shadow-none">
                     <CardHeader className="flex justify-between border-b border-slate-200">
                         <CardTitle className="flex items-center gap-2">
@@ -57,7 +57,7 @@ const AI = ({ patient }: { patient: Patient }) => {
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 >
-                                    {patient.comments}
+                                    {patient.aiResponse}
                                 </ReactMarkdown>
                             </div>
 

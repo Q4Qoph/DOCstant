@@ -15,7 +15,6 @@ import { useParams, useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Key, useState } from "react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
@@ -31,6 +30,7 @@ import { Treatment } from "@/types";
 import AI from "./(components)/AI";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import TestnResults from "./(components)/TestnResults";
+import Examinations from "./(components)/examinations/Examinations";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -204,41 +204,8 @@ const RecordDetails = () => {
                                 </div>
                             </TabsContent>
 
-                                   {/* Examinations Tab */}
-                            <TabsContent value="examinations" className="mt-0">
-                                <Card className="shadow-none">
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2">
-                                            <Stethoscope className="h-5 w-5 text-blue-600" />
-                                            Physical Examinations ({patient.examinations.length})
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        {patient.examinations.length > 0 ? (
-                                            <div className="space-y-4">
-                                                {patient.examinations.map((examination: any, index: any) => (
-                                                    <div key={index} className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                                                        <div className="flex justify-between items-start mb-4">
-                                                            <h4 className="font-semibold text-lg">Examination #{index + 1}</h4>
-                                                            <Badge className="bg-blue-100 text-blue-800 border-blue-300">
-                                                                {examination.technique}
-                                                            </Badge>
-                                                        </div>
-                                                        <p className="text-slate-700 whitespace-pre-wrap leading-relaxed">
-                                                            {examination.physicalExamination}
-                                                        </p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-12">
-                                                <Stethoscope className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                                                <p className="text-slate-500 text-lg">No examinations recorded</p>
-                                            </div>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                            {/* Examinations Tab */}
+                            <Examinations patient={patient} />
 
                             {/* Vaccinations Tab */}
                             <TabsContent value="vaccinations" className="mt-0">
@@ -269,8 +236,6 @@ const RecordDetails = () => {
                                     </CardContent>
                                 </Card>
                             </TabsContent>
-
-                     
 
                             {/* Treatments Tab */}
                             <TabsContent value="treatments" className="mt-0">
@@ -416,7 +381,7 @@ const RecordDetails = () => {
                     open={prescOpen}
                     onOpenChange={setPrescOpen}
                 />
-                
+
                 <AdmitPatientForm
                     open={admitOpen}
                     onOpenChange={setAdmitOpen}
