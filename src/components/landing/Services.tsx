@@ -81,46 +81,6 @@ export const Services = () => {
           </p>
         </div>
 
-        {/* Featured Service */}
-        <div className="mb-16">
-          <Card className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
-            <div className="grid lg:grid-cols-2 gap-0">
-              <div className="relative bg-blue-100 min-h-[300px]">
-                {/* Optional image here */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-100/40 to-transparent"></div>
-              </div>
-              <CardContent className="p-8 lg:p-12 flex flex-col justify-center">
-                <div className="space-y-6">
-                  <div className="inline-flex items-center space-x-2 text-blue-600">
-                    <AlertCircle className="h-6 w-6" />
-                    <span className="font-semibold">Featured Service</span>
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-bold">
-                    Healthcare AI Engine
-                  </h3>
-                  <p className="text-blue-900/80 text-lg leading-relaxed">
-                    Our proprietary AI engine processes millions of healthcare interactions daily, optimizing everything from 
-                    appointment scheduling to clinical workflows while ensuring 99.9% accuracy and regulatory compliance.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Machine Learning", "Predictive Analytics", "Real-time Processing", "Scalable Architecture"].map((tag) => (
-                      <span 
-                        key={tag}
-                        className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <Button className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300 w-fit">
-                    See ROI Calculator
-                  </Button>
-                </div>
-              </CardContent>
-            </div>
-          </Card>
-        </div>
-
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
