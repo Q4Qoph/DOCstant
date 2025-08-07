@@ -65,7 +65,6 @@ interface Treatment {
     diagnosisId: string;
     description: string;
 }
-
 interface Expense {
     id: number;
     expenseName: string;
@@ -93,6 +92,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: PaymentResponse }> 
         "approvedURL": "http://localhost:3000/dashboard/payment/success",
         "cancelURL": "http://localhost:3000/dashboard/payment/cancelled"
     });
+
 
 const RecordDetails = () => {
     const [prescOpen, setPrescOpen] = useState(false);
@@ -482,7 +482,7 @@ const RecordDetails = () => {
                                     <Plus className="h-4 w-4 mr-2" />
                                     Add Expense
                                 </Button>
-                                
+
                             </div>
                         </CardHeader>
                         <CardContent className="p-6">
@@ -641,8 +641,8 @@ const RecordDetails = () => {
                                 <Activity className="h-5 w-5" />
                                 Patient Reevaluations
                             </CardTitle>
-                            <Button 
-                                onClick={() => setReevaluationOpen(true)} 
+                            <Button
+                                onClick={() => setReevaluationOpen(true)}
                                 className="bg-purple-500 hover:bg-purple-600 text-white"
                             >
                                 <Plus className="h-4 w-4 mr-2" />
@@ -664,10 +664,10 @@ const RecordDetails = () => {
                                                         Reevaluation #{index + 1}
                                                     </h4>
                                                     <p className="text-sm text-purple-600">
-                                                        {new Date().toLocaleDateString('en-US', { 
-                                                            year: 'numeric', 
-                                                            month: 'long', 
-                                                            day: 'numeric' 
+                                                        {new Date().toLocaleDateString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric'
                                                         })}
                                                     </p>
                                                 </div>
@@ -682,7 +682,7 @@ const RecordDetails = () => {
                                                     )}
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                                                 <div className="bg-white p-3 rounded-lg border border-purple-100">
                                                     <h5 className="font-semibold text-purple-700 mb-2">Chief Complaint</h5>
@@ -730,12 +730,12 @@ const RecordDetails = () => {
                                     <p className="text-gray-500 mb-4">
                                         Track patient progress with follow-up evaluations
                                     </p>
-                                    <Button 
-                                        onClick={() => setReevaluationOpen(true)} 
+                                    <Button
+                                        onClick={() => setReevaluationOpen(true)}
                                         className="bg-purple-500 hover:bg-purple-600"
                                     >
                                         <Plus className="h-4 w-4 mr-2" />
-                                        Schedule First Reevaluation
+                                         Reevaluate Patient
                                     </Button>
                                 </div>
                             )}
@@ -787,12 +787,12 @@ const RecordDetails = () => {
                 isLoading={createExpenseMutation.isPending}
             />
             <ReevaluationForm
-            open={reevaluationOpen}
-            onOpenChange={setReevaluationOpen}
-            diagnosisId={id as string}
-            patientData={patient}
-            onSubmit={(data) => createReevaluationMutation.mutate(data)}
-            isLoading={createReevaluationMutation.isPending}
+                open={reevaluationOpen}
+                onOpenChange={setReevaluationOpen}
+                diagnosisId={id as string}
+                patientData={patient}
+                onSubmit={(data) => createReevaluationMutation.mutate(data)}
+                isLoading={createReevaluationMutation.isPending}
             />
         </div>
     );

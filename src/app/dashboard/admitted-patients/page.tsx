@@ -9,6 +9,8 @@ import { Eye, Plus } from "lucide-react";
 import api from "@/lib/axios";
 import PatientsRecordSkeleton from "../patients/loading";
 import DischargeForm from "./(components)/DischargeForm";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 export default function AdmittedPatients() {
     const [dischargeOpen, setDischargeOpen] = useState(false)
@@ -60,7 +62,26 @@ export default function AdmittedPatients() {
                             <CardHeader className="border-b">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <CardTitle>{entry.diagnosis?.name || "Unnamed Patient"}</CardTitle>
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Link
+                                                        className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
+                                                        href={`/dashboard/patients/${entry.diagnosisId}`}
+                                                    >
+                                                        <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
+                                                            {entry.diagnosis?.name || "Unnamed Patient"}
+                                                        </h3>
+                                                        <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                        </svg>
+                                                    </Link>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>View patient details</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
                                         <p className="text-sm text-gray-600">Age: {entry.diagnosis?.age}</p>
                                     </div>
                                     <div className="flex gap-2">

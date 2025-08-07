@@ -10,7 +10,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import {
     Filter,
     Loader2,
@@ -34,6 +39,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import { useNotifications } from "@/hooks/useNotifications"
+import Link from "next/link"
 
 interface PrescribedPatient {
     id: number
@@ -597,7 +603,27 @@ export default function PrescriptionDashboard() {
                                                                 <div className="space-y-2">
                                                                     <div className="flex items-center space-x-2">
                                                                         <span className="text-sm font-medium text-blue-700">Name:</span>
-                                                                        <span className="text-sm text-blue-600">{prescription.patientDetails.name}</span>
+                                                                        <TooltipProvider>
+                                                                            <Tooltip>
+                                                                                <TooltipTrigger asChild>
+                                                                                    <Link
+                                                                                        className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
+                                                                                        href={`/dashboard/patients/${prescription.diagnosisId}`}
+                                                                                    >
+                                                                                        <span className="text-sm text-blue-600 group-hover:text-blue-700">
+                                                                                            {prescription.patientDetails?.name}
+                                                                                        </span>
+                                                                                        <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                                                        </svg>
+                                                                                    </Link>
+                                                                                </TooltipTrigger>
+                                                                                <TooltipContent>
+                                                                                    <p>View patient details</p>
+                                                                                </TooltipContent>
+                                                                            </Tooltip>
+                                                                        </TooltipProvider>
+                                                                        {/* <span className="text-sm text-blue-600">{prescription.patientDetails.name}</span> */}
                                                                     </div>
                                                                     <div className="flex items-center space-x-2">
                                                                         <span className="text-sm font-medium text-blue-700">Age & Gender:</span>
@@ -935,9 +961,26 @@ export default function PrescriptionDashboard() {
                                                         <Users className="h-6 w-6 text-blue-600" />
                                                     </div>
                                                     <div className="flex-1">
-                                                        <h3 className="text-lg font-semibold text-gray-900">
-                                                            {patient.patientDetails?.name || patient.name || "Unknown Patient"}
-                                                        </h3>
+                                                        <TooltipProvider>
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <Link
+                                                                        className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
+                                                                        href={`/dashboard/patients/${patient.diagnosisId}`}
+                                                                    >
+                                                                        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">
+                                                                            {patient.patientDetails?.name || patient.name || "Unknown Patient"}
+                                                                        </h3>
+                                                                        <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                                        </svg>
+                                                                    </Link>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent>
+                                                                    <p>View patient details</p>
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        </TooltipProvider>
                                                         <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
                                                             <span className="flex items-center">
                                                                 <span className="font-medium">Age:</span>

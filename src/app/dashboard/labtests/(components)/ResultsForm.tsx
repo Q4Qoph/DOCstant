@@ -44,17 +44,6 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
         labResult: ""
     });
 
-    useEffect(() => {
-        if (labTest) {
-            setFormData({
-                labResult: labTest.labTestResult || ""
-            });
-        } else {
-            setFormData({
-                labResult: ""
-            });
-        }
-    }, [labTest, diagnosisId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,10 +51,10 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
         setIsLoading(true);
 
         try {
-            // Send only the result string as the request body
-            const response = await api.put(`/api/LabTest/${diagnosisId}`, formData.labResult, {
+            const response = await api.put(`/api/LabTest/${labTest?.id}`, formData.labResult, {
                 headers: {
-                    'Content-Type': 'text/plain'
+                    'Accept': 'text/plain',
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -75,7 +64,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                 // Notify specialists about the updated results
                 if (specialists && specialists.length > 0) {
                     sendNotification({
-                        title: "Lab Results Updated",
+                        title: "Lab Results Updloaded",
                         message: `Laboratory test results for ${labTest?.testName} have been updated. Please <a href="/dashboard/patients/${labTest?.diagnosisId}" class="text-blue-600 underline">review the results</a> and proceed with clinical evaluation.`,
                         fromUserId: user!.id,
                         fromDepartment: 3,

@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { 
   Bot, 
-  Pill, 
+  Stethoscope, 
   UserCheck, 
   Clock, 
   Shield, 
@@ -26,37 +26,37 @@ export const Services = () => {
     {
       icon: <Bot className="h-8 w-8" />,
       title: "AI-Powered Workflow Automation",
-      description: "Automate prescription processing, inventory management, and customer interactions with intelligent AI.",
-      features: ["Auto-Processing", "Smart Routing", "Error Reduction"]
+      description: "Automate patient scheduling, record management, and administrative tasks with intelligent AI solutions.",
+      features: ["Smart Scheduling", "Auto-Documentation", "Process Optimization"]
     },
     {
       icon: <UserCheck className="h-8 w-8" />,
       title: "Enterprise Patient Management",
-      description: "Scalable patient database with advanced analytics and compliance tracking for multi-location operations.",
+      description: "Comprehensive patient database with advanced analytics and compliance tracking for multi-location practices.",
       features: ["Multi-Site Access", "HIPAA Compliance", "Advanced Analytics"]
     },
     {
-      icon: <Pill className="h-8 w-8" />,
-      title: "Intelligent Inventory Control",
-      description: "Predictive inventory management with automated ordering and supplier integration.",
-      features: ["Demand Forecasting", "Auto-Ordering", "Supplier Integration"]
+      icon: <Stethoscope className="h-8 w-8" />,
+      title: "Clinical Decision Support",
+      description: "AI-enhanced clinical workflows with evidence-based recommendations and automated quality checks.",
+      features: ["Clinical Alerts", "Evidence-Based Care", "Quality Metrics"]
     },
     {
       icon: <Smartphone className="h-8 w-8" />,
       title: "Omnichannel Platform",
-      description: "Unified platform connecting web, mobile, and in-store experiences with real-time synchronization.",
+      description: "Unified platform connecting telehealth, mobile, and in-office experiences with real-time synchronization.",
       features: ["Unified Dashboard", "Real-time Sync", "Cross-platform"]
     },
     {
       icon: <Shield className="h-8 w-8" />,
       title: "Advanced Security & Compliance",
-      description: "Enterprise-grade security with automated compliance reporting and audit trails.",
+      description: "Enterprise-grade security with automated compliance reporting and comprehensive audit trails.",
       features: ["SOC 2 Compliant", "Audit Trails", "Data Encryption"]
     },
     {
       icon: <Clock className="h-8 w-8" />,
       title: "Performance Analytics",
-      description: "Real-time business intelligence with KPI tracking and performance optimization insights.",
+      description: "Real-time practice intelligence with KPI tracking and operational efficiency optimization insights.",
       features: ["ROI Tracking", "Performance KPIs", "Custom Reports"]
     }
   ];
@@ -72,12 +72,12 @@ export const Services = () => {
             <span className="text-blue-600 font-medium">Our Services</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Enterprise-Grade Pharmacy
-            <span className="block text-blue-600">Automation Platform</span>
+            Enterprise-Grade Healthcare
+            <span className="block text-blue-600">Technology Platform</span>
           </h2>
           <p className="text-xl text-blue-900/70">
-            Streamline operations, reduce overhead costs, and scale your pharmacy business 
-            with Docstant's comprehensive SaaS solution built for modern healthcare enterprises.
+            Streamline operations, reduce administrative burden, and scale your healthcare practice 
+            with Docstant's comprehensive solution built for modern medical enterprises.
           </p>
         </div>
 
@@ -96,11 +96,11 @@ export const Services = () => {
                     <span className="font-semibold">Featured Service</span>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold">
-                    Enterprise AI Engine
+                    Healthcare AI Engine
                   </h3>
                   <p className="text-blue-900/80 text-lg leading-relaxed">
-                    Our proprietary AI engine processes millions of prescriptions daily, optimizing everything from 
-                    inventory levels to patient workflows while ensuring 99.9% accuracy and regulatory compliance.
+                    Our proprietary AI engine processes millions of healthcare interactions daily, optimizing everything from 
+                    appointment scheduling to clinical workflows while ensuring 99.9% accuracy and regulatory compliance.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {["Machine Learning", "Predictive Analytics", "Real-time Processing", "Scalable Architecture"].map((tag) => (
@@ -161,10 +161,10 @@ export const Services = () => {
           <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-xl">
             <CardContent className="p-8 md:p-12">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Ready to Transform Your Pharmacy Operations?
+                Ready to Transform Your Healthcare Practice?
               </h3>
               <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                Join 500+ pharmacies already saving 40% on operational costs with Docstant's AI platform.
+                Join 1000+ healthcare providers already improving efficiency by 45% with Docstant's AI platform.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 

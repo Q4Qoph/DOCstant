@@ -1,9 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { useState } from "react";
 import ResultsForm from "./ResultsForm";
+import Link from "next/link";
 
 
 const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
@@ -35,7 +36,26 @@ const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
                                     <div className="flex justify-between items-start">
                                         {showPatientDetails &&
                                             <div>
-                                                <CardTitle>{test.diagnosis?.name || "Unknown Patient"}</CardTitle>
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <Link
+                                                                className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
+                                                                href={`/dashboard/patients/${test.diagnosisId}`}
+                                                            >
+                                                                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
+                                                                    {test.diagnosis?.name || "Unnamed Patient"}
+                                                                </h3>
+                                                                <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                                </svg>
+                                                            </Link>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>View patient details</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
                                                 <p className="text-sm text-gray-600">Age: {test.diagnosis?.age}</p>
                                             </div>
                                         }
@@ -48,11 +68,12 @@ const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
                                                         size="sm"
                                                         className="border-blue-300 hover:bg-blue-50"
                                                     >
-                                                        <Plus className="h-4 w-4" />
+                                                        <Upload className="h-4 w-4" />
+                                                        Upload Results
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    Add Test Results
+                                                    Click to upload and save test results
                                                 </TooltipContent>
                                             </Tooltip>
                                         </div>

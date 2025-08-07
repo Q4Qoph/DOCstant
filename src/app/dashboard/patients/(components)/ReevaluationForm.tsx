@@ -17,6 +17,7 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 import { Loader2, Activity, User, Heart, Thermometer, Weight, Ruler, Stethoscope, TestTube, Bot, FileText, AlertTriangle, Clock, TrendingUp } from "lucide-react";
+import api from "@/lib/axios";
 
 interface ReevaluationFormData {
     name: string;
@@ -31,7 +32,6 @@ interface ReevaluationFormData {
     respiratoryRate: string;
     heartRate: string;
     symptoms: string;
-    doctorId: string;
     address: string;
     idNumber: string;
     medicalHistory: string;
@@ -75,7 +75,6 @@ const ReevaluationForm = ({
         respiratoryRate: "",
         heartRate: "",
         symptoms: "",
-        doctorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6", // Default doctor ID
         address: "",
         idNumber: "",
         medicalHistory: "",
@@ -109,7 +108,6 @@ const ReevaluationForm = ({
                 respiratoryRate: "",
                 heartRate: "",
                 symptoms: patientData.symptoms || "",
-                doctorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 address: patientData.address || "",
                 idNumber: patientData.idNumber || "",
                 medicalHistory: patientData.medicalHistory || "",
@@ -154,56 +152,6 @@ const ReevaluationForm = ({
         return Object.keys(newErrors).length === 0;
     };
 
-    const generateAIAnalysis = async () => {
-        setIsGeneratingAI(true);
-        try {
-            // Simulate AI analysis generation
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            const analysisPrompt = `
-Based on the patient data:
-- Age: ${formData.age}, Sex: ${formData.sex}
-- Chief Complaint: ${formData.chiefComplaint}
-- Current Symptoms: ${formData.symptoms}
-- Vitals: BP ${formData.bloodPresure}, HR ${formData.heartRate}, Temp ${formData.temperature}°C, RR ${formData.respiratoryRate}
-- Medical History: ${formData.medicalHistory}
-- Lab Results: ${formData.laboratoryResults}
-- Imaging: ${formData.imageResults}
-            `;
-
-            const aiAnalysis = `
-**REEVALUATION ANALYSIS**
-
-**Clinical Assessment:**
-Patient presents for follow-up evaluation with ongoing symptoms. Based on current presentation and historical data, the following observations are noted:
-
-**Symptom Progression:**
-- Current symptoms appear to be ${formData.symptoms.toLowerCase().includes('improved') ? 'improving' : formData.symptoms.toLowerCase().includes('worse') ? 'worsening' : 'stable'}
-- Vital signs ${formData.temperature && parseFloat(formData.temperature) > 37.5 ? 'indicate possible infection/inflammation' : 'within normal parameters'}
-
-**Recommendations:**
-1. Continue current treatment plan with modifications as needed
-2. Monitor symptom progression closely
-3. Consider additional diagnostic workup if symptoms persist
-4. Follow-up in 1-2 weeks or sooner if symptoms worsen
-
-**Next Steps:**
-- Review all current medications
-- Assess treatment compliance
-- Consider consultation with specialist if indicated
-- Patient education on warning signs
-
-*This analysis is AI-generated and should be reviewed by the attending physician.*
-            `;
-
-            handleInputChange("aiResponse", aiAnalysis);
-        } catch (error) {
-            console.error("Error generating AI analysis:", error);
-        } finally {
-            setIsGeneratingAI(false);
-        }
-    };
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -226,7 +174,6 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
             respiratoryRate: "",
             heartRate: "",
             symptoms: "",
-            doctorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             address: "",
             idNumber: "",
             medicalHistory: "",
@@ -265,7 +212,6 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                 <TabsTrigger value="basic">Basic Info</TabsTrigger>
                                 <TabsTrigger value="vitals">Vitals & Symptoms</TabsTrigger>
                                 <TabsTrigger value="medical">Medical History</TabsTrigger>
-                                <TabsTrigger value="results">Results & AI</TabsTrigger>
                             </TabsList>
 
                             {/* Basic Information Tab */}
@@ -352,24 +298,6 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 onChange={(e) => handleInputChange("address", e.target.value)}
                                                 disabled={isLoading}
                                             />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="department">Department</Label>
-                                            <Select value={formData.department.toString()} onValueChange={(value) => handleInputChange("department", parseInt(value))}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select department" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="0">Receptionist</SelectItem>
-                                                    <SelectItem value="1">General Practitioner</SelectItem>
-                                                    <SelectItem value="2">Specialist</SelectItem>
-                                                    <SelectItem value="3">Pharmacist</SelectItem>
-                                                    <SelectItem value="4">Lab Technician</SelectItem>
-                                                    <SelectItem value="5">Admin</SelectItem>
-
-                                                </SelectContent>
-                                            </Select>
                                         </div>
 
                                         <div className="flex items-center space-x-2">
@@ -568,86 +496,6 @@ Patient presents for follow-up evaluation with ongoing symptoms. Based on curren
                                                 onChange={(e) => handleInputChange("toxicHabits", e.target.value)}
                                                 disabled={isLoading}
                                                 rows={2}
-                                            />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-
-                            {/* Results & AI Tab */}
-                            <TabsContent value="results" className="space-y-4">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2 text-lg">
-                                            <TestTube className="h-5 w-5 text-blue-500" />
-                                            Test Results
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="laboratoryResults">Laboratory Results</Label>
-                                            <Textarea
-                                                id="laboratoryResults"
-                                                placeholder="Blood work, urine analysis, cultures, etc..."
-                                                value={formData.laboratoryResults}
-                                                onChange={(e) => handleInputChange("laboratoryResults", e.target.value)}
-                                                disabled={isLoading}
-                                                rows={3}
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="imageResults">Imaging Results</Label>
-                                            <Textarea
-                                                id="imageResults"
-                                                placeholder="X-rays, CT scans, MRI, ultrasound findings..."
-                                                value={formData.imageResults}
-                                                onChange={(e) => handleInputChange("imageResults", e.target.value)}
-                                                disabled={isLoading}
-                                                rows={3}
-                                            />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2 text-lg">
-                                            <Bot className="h-5 w-5 text-blue-500" />
-                                            AI Analysis
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={generateAIAnalysis}
-                                                disabled={isGeneratingAI || isLoading}
-                                                className="ml-auto"
-                                            >
-                                                {isGeneratingAI ? (
-                                                    <>
-                                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                        Generating...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <TrendingUp className="h-4 w-4 mr-2" />
-                                                        Generate Analysis
-                                                    </>
-                                                )}
-                                            </Button>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="aiResponse">AI Clinical Analysis</Label>
-                                            <Textarea
-                                                id="aiResponse"
-                                                placeholder="AI-generated clinical analysis will appear here..."
-                                                value={formData.aiResponse}
-                                                onChange={(e) => handleInputChange("aiResponse", e.target.value)}
-                                                disabled={isLoading}
-                                                rows={8}
-                                                className="font-mono text-sm"
                                             />
                                         </div>
                                     </CardContent>

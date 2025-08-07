@@ -15,33 +15,33 @@ import patientsImage from "@/assets/happy-patients.jpg";
 
 export const About = () => {
   const stats = [
-    { number: "500+", label: "Pharmacy Locations", icon: <Users className="h-6 w-6" /> },
-    { number: "40%", label: "Cost Reduction", icon: <Target className="h-6 w-6" /> },
+    { number: "1000+", label: "Healthcare Providers", icon: <Users className="h-6 w-6" /> },
+    { number: "45%", label: "Efficiency Improvement", icon: <Target className="h-6 w-6" /> },
     { number: "99.9%", label: "Platform Uptime", icon: <Award className="h-6 w-6" /> },
-    { number: "$50M+", label: "Client Savings", icon: <Star className="h-6 w-6" /> }
+    { number: "$75M+", label: "Cost Savings Generated", icon: <Star className="h-6 w-6" /> }
   ];
 
   const values = [
     {
       icon: <Target className="h-8 w-8" />,
       title: "Operational Excellence",
-      description: "Delivering measurable ROI through intelligent automation and process optimization."
+      description: "Delivering measurable improvements through intelligent automation and streamlined workflows."
     },
     {
       icon: <Shield className="h-8 w-8" />,
-      title: "Enterprise Security",
-      description: "Bank-grade security with HIPAA compliance ensuring your data and patients are protected."
+      title: "Data Security",
+      description: "Enterprise-grade security with HIPAA compliance ensuring your practice and patient data are protected."
     },
     {
       icon: <Lightbulb className="h-8 w-8" />,
       title: "Continuous Innovation",
-      description: "Regular platform updates and new features driven by client feedback and market needs."
+      description: "Regular platform updates and cutting-edge features driven by practitioner feedback and industry needs."
     }
   ];
 
   const achievements = [
-    "Serving 500+ pharmacy locations across North America",
-    "Achieved 40% average cost reduction for clients",
+    "Serving 1000+ healthcare providers across multiple specialties",
+    "Achieved 45% average efficiency improvement for medical practices",
     "99.9% platform uptime with enterprise-grade infrastructure",
     "SOC 2 Type II certified for security and compliance",
     "Winner of Healthcare Innovation Award 2024"
@@ -60,13 +60,13 @@ export const About = () => {
                 <span className="text-blue-600 font-medium">About Docstant</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                Scaling Pharmacy Operations
-                <span className="block text-blue-500">Through Enterprise AI</span>
+                Transforming Healthcare
+                <span className="block text-blue-500">Through Smart Technology</span>
               </h2>
               <p className="text-xl text-black/60 leading-relaxed">
-                Docstant is the leading SaaS platform that empowers pharmacy chains and independent
-                pharmacies to scale efficiently. Our AI-driven automation reduces costs by 40% while
-                improving patient outcomes and operational efficiency.
+                Docstant is the leading technology platform that empowers healthcare practices to
+                overcome daily operational challenges. Our advanced solutions reduce inefficiencies by 45% while
+                improving patient outcomes and practitioner satisfaction.
               </p>
             </div>
 
@@ -91,7 +91,7 @@ export const About = () => {
             <div className="relative overflow-hidden rounded-2xl shadow-xl">
               {/* <img 
                 src={patientsImage} 
-                alt="Happy patients using AI pharmacy services"
+                alt="Healthcare professionals using smart technology solutions"
                 className="w-full h-[500px] object-cover"
               /> */}
               <div className="absolute inset-0 bg-[linear-gradient(135deg,_#2563eb,_#60a5fa)]"></div>
@@ -102,7 +102,7 @@ export const About = () => {
               <CardContent className="p-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue-500 mb-2">4.9/5</div>
-                  <div className="text-sm text-black/60 mb-3">Patient Rating</div>
+                  <div className="text-sm text-black/60 mb-3">Practitioner Rating</div>
                   <div className="flex space-x-1 justify-center">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -136,7 +136,7 @@ export const About = () => {
         <div className="text-center mb-16">
           <h3 className="text-3xl font-bold mb-6 text-blue-800">Our Core Values</h3>
           <p className="text-xl text-blue-900/70 max-w-2xl mx-auto mb-12">
-            These principles guide everything we do and shape our commitment to excellence in healthcare.
+            These principles guide everything we do and shape our commitment to excellence in healthcare technology.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -166,9 +166,9 @@ export const About = () => {
           <CardContent className="p-8 md:p-16 text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h3>
             <p className="text-xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-8">
-              To empower pharmacy businesses of all sizes with enterprise-grade AI technology that
-              drives operational efficiency, reduces costs, and scales growth. We believe every pharmacy
-              deserves access to cutting-edge technology that enhances both business performance and patient care.
+              To revolutionize healthcare operations by addressing everyday medical inconveniences for practitioners.
+              We believe every healthcare practice deserves access to cutting-edge technology that enhances both operational
+              efficiency and patient care outcomes through innovative, reliable solutions.
             </p>
             <Button
               size="lg"
