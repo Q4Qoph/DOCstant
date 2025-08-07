@@ -20,15 +20,15 @@ export const Contact = () => {
     {
       icon: <Phone className="h-6 w-6" />,
       title: "Call Us",
-      description: "Speak with our AI-assisted support team",
-      detail: "+1 (555) 123-4567",
+      description: "Speak with our healthcare technology specialists",
+      detail: "+1 (758) 486-9802",
       action: "Call Now"
     },
     {
       icon: <Mail className="h-6 w-6" />,
       title: "Email Support",
       description: "Get detailed responses within 24 hours",
-      detail: "support@pharmai.com",
+      detail: "contact@intl-coltium.com",
       action: "Send Email"
     },
   ];
@@ -49,8 +49,8 @@ export const Contact = () => {
             <span className="block text-blue-600">Healthcare Experts</span>
           </h2>
           <p className="text-xl text-blue-900/70">
-            Have questions about our AI-powered pharmacy services? Our team is here to help 
-            you get started with personalized healthcare solutions.
+            Have questions about our AI-powered healthcare technology? Our team is here to help 
+            you get started with personalized solutions for your practice.
           </p>
         </div>
 
@@ -142,12 +142,12 @@ export const Contact = () => {
             {/* Emergency Contact */}
             <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white border-0 shadow-xl">
               <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold mb-2">Emergency Support</h3>
+                <h3 className="text-xl font-semibold mb-2">Priority Support</h3>
                 <p className="text-white/90 mb-4">
-                  For urgent medical assistance, our AI system is available 24/7
+                  For urgent technical assistance, our support team is available 24/7
                 </p>
                 <Button className="bg-white text-blue-600 hover:bg-blue-100">
-                  Emergency Contact
+                  Priority Contact
                 </Button>
               </CardContent>
             </Card>

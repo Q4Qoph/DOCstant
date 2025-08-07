@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import PatientForm from "./PatientForm";
 import PatientsRecordSkeleton from "../loading";
+import { sortByCreatedAt } from "@/lib/sortItems";
 
 export default function Records() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -71,7 +72,7 @@ export default function Records() {
                 </Card>
             ) : (
                 <div className="grid gap-4 px-8">
-                    {patients.map((patient: any) => (
+                    {sortByCreatedAt(patients).map((patient: any) => (
                         <Card key={patient.id}>
                             <CardHeader className="border-b">
                                 <div className="flex justify-between items-start">
