@@ -142,7 +142,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                                         ? "Analyzing..."
                                                         : reevaluation.aiResponse
                                                             ? "Regenerate Analysis"
-                                                            : "Generate Analysis"
+                                                            : "Analyze With AI"
                                                     }
                                                 </Button>
                                             }
@@ -186,7 +186,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                             <p className="text-gray-500 mb-4">Track patient progress with follow-up evaluations</p>
                             <Button onClick={() => setReevaluationOpen(true)} className="bg-blue-500 hover:bg-blue-600">
                                 <Plus className="h-4 w-4 mr-2" />
-                                Reevaluate
+                                Review Patient
                             </Button>
                         </div>
                     )}
