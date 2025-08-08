@@ -34,31 +34,6 @@ const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
                             <Card key={test.id} className="shadow-none">
                                 <CardHeader className="border-b">
                                     <div className="flex justify-between items-start">
-                                        {showPatientDetails &&
-                                            <div>
-                                                <TooltipProvider>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Link
-                                                                className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
-                                                                href={`/dashboard/patients/${test.diagnosisId}`}
-                                                            >
-                                                                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
-                                                                    {test.diagnosis?.name || "Unnamed Patient"}
-                                                                </h3>
-                                                                <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                                </svg>
-                                                            </Link>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>View patient details</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                                <p className="text-sm text-gray-600">Age: {test.diagnosis?.age}</p>
-                                            </div>
-                                        }
                                         <div className="flex gap-2">
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
