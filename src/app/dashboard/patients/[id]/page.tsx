@@ -40,8 +40,6 @@ const createTreatment = (data: { diagnosisId: string; description: string }) =>
 
 
 const RecordDetails = () => {
-    const [prescOpen, setPrescOpen] = useState(false);
-    const [admitOpen, setAdmitOpen] = useState(false);
     const [treatmentOpen, setTreatmentOpen] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("basic-info");
@@ -124,14 +122,8 @@ const RecordDetails = () => {
                             </div>
                         </div>
                         <div className="space-x-2">
-                            <Button variant="outline" onClick={() => setPrescOpen(true)} className="border-blue-500 text-blue-500 hover:text-blue-600">
-                                <Pill className="h-4 w-4 mr-2" />
-                                Prescribe Medication
-                            </Button>
-                            <Button onClick={() => setAdmitOpen(true)} className="bg-blue-500 hover:bg-blue-600">
-                                <Stethoscope className="h-4 w-4 mr-2" />
-                                Admit Patient
-                            </Button>
+                          
+
                         </div>
 
                     </div>
@@ -311,7 +303,7 @@ const RecordDetails = () => {
                                 <Edit className="h-4 w-4 mr-2" />
                                 Update
                             </Button> */}
-                            {patient.comments ? (
+                            {/* {patient.comments ? (
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <span>
@@ -337,7 +329,7 @@ const RecordDetails = () => {
                                     <Edit className="h-4 w-4 mr-2" />
                                     Update
                                 </Button>
-                            )}
+                            )} */}
 
                         </SheetTrigger>
                         <EditPatientForm
@@ -376,17 +368,6 @@ const RecordDetails = () => {
                 </div>
 
                 {/* Modals and Sheets */}
-                <PrescriptionSheet
-                    diagnosisId={patient.id}
-                    open={prescOpen}
-                    onOpenChange={setPrescOpen}
-                />
-
-                <AdmitPatientForm
-                    open={admitOpen}
-                    onOpenChange={setAdmitOpen}
-                    diagnosisId={id}
-                />
                 <TreatmentForm
                     open={treatmentOpen}
                     onOpenChange={setTreatmentOpen}

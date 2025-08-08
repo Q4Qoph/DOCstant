@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bot, Sparkles } from "lucide-react"
+import { Bot, Pill, Sparkles } from "lucide-react"
 import api from "@/lib/axios"
 import { Patient } from "@/types"
 import { cn } from "@/lib/utils"
@@ -11,8 +11,11 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import { toast } from "sonner"
+import PrescriptionSheet from "@/app/dashboard/prescriptions/(components)/PrescriptionSheet"
 
 const AI = ({ patient }: { patient: Patient }) => {
+    const [prescOpen, setPrescOpen] = useState(false);
+
     const queryClient = useQueryClient()
     const [loading, setLoading] = useState(false)
 
@@ -38,7 +41,7 @@ const AI = ({ patient }: { patient: Patient }) => {
                             <Bot className="h-5 w-5 text-blue-600" />
                             AI Analysis & Response
                         </CardTitle>
-                        <Button
+                        {/* <Button
                             className="bg-blue-500 hover:bg-blue-600"
                             onClick={handleGenerateAnalysis}
                             disabled={loading}
@@ -48,6 +51,10 @@ const AI = ({ patient }: { patient: Patient }) => {
                                 loading && "animate-spin"
                             )} />
                             {loading ? "Regenerating..." : "Regenerate Diagnosis"}
+                        </Button> */}
+                        <Button onClick={() => setPrescOpen(true)} className="bg-blue-500 hover:bg-blue-600 mt-4">
+                            <Pill className="h-4 w-4 mr-2" />
+                            Prescribe Medication
                         </Button>
                     </CardHeader>
                     <CardContent className="p-6">
@@ -79,12 +86,19 @@ const AI = ({ patient }: { patient: Patient }) => {
                                     "h-4 w-4 mr-2",
                                     loading && "animate-spin"
                                 )} />
-                                {loading ? "Generating..." : "Generate AI Analysis"}
+                                {loading ? "Analyzing..." : "Analyze With AI"}
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
             )}
+
+
+            <PrescriptionSheet
+                diagnosisId={patient.id}
+                open={prescOpen}
+                onOpenChange={setPrescOpen}
+            />
         </TabsContent>
     )
 }

@@ -1,16 +1,23 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import {
     Phone, MapPin, User, Calendar,
     Activity, Heart, Thermometer, Weight,
-    Ruler
+    Ruler,
+    Stethoscope
 } from "lucide-react";
+import { useState } from "react";
+import AdmitPatientForm from "../../(components)/AdmitPatientForm";
 
 const BasicInfo = ({ patient }: { patient: any }) => {
+    const [admitOpen, setAdmitOpen] = useState(false);
+
     return (
         <TabsContent value="basic-info" className="mt-0">
             <div className="space-y-6">
+
                 {/* Contact Info Card */}
                 <Card className="border-slate-200 shadow-none w-full">
                     <CardHeader className="">
@@ -104,9 +111,18 @@ const BasicInfo = ({ patient }: { patient: any }) => {
                                 <p className="text-slate-700">{patient.symptoms}</p>
                             </div>
                         </div>
+                        <Button onClick={() => setAdmitOpen(true)} className="bg-blue-500 hover:bg-blue-600 mt-4 w-full">
+                            <Stethoscope className="h-4 w-4 mr-2" />
+                            Admit Patient
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
+            <AdmitPatientForm
+                open={admitOpen}
+                onOpenChange={setAdmitOpen}
+                diagnosisId={patient.id}
+            />
         </TabsContent>
     )
 }
