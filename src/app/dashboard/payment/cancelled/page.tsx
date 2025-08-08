@@ -14,7 +14,7 @@ const PaymentCancelled = () => {
 
         if (sid) {
             localStorage.removeItem("sid");
-            router.replace("/");
+            router.replace("/dashboard");
         } else {
             router.replace("/dashboard/patients");
         }
