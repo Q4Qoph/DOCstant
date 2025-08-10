@@ -1,140 +1,204 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Edit, Trash2, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import api from "@/lib/axios";
+import {
+    Eye,
+    Plus,
+    Phone,
+    MapPin,
+    Heart,
+    Syringe,
+    Stethoscope,
+    Calendar,
+    Search,
+    Users,
+    Activity,
+    TrendingUp,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/axios";
+import { useRouter } from "next/navigation";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import PatientForm from "./PatientForm";
-import PatientsRecordSkeleton from "../loading";
-import { sortByCreatedAt } from "@/lib/sortItems";
+import PatientCard from "./PatientCard";
 
 export default function Records() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-    const {
-        data: patients,
-        isLoading,
-        isError,
-    } = useQuery({
-        queryKey: ['records'],
-        queryFn: async () => {
-            const response = await api.get("/api/diagnosisrecord")
-            return response.data
-        },
-    });
+    const [searchQuery, setSearchQuery] = useState("");
 
     const router = useRouter()
+
+    const { data: patients, isLoading } = useQuery({
+        queryKey: ["records"],
+        queryFn: async () => {
+            const response = await api.get("/api/diagnosisrecord");
+            return response.data;
+        },
+    });
 
     const onAdd = () => {
         setIsSheetOpen(true);
     };
 
     const onView = (id: string) => {
+        console.log("Clicked!!")
         router.push(`/dashboard/patients/${id}`)
     };
 
+    const filteredPatients = patients
+        ? patients.filter(
+            (patient: any) =>
+                patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                patient.phoneNumber.includes(searchQuery) ||
+                patient.address.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : [];
+
     return (
-        <div className="py-8">
-            <div className="flex justify-between items-center mb-6 px-8">
-                <div>
-                    <h1 className="text-3xl font-bold t">Patients Records</h1>
-                    <p className="">Review and manage patient diagnosis records</p>
+        <div className="min-h-screen">
+            {/* Header */}
+            <div className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-[hsl(210,100%,50%)/.1]" />
+                <div className="relative px-6 py-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div className="space-y-2">
+                                <h1 className="text-4xl font-bold">Patients Records</h1>
+                                <p className=" text-lg">
+                                    Review and manage patient diagnosis records
+                                </p>
+                            </div>
+
+                            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                                <SheetTrigger asChild>
+                                    <Button
+                                        onClick={onAdd}
+                                        size="lg"
+                                        className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
+                                    >
+                                        <Plus className="h-5 w-5 mr-2" />
+                                        Add New Patient
+                                    </Button>
+                                </SheetTrigger>
+                                <PatientForm setIsSheetOpen={setIsSheetOpen} onCancel={() => setIsSheetOpen(false)} />
+                            </Sheet>
+                        </div>
+                    </div>
                 </div>
-                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetTrigger asChild>
-                        <Button onClick={onAdd} className="flex bg-blue-500 hover:bg-blue-600 items-center space-x-2">
-                            <Plus className="h-4 w-4 mr-2" />
-                            <span> Add New Patient</span>
-                        </Button>
-                    </SheetTrigger>
-                    <PatientForm
-                        setIsSheetOpen={setIsSheetOpen}
-                        onCancel={() => setIsSheetOpen(false)}
-                    />
-                </Sheet>
             </div>
 
-            {isLoading ? (
-                <PatientsRecordSkeleton />
-            ) : patients.length === 0 ? (
-                <Card>
-                    <CardContent className="text-center p-8">
-                        <p className="600 text-lg">No records found.</p>
-                        <Button onClick={onAdd} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                            Get Diagnosis
-                        </Button>
-                    </CardContent>
-                </Card>
-            ) : (
-                <div className="grid gap-4 px-8">
-                    {sortByCreatedAt(patients).map((patient: any) => (
-                        <Card key={patient.id}>
-                            <CardHeader className="border-b">
-                                <div className="flex justify-between items-start">
+            <div className="px-6 py-8 max-w-7xl mx-auto">
+                {/* Stats */}
+                {patients && patients.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <Card className="shadow-none">
+                            <CardContent className="p-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 rounded-full bg-[hsl(199,89%,48%)/.1]">
+                                        <Users className="h-6 w-6 text-[hsl(199,89%,48%)]" />
+                                    </div>
                                     <div>
-                                        <CardTitle className="900">{patient.name}</CardTitle>
-                                        <p className="700 text-sm">
-                                            Age: {patient.age}
+                                        <p className="text-sm text-[hsl(215,20%,65%)]">
+                                            Total Patients
+                                        </p>
+                                        <p className="text-2xl font-bold text-[hsl(215,25%,27%)]">
+                                            {patients.length}
                                         </p>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            onClick={() => onView(patient.id)}
-                                            variant="outline"
-                                            size="sm"
-                                            className="border-blue-300 700 hover:bg-blue-50"
-                                        >
-                                            <Eye className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="p-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                                    <div>
-                                        <p className="700 font-medium">Phone:</p>
-                                        <p className="text-gray-700">{patient.phoneNumber}</p>
-                                    </div>
-                                    <div>
-                                        <p className="700 font-medium">Address:</p>
-                                        <p className="text-gray-700 truncate">{patient.address}</p>
-                                    </div>
-                                    <div>
-                                        <p className="700 font-medium">Status:</p>
-                                        <div className="flex gap-1 mt-1 flex-wrap">
-                                            {patient.isPregnant && (
-                                                <Badge className="bg-pink-100 text-pink-800 border-pink-300">
-                                                    Pregnant
-                                                </Badge>
-                                            )}
-                                            <Badge className="bg-blue-100 800 border-blue-300">
-                                                {patient.vaccinations.length} Vaccination{patient.vaccinations.length !== 1 ? "s" : ""}
-                                            </Badge>
-                                            <Badge className="bg-green-100 text-green-800 border-green-300">
-                                                {patient.examinations.length} Examination{patient.examinations.length !== 1 ? "s" : ""}
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mt-3 pt-3 border-t border-blue-100">
-                                    <p className="700 font-medium text-xs mb-1">Medical History:</p>
-                                    <p className="text-gray-600 text-xs line-clamp-2">
-                                        {patient.medicalHistory.length > 100
-                                            ? `${patient.medicalHistory.substring(0, 100)}...`
-                                            : patient.medicalHistory}
-                                    </p>
                                 </div>
                             </CardContent>
                         </Card>
-                    ))}
-                </div>
-            )}
+
+                        <Card className="shadow-none">
+                            <CardContent className="p-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 rounded-full bg-[hsl(142,76%,36%)/.1]">
+                                        <Activity className="h-6 w-6 text-[hsl(142,76%,36%)]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[hsl(215,20%,65%)]">
+                                            Active Cases
+                                        </p>
+                                        <p className="text-2xl font-bold text-[hsl(215,25%,27%)]">
+                                            {patients.filter((p: any) => p.examinations?.length > 0).length}
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="shadow-none">
+                            <CardContent className="p-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 rounded-full bg-[hsl(38,92%,50%)/.1]">
+                                        <TrendingUp className="h-6 w-6 text-[hsl(38,92%,50%)]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[hsl(215,20%,65%)]">
+                                            Vaccinated
+                                        </p>
+                                        <p className="text-2xl font-bold text-[hsl(215,25%,27%)]">
+                                            {patients.filter((p: any) => p.vaccinations?.length > 0).length}
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                )}
+
+                {/* Search */}
+                {patients && patients.length > 0 && (
+                    <div className="mb-8">
+                        <div className="relative max-w-md">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(215,20%,65%)]" />
+                            <Input
+                                placeholder="Search patients by name, phone, or address..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10 bg-white"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {isLoading ? (
+                    <div className="text-center p-8">Loading patients...</div>
+                ) : !patients || patients.length === 0 ? (
+                    <Card className="">
+                        <CardContent className="text-center p-12">
+                            <div className="max-w-md mx-auto space-y-4">
+                                <div className="p-4 rounded-full bg-[hsl(215,20%,65%)/.5] w-fit mx-auto">
+                                    <Users className="h-8 w-8 text-[hsl(215,20%,65%)]" />
+                                </div>
+                                <h3 className="text-xl font-semibold text-[hsl(215,25%,27%)]">
+                                    No records found
+                                </h3>
+                                <p className="text-[hsl(215,20%,65%)]">
+                                    Get started by adding your first patient
+                                </p>
+                                <Button onClick={onAdd} className="mt-4">
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Get Diagnosis
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {filteredPatients.map((patient: any, index: number) => (
+                            <PatientCard
+                                onView={onView}
+                                key={index}
+                                patient={patient} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
