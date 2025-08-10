@@ -14,7 +14,7 @@ import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
 import { ParamValue } from "next/dist/server/request/params";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Key, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
@@ -57,7 +57,9 @@ const RecordDetails = () => {
         queryFn: () => getPatientById(id).then((res) => res.data),
         enabled: !!id,
     });
-
+useEffect(()=>{
+    console.log(patient)
+},[patient])
     const {
         data: treatments,
         isLoading: treatmentsLoading,
