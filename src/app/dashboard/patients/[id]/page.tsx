@@ -5,10 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
-    Edit, Trash2, FileText,
-    Activity, TestTube, Bot, Stethoscope, Save, Pill, Sparkles,
+    Activity, Bot, Stethoscope,
     Plus, Clock,
-    Target, AlertCircle
+    Target
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
@@ -18,19 +17,19 @@ import { Key, useEffect, useState } from "react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import EditPatientForm from "../(components)/EditPatientForm";
 import PatientDetailsSkeleton from "./loading";
-import PrescriptionSheet from "../../prescriptions/(components)/PrescriptionSheet";
-import LabTestForm from "../../labtests/(components)/LabTestForm";
-import AdmitPatientForm from "../(components)/AdmitPatientForm";
 import TreatmentForm from "../(components)/TreatmentForm";
 import PatientTabs from "./(components)/PatientTabs";
 import BasicInfo from "./(components)/BasicInfo";
 import Reevaluate from "./(components)/Reevaluate";
 import Expenses from "./(components)/Expenses";
 import { Treatment } from "@/types";
-import AI from "./(components)/AI";
+import AI from "./(components)/AITab";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import TestnResults from "./(components)/TestnResults";
 import Examinations from "./(components)/examinations/Examinations";
+import MedicalHistory from "./(components)/MedicalHistory";
+import AITab from "./(components)/AITab";
+import Vaccinations from "./(components)/Vaccinations";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -57,9 +56,6 @@ const RecordDetails = () => {
         queryFn: () => getPatientById(id).then((res) => res.data),
         enabled: !!id,
     });
-useEffect(()=>{
-    console.log(patient)
-},[patient])
     const {
         data: treatments,
         isLoading: treatmentsLoading,
@@ -68,7 +64,9 @@ useEffect(()=>{
         queryFn: () => getTreatments(id as string).then((res) => res.data),
         enabled: !!id,
     });
-
+    useEffect(() => {
+        console.log(patient)
+    }, [patient])
     const createTreatmentMutation = useMutation({
         mutationFn: createTreatment,
         onSuccess: () => {
@@ -76,21 +74,6 @@ useEffect(()=>{
             setTreatmentOpen(false);
         },
     });
-
-
-
-    const onBack = () => {
-        router.back();
-    };
-
-    const onEdit = () => {
-        setIsSheetOpen(true);
-    };
-
-    const onDelete = () => {
-        // Implement delete logic
-    };
-
 
     if (isLoading) {
         return <PatientDetailsSkeleton />;
@@ -124,7 +107,7 @@ useEffect(()=>{
                             </div>
                         </div>
                         <div className="space-x-2">
-                          
+
 
                         </div>
 
@@ -144,92 +127,19 @@ useEffect(()=>{
                             />
 
                             {/* Medical History Tab */}
-                            <TabsContent value="medical-history" className="mt-0">
-                                <div className="space-y-6">
-                                    <Card className="border-slate-200 shadow-none">
-                                        <CardHeader>
-                                            <CardTitle className="flex items-center gap-2">
-                                                <FileText className="h-5 w-5 text-blue-600" />
-                                                Medical History
-                                            </CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                                                <p className="text-slate-700 whitespace-pre-wrap leading-relaxed">
-                                                    {patient.medicalHistory}
-                                                </p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <Card className="border-red-200 shadow-none">
-                                            <CardHeader>
-                                                <CardTitle className="flex items-center gap-2 text-red-700">
-                                                    <AlertCircle className="h-5 w-5" />
-                                                    Allergies
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                                                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed">
-                                                        {patient.allergies}
-                                                    </p>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-
-                                        <Card className="border-orange-200 shadow-none">
-                                            <CardHeader>
-                                                <CardTitle className="flex items-center gap-2 text-orange-700">
-                                                    <AlertCircle className="h-5 w-5" />
-                                                    Toxic Habits
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                                                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed">
-                                                        {patient.toxicHabits}
-                                                    </p>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                </div>
-                            </TabsContent>
+                            <MedicalHistory
+                                patient={patient}
+                            />
 
                             {/* Examinations Tab */}
-                            <Examinations patient={patient} />
+                            <Examinations
+                                patient={patient}
+                            />
 
                             {/* Vaccinations Tab */}
-                            <TabsContent value="vaccinations" className="mt-0">
-                                <Card className="border-slate-200 shadow-none">
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2">
-                                            <Activity className="h-5 w-5 text-green-600" />
-                                            Vaccinations ({patient.vaccinations.length})
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        {patient.vaccinations.length > 0 ? (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {patient.vaccinations.map((vaccination: any, index: Key) => (
-                                                    <div key={index} className="bg-green-50 p-4 rounded-lg border border-green-200">
-                                                        <Badge className="bg-green-100 text-green-800 border-green-300">
-                                                            {vaccination.vaccineName}
-                                                        </Badge>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-12">
-                                                <Activity className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                                                <p className="text-slate-500 text-lg">No vaccinations recorded</p>
-                                            </div>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                            <Vaccinations
+                                patient={patient}
+                            />
 
                             {/* Treatments Tab */}
                             <TabsContent value="treatments" className="mt-0">
@@ -285,7 +195,7 @@ useEffect(()=>{
                             <TestnResults id={id} />
 
                             {/* AI Analysis Tab */}
-                            <AI patient={patient} />
+                            <AITab patient={patient} />
 
                             {/* Reevaluations Tab */}
                             <Reevaluate id={id} patient={patient} />

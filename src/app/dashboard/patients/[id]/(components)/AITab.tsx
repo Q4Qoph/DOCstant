@@ -13,7 +13,7 @@ import rehypeRaw from "rehype-raw"
 import { toast } from "sonner"
 import PrescriptionSheet from "@/app/dashboard/prescriptions/(components)/PrescriptionSheet"
 
-const AI = ({ patient }: { patient: Patient }) => {
+const AITab = ({ patient }: { patient: Patient }) => {
     const [prescOpen, setPrescOpen] = useState(false);
 
     const queryClient = useQueryClient()
@@ -34,7 +34,7 @@ const AI = ({ patient }: { patient: Patient }) => {
 
     return (
         <TabsContent value="ai-analysis" className="mt-0">
-            {patient.aiResponse ? (
+            {patient.aiResponse && patient.aiResponse[2]?.response ? (
                 <Card className="shadow-none">
                     <CardHeader className="flex justify-between border-b border-slate-200">
                         <CardTitle className="flex items-center gap-2">
@@ -64,7 +64,7 @@ const AI = ({ patient }: { patient: Patient }) => {
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 >
-                                    {patient.aiResponse}
+                                    {patient.aiResponse[2].response}
                                 </ReactMarkdown>
                             </div>
 
@@ -103,4 +103,4 @@ const AI = ({ patient }: { patient: Patient }) => {
     )
 }
 
-export default AI
+export default AITab
