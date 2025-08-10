@@ -53,7 +53,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
             setLoadingAI(null);
         }
     };
-
+    console.log(reevaluations)
     return (
         <TabsContent value="reevaluations" className="mt-0">
             <Card className="shadow-none">
@@ -126,39 +126,40 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                                 <Bot className="h-4 w-4 text-blue-600" />
                                                 AI Assessment
                                             </h5>
-                                            {
-                                                !reevaluation.aiResponse &&
+                                            {(!reevaluation.aiResponse || reevaluation.aiResponse.length === 0) && (
                                                 <Button
                                                     size="sm"
                                                     className="bg-blue-500 hover:bg-blue-600 text-white"
                                                     onClick={() => handleGenerateReevaluationAnalysis(reevaluation.id)}
                                                     disabled={loadingAI === reevaluation.id}
                                                 >
-                                                    <Sparkles className={cn(
-                                                        "h-3 w-3 mr-2",
-                                                        loadingAI === reevaluation.id && "animate-spin"
-                                                    )} />
+                                                    <Sparkles
+                                                        className={cn(
+                                                            "h-3 w-3 mr-2",
+                                                            loadingAI === reevaluation.id && "animate-spin"
+                                                        )}
+                                                    />
                                                     {loadingAI === reevaluation.id
                                                         ? "Analyzing..."
-                                                        : reevaluation.aiResponse
-                                                            ? "Regenerate Analysis"
-                                                            : "Analyze With AI"
-                                                    }
+                                                        : "Analyze With AI"}
                                                 </Button>
-                                            }
+                                            )}
+
                                         </div>
 
-                                        {reevaluation.aiResponse ? (
-                                            <div className={cn(
-                                                "bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200",
-                                                loadingAI === reevaluation.id && "opacity-50 animate-pulse"
-                                            )}>
+                                        {reevaluation.aiResponse && reevaluation.aiResponse.length > 0 ? (
+                                            <div
+                                                className={cn(
+                                                    "bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200",
+                                                    loadingAI === reevaluation.id && "opacity-50 animate-pulse"
+                                                )}
+                                            >
                                                 <div className="prose prose-sm text-gray-700 max-w-none">
                                                     <ReactMarkdown
                                                         remarkPlugins={[remarkGfm]}
                                                         rehypePlugins={[rehypeRaw]}
                                                     >
-                                                        {reevaluation.aiResponse}
+                                                        {reevaluation.aiResponse[0].response}
                                                     </ReactMarkdown>
                                                 </div>
                                             </div>
@@ -168,11 +169,11 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                                 <p className="text-sm text-gray-500">
                                                     {loadingAI === reevaluation.id
                                                         ? "Generating AI analysis..."
-                                                        : "No AI analysis available for this reevaluation"
-                                                    }
+                                                        : "No AI analysis available for this reevaluation"}
                                                 </p>
                                             </div>
                                         )}
+
                                     </div>
                                 </div>
                             ))}
