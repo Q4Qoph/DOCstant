@@ -17,20 +17,24 @@ export default function PatientTabs() {
   ]
 
   return (
-    <div className="">
+    <div>
       {/* Desktop/Tablet View */}
-      <TabsList className="hidden md:grid w-full grid-cols-5 lg:grid-cols-9 h-auto p-2 bg-gray-50 to-gray-100 border border-gray-100 rounded-t-xl rounded-b-none">
+      <TabsList className="hidden md:grid w-full grid-cols-5 lg:grid-cols-9 h-auto p-2 bg-gray-50 border border-gray-100 rounded-t-xl">
         {tabs.map((tab) => {
           const IconComponent = tab.icon
           return (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="flex flex-col items-center gap-2 py-4 px-3 text-xs font-medium rounded-lg transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-blue-700  data-[state=active]:border-none data-[state=active]:border-gray-200 data-[state=active]:shadow-none hover:bg-white/50 text-slate-600 hover:text-slate-800"
+              className="group flex flex-col items-center gap-2 py-4 px-3 text-xs font-medium rounded-lg transition-all duration-200
+                         data-[state=active]:bg-transparent data-[state=active]:shadow-none
+                         hover:bg-transparent text-slate-600 hover:text-slate-800"
             >
-              <IconComponent className="h-5 w-5" />
-              <span className="hidden lg:inline text-center leading-tight">{tab.label}</span>
-              <span className="lg:hidden text-center leading-tight">{tab.shortLabel}</span>
+              <div className="h-10 w-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 group-data-[state=active]:bg-blue-500 group-data-[state=active]:text-white transition-colors duration-200">
+                <IconComponent className="h-5 w-5" />
+              </div>
+              <span className="hidden lg:inline text-center leading-tight text-blue-500 group-data-[state=active]:text-blue-500">{tab.label}</span>
+              <span className="lg:hidden text-center leading-tight group-data-[state=active]:text-blue-500">{tab.shortLabel}</span>
             </TabsTrigger>
           )
         })}
@@ -46,9 +50,13 @@ export default function PatientTabs() {
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  className="flex flex-col items-center gap-2 py-3 px-4 text-xs font-medium rounded-lg transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-blue-700  data-[state=active]:border data-[state=active]:border-blue-200 hover:bg-white/50 text-slate-600 hover:text-slate-800 whitespace-nowrap min-w-[80px]"
+                  className="flex bg-transparent flex-col items-center gap-2 py-3 px-4 text-xs font-medium rounded-lg transition-all duration-200
+                              data-[state=active]:text-blue-700 data-[state=active]:border data-[state=active]:border-blue-200
+                             hover:bg-white/50 text-slate-600 hover:text-slate-800 whitespace-nowrap min-w-[80px]"
                 >
-                  <IconComponent className="h-4 w-4" />
+                  <div className="h-8 w-8 flex items-center justify-center rounded-full text-slate-500 group-data-[state=active]:bg-blue-100 group-data-[state=active]:text-blue-700 transition-colors duration-200">
+                    <IconComponent className="h-4 w-4" />
+                  </div>
                   <span className="text-center leading-tight">{tab.shortLabel}</span>
                 </TabsTrigger>
               )
