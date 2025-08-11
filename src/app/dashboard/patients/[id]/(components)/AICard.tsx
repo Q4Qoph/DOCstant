@@ -11,10 +11,10 @@ import rehypeRaw from "rehype-raw"
 
 interface AIResponseCardProps {
     patient: any
-    index: number
+    step: string
 }
 
-export default function AICard({ patient, index }: AIResponseCardProps) {
+export default function AICard({ patient, step }: AIResponseCardProps) {
     const [loading, setLoading] = useState(false)
     const queryClient = useQueryClient()
 
@@ -31,7 +31,9 @@ export default function AICard({ patient, index }: AIResponseCardProps) {
         }
     }
 
-    const aiEntry = Array.isArray(patient.aiResponse) ? patient.aiResponse[index] : undefined
+    const aiEntry = Array.isArray(patient.aiResponse)
+        ? patient.aiResponse.find((item: any) => item.step === step)
+        : undefined;
 
     return (
         <Card className="border-slate-200 shadow-none mt-4">
