@@ -21,7 +21,7 @@ export interface Patient {
   pregnancyWeeks?: number;
   department: 0 | 1 | 2 | 3 | 4 | 5;
   assignedDoctor?: string;
-  aiResponse:{ response: string }[]
+  aiResponse:{step: string, response: string }[]
   comments: string
   createdAt: string;
   updatedAt: string;
@@ -193,7 +193,7 @@ export interface Treatment {
     laboratoryResults: string;
     department: number;
     imageResults: string;
-    aiResponse: { response: string }[];
+    aiResponse: {step: string, response: string }[];
     comments: string;
   };
   diagnosisId: string;

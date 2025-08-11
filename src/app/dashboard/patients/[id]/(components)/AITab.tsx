@@ -31,10 +31,12 @@ const AITab = ({ patient }: { patient: Patient }) => {
             setLoading(false)
         }
     }
-
+const analyzePrescribe = patient.aiResponse?.find(
+  item => item.step === "analyze_prescribe"
+);
     return (
         <TabsContent value="ai-analysis" className="mt-0">
-            {patient.aiResponse && patient.aiResponse[2]?.response ? (
+            {analyzePrescribe ? (
                 <Card className="shadow-none">
                     <CardHeader className="flex justify-between border-b border-slate-200">
                         <CardTitle className="flex items-center gap-2">
@@ -64,7 +66,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 >
-                                    {patient.aiResponse[2].response}
+                                     {analyzePrescribe.response}
                                 </ReactMarkdown>
                             </div>
 

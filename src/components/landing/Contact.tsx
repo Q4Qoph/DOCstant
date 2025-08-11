@@ -33,11 +33,9 @@ export const Contact = () => {
     },
   ];
 
-
   return (
     <section id="contact" className="py-24 bg-gradient-to-b from-white to-blue-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center space-x-2 bg-blue-100 rounded-full px-4 py-2 mb-6">
@@ -48,53 +46,52 @@ export const Contact = () => {
             Contact Our
             <span className="block text-blue-600">Healthcare Experts</span>
           </h2>
-          <p className="text-xl text-blue-900/70">
-            Have questions about our AI-powered healthcare technology? Our team is here to help 
+          <p className="text-xl text-gray-400">
+            Have questions about our AI-powered healthcare technology? Our team is here to help
             you get started with personalized solutions for your practice.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-12">
-
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <Card className="shadow-lg border border-blue-100">
               <CardHeader>
-                <CardTitle className="text-2xl text-blue-800">Send us a Message</CardTitle>
-                <p className="text-blue-900/70">
+                <CardTitle className="text-2xl">Send us a Message</CardTitle>
+                <p className="text-gray-400">
                   Fill out the form below and we'll get back to you within 24 hours.
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-blue-700">First Name</label>
+                    <label className="text-sm font-medium">First Name</label>
                     <Input placeholder="Enter your first name" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-blue-700">Last Name</label>
+                    <label className="text-sm font-medium">Last Name</label>
                     <Input placeholder="Enter your last name" />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-blue-700">Email</label>
+                    <label className="text-sm font-medium">Email</label>
                     <Input type="email" placeholder="your.email@example.com" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-blue-700">Phone</label>
+                    <label className="text-sm font-medium">Phone</label>
                     <Input type="tel" placeholder="+1 (555) 123-4567" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-700">Subject</label>
+                  <label className="text-sm font-medium">Subject</label>
                   <Input placeholder="What can we help you with?" />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-700">Message</label>
+                  <label className="text-sm font-medium">Message</label>
                   <Textarea
                     placeholder="Tell us more about your inquiry..."
                     className="min-h-32"
@@ -111,7 +108,6 @@ export const Contact = () => {
 
           {/* Contact Information */}
           <div className="space-y-8">
-
             {/* Contact Methods */}
             <div className="space-y-4">
               {contactMethods.map((method, index) => (
@@ -125,10 +121,10 @@ export const Contact = () => {
                         {method.icon}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-blue-800 group-hover:text-blue-600 transition-colors">
+                        <h3 className="font-semibold  group-hover:text-blue-600 transition-colors">
                           {method.title}
                         </h3>
-                        <p className="text-sm text-blue-900/70 mb-2">
+                        <p className="text-sm text-gray-400 mb-2">
                           {method.description}
                         </p>
                         <p className="font-medium text-blue-600">{method.detail}</p>

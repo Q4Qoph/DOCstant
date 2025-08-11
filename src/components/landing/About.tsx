@@ -43,8 +43,6 @@ export const About = () => {
     "Serving 1000+ healthcare providers across multiple specialties",
     "Achieved 45% average efficiency improvement for medical practices",
     "99.9% platform uptime with enterprise-grade infrastructure",
-    "SOC 2 Type II certified for security and compliance",
-    "Winner of Healthcare Innovation Award 2024"
   ];
 
   return (
@@ -80,10 +78,6 @@ export const About = () => {
                 </div>
               ))}
             </div>
-
-            <Button className="bg-blue-500 text-white hover:bg-blue-600 shadow-md transition-all duration-300">
-              Learn More About Our Technology
-            </Button>
           </div>
 
           {/* Image with Overlay */}
@@ -134,8 +128,8 @@ export const About = () => {
 
         {/* Values Section */}
         <div className="text-center mb-16">
-          <h3 className="text-3xl font-bold mb-6 text-blue-800">Our Core Values</h3>
-          <p className="text-xl text-blue-900/70 max-w-2xl mx-auto mb-12">
+          <h3 className="text-3xl font-bold mb-6">Our Core Values</h3>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12">
             These principles guide everything we do and shape our commitment to excellence in healthcare technology.
           </p>
 
