@@ -35,7 +35,9 @@ const Vaccinations = ({ patient }: any) => {
                     )}
                 </CardContent>
             </Card>
-            <AICard patient={patient} index={1} />
+            <AICard patient={patient}
+                step="vaccinations"
+            />
         </TabsContent>
     )
 }

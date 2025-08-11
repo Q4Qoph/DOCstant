@@ -55,7 +55,7 @@ export const Header = () => {
               </Button>
             </Link>
             <Link href="/login">
-              <Button className="bg-gradient-primary shadow-medium hover:shadow-glow transition-all duration-300">
+              <Button className="bg-blue-500 shadow-medium hover:shadow-glow transition-all duration-300">
                 Get Started
               </Button>
             </Link>

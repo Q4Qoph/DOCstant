@@ -14,6 +14,7 @@ import {
   Linkedin,
   ArrowRight
 } from "lucide-react";
+import Image from "next/image";
 
 export const Footer = () => {
   const footerSections = [
@@ -88,12 +89,8 @@ export const Footer = () => {
 
             {/* Brand Section */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <Activity className="h-10 w-10 text-white" />
-                  <Bot className="h-5 w-5 text-accent-glow absolute -top-1 -right-1" />
-                </div>
-                <span className="text-3xl font-bold">Docstant</span>
+              <div className="flex">
+                <Image src="/logo.png" alt="HIMS Logo" width={200} height={32} />
               </div>
 
               <p className="text-white/80 text-lg leading-relaxed">

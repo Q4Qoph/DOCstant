@@ -75,7 +75,7 @@ export const Services = () => {
             Enterprise-Grade Healthcare
             <span className="block text-blue-600">Technology Platform</span>
           </h2>
-          <p className="text-xl text-blue-900/70">
+          <p className="text-xl text-gray-400">
             Streamline operations, reduce administrative burden, and scale your healthcare practice 
             with Docstant's comprehensive solution built for modern medical enterprises.
           </p>
@@ -86,18 +86,18 @@ export const Services = () => {
           {services.map((service, index) => (
             <Card 
               key={index} 
-              className="group hover:shadow-xl transition-all duration-300 cursor-pointer border border-blue-100 shadow-sm"
+              className="border-none shadow-none group hover:shadow-xl transition-all duration-300 cursor-pointer border border-blue-100"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardHeader className="space-y-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white group-hover:scale-110 transition-transform duration-300">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500 text-white rounded-full group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
                 <div>
-                  <CardTitle className="text-xl mb-2 group-hover:text-blue-600 transition-colors">
+                  <CardTitle className="text-xl mb-2 transition-colors">
                     {service.title}
                   </CardTitle>
-                  <CardDescription className="text-blue-900/70">
+                  <CardDescription className="">
                     {service.description}
                   </CardDescription>
                 </div>
@@ -105,7 +105,7 @@ export const Services = () => {
               <CardContent>
                 <ul className="space-y-2">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center space-x-2 text-sm text-blue-900/80">
+                    <li key={idx} className="flex items-center space-x-2 text-sm">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                       <span>{feature}</span>
                     </li>
@@ -132,13 +132,6 @@ export const Services = () => {
                   className="bg-white text-blue-600 hover:bg-blue-50 shadow-md"
                 >
                   Start Free Trial
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
-                >
-                  Book Enterprise Demo
                 </Button>
               </div>
             </CardContent>
