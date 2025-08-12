@@ -43,7 +43,7 @@ export function Pricing() {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white">Start Free Trial</Button>
+                            <Button className="w-full bg-gray-100 hover:bg-gray-200 text-black">Start Free Trial</Button>
                         </CardFooter>
                     </Card>
 
