@@ -98,7 +98,7 @@ export const Contact = () => {
                   />
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300">
+                <Button className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300">
                   <Send className="mr-2 h-4 w-4" />
                   Send Message
                 </Button>
@@ -136,7 +136,7 @@ export const Contact = () => {
             </div>
 
             {/* Emergency Contact */}
-            <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white border-0 shadow-xl">
+            <Card className="bg-blue-600  text-white border-0 shadow-xl">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold mb-2">Priority Support</h3>
                 <p className="text-white/90 mb-4">

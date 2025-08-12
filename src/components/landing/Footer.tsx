@@ -58,7 +58,7 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[linear-gradient(to_bottom_right,_#2563eb,_#8058f8)] text-white">
+    <footer className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900  text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Newsletter Section */}

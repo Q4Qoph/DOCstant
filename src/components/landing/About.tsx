@@ -159,17 +159,11 @@ export const About = () => {
         <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-xl">
           <CardContent className="p-8 md:p-16 text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h3>
-            <p className="text-xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-8">
+            <p className="text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
               To revolutionize healthcare operations by addressing everyday medical inconveniences for practitioners.
               We believe every healthcare practice deserves access to cutting-edge technology that enhances both operational
               efficiency and patient care outcomes through innovative, reliable solutions.
             </p>
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 shadow-md"
-            >
-              Partner With Us
-            </Button>
           </CardContent>
         </Card>
       </div>

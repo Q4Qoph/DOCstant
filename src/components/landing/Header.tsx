@@ -20,6 +20,7 @@ export const Header = () => {
 
   const navItems = [
     { label: "Services", href: "#services" },
+    { label: "Pricing", href: "#pricing" },
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" }
   ];
