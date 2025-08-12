@@ -10,20 +10,15 @@ const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
         <div className="min-h-screen flex">
             <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-bl from-blue-50 via-blue-50 to-blue-100 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-600/20"></div>
-                <div className="relative z-10 flex flex-col justify-center items-center p-12 text-slate-800">
+                <div className="relative z-10 flex flex-col justify-center w-full items-center p-12 text-slate-800">
                     <div className="text-center mb-8">
                         <Link href="/">
-                        <div className="flex items-center justify-center mb-6">
-                            <Image src="/logo.png" alt="HIMS Logo" width={200} height={32} />
-                        </div>
+                            <div className="flex items-center justify-center mb-6">
+                                <Image src="/logo.png" alt="HIMS Logo" width={200} height={32} />
+                            </div>
                         </Link>
-                        <h1 className="text-4xl font-bold mb-4 text-slate-900">
-                            Hospital Information
-                            <br />
-                            Management System
-                        </h1>
-                        <p className="text-xl text-slate-600 mb-8">Streamlining healthcare operations for better patient care</p>
-                    </div>
+                        <h1 className="text-3xl font-bold text-slate-900 mb-4">Healthcare Technology <br/>Platform</h1>
+                        <p className="text-lg text-slate-600 mb-8">Transforming Healthcare Through Smart Technology</p>                    </div>
 
                     <div className="grid grid-cols-1 gap-6 max-w-md">
                         <div className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-blue-100">
