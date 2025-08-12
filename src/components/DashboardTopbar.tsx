@@ -22,6 +22,7 @@ const DashboardTopbar: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
             case '3': return 'Pharmacist';
             case '4': return 'Lab Technician';
             case '5': return 'Administrator';
+            case '6': return 'Super Admin';
             default: return role;
         }
     };
