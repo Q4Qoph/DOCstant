@@ -4,6 +4,7 @@ import { Services } from "@/components/landing/Services"
 import { About } from "@/components/landing/About"
 import { Contact } from "@/components/landing/Contact"
 import { Footer } from "@/components/landing/Footer"
+import { Pricing } from "@/components/landing/Pricing"
 
 export default function Component() {
   return (
@@ -12,6 +13,7 @@ export default function Component() {
       <Hero />
       <Services />
       <About />
+      <Pricing/>
       <Contact />
       <Footer />
     </div>

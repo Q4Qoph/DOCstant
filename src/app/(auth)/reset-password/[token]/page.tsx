@@ -59,7 +59,7 @@ const ResetPasswordForm = () => {
               placeholder="Enter new password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="pl-10 pr-10 h-12 border-gray-200"
+              className="pl-10 pr-10 h-12 bg-blue-50 border-gray-200"
               required
             />
             <button
@@ -84,7 +84,7 @@ const ResetPasswordForm = () => {
               placeholder="Confirm new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="pl-10 pr-10 h-12 border-gray-200"
+              className="pl-10 pr-10 h-12 bg-blue-50 border-gray-200"
               required
             />
           </div>

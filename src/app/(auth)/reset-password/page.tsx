@@ -52,7 +52,7 @@ const ForgotPasswordForm = () => {
                             placeholder="Enter your email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="pl-10 h-12 border-gray-200"
+                            className="bg-blue-50 pl-10 h-12 border-gray-200"
                             required
                         />
                     </div>

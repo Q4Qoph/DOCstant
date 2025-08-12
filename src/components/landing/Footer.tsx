@@ -1,10 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Activity,
-  Bot,
   Mail,
   Phone,
   MapPin,
@@ -12,7 +8,6 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  ArrowRight
 } from "lucide-react";
 import Image from "next/image";
 
@@ -58,11 +53,11 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[linear-gradient(to_bottom_right,_#2563eb,_#8058f8)] text-white">
+    <footer className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900  text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Newsletter Section */}
-        <div className="py-16 border-b border-white/20">
+        {/* <div className="py-16 border-b border-white/20">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
               Stay Updated with Docstant News
@@ -81,7 +76,7 @@ export const Footer = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Footer Content */}
         <div className="py-16">
