@@ -48,7 +48,7 @@ const LoginForm = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                className="pl-10 h-12 bg-blue-50  border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                 required
               />
             </div>
@@ -64,7 +64,7 @@ const LoginForm = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 pr-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                className="pl-10 pr-10 h-12 bg-blue-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                 required
               />
               <button
