@@ -11,7 +11,7 @@ export const Hero = () => {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-indigo-100/50 to-transparent rounded-full blur-3xl -z-10" />
 
       {/* Main Content */}
-      <div className="relative z-10 w-full pt-4">
+      <div className="relative z-10 w-full pt-2">
         <div className="container mx-auto px-6 lg:px-8 pt-20 pb-16">
           <div className="grid lg:grid-cols-12 gap-12 items-center min-h-[80vh]">
             {/* Left Content - Takes up more space */}

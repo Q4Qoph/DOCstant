@@ -15,7 +15,7 @@ export function Pricing() {
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Free Trial */}
-                    <Card className="relative border-2 border-gray-200 hover:border-blue-300 transition-colors">
+                    <Card className="relative border-2 shadow-none border-gray-200 hover:border-blue-300 transition-colors">
                         <CardHeader className="text-center pb-8">
                             <CardTitle className="text-2xl font-bold text-gray-900">Free Trial</CardTitle>
                             <CardDescription className="text-gray-600 mt-2">Perfect for trying out our platform</CardDescription>
@@ -48,7 +48,7 @@ export function Pricing() {
                     </Card>
 
                     {/* Monthly Plan */}
-                    <Card className="relative border-2 border-blue-500 hover:border-blue-600 transition-colors">
+                    <Card className="relative border-2 shadow-none border-blue-500 hover:border-blue-600 transition-colors">
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                             <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
                         </div>
