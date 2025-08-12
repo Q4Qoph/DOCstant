@@ -22,7 +22,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
     const handleGenerateAnalysis = async () => {
         try {
             setLoading(true)
-            await api.post("/api/ai", null, { params: { id: patient.id } })
+            await api.post("/api/ai", null, { params: { id: patient.id, steps: 2 } })
             toast.success("Analysis complete!")
             await queryClient.invalidateQueries({ queryKey: ["patient", patient.id] })
         } catch (error) {
@@ -32,7 +32,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
         }
     }
 const analyzePrescribe = patient.aiResponse?.find(
-  item => item.step === "analyze_prescribe"
+  item => item.step === "2"
 );
     return (
         <TabsContent value="ai-analysis" className="mt-0">

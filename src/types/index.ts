@@ -4,7 +4,9 @@ export interface User {
   email: string;
   role: any;
   phone: string;
+  companyId: string
 }
+
 
 export interface Patient {
   id: string;
