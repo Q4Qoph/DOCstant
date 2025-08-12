@@ -19,50 +19,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 
   const getMenuItems = () => {
     const baseItems = [
-      { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/coltium' },
-      { id: 'subs', label: 'Subscribers', icon: Users, href: '/coltium/subscribers' },
-      { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/coltium/chat' },
-      { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
+      { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/moderator' },
+      { id: 'subs', label: 'Subscribers', icon: Users, href: '/moderator/subscribers' },
+      // { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/moderator/chat' },
+      // { id: 'notifications', label: 'Notifications', icon: Bell, href: '/moderator/notifications' },
     ];
-
-    switch (user?.role) {
-      case 'RN':
-        return [
-          ...baseItems,
-          { id: 'patient-registration', label: 'Register Patient', icon: Plus, href: '/patient-registration' },
-          { id: 'payments', label: 'Payments', icon: Package, href: '/payments' },
-          { id: 'appointments', label: 'Appointments', icon: Calendar, href: '/appointments' },
-        ];
-      case 'GP':
-      case 'C':
-        return [
-          ...baseItems,
-          { id: 'consultations', label: 'Consultations', icon: User, href: '/consultations' },
-          { id: 'prescriptions', label: 'Prescriptions', icon: Package, href: '/prescriptions' },
-          { id: 'appointments', label: 'Appointments', icon: Calendar, href: '/appointments' },
-        ];
-      case 'P':
-        return [
-          ...baseItems,
-          { id: 'prescriptions', label: 'Prescriptions', icon: Package, href: '/prescriptions' },
-          { id: 'inventory', label: 'Inventory', icon: Package, href: '/inventory' },
-        ];
-      case 'L':
-        return [
-          ...baseItems,
-          { id: 'lab-results', label: 'Lab Results', icon: TestTube, href: '/lab-results' },
-        ];
-      case 'admin':
-        return [
-          ...baseItems,
-          { id: 'users', label: 'Users', icon: Users, href: '/users' },
-          { id: 'departments', label: 'Departments', icon: Settings, href: '/departments' },
-          { id: 'inventory', label: 'Inventory', icon: Package, href: '/inventory' },
-          { id: 'reports', label: 'Reports', icon: FileText, href: '/reports' },
-        ];
-      default:
-        return baseItems;
-    }
+    return baseItems
   };
 
   const menuItems = getMenuItems();

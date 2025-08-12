@@ -19,11 +19,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         if (!hydrating) {
             if (!user) {
                 router.replace("/login");
+            } else if (user.role !== 6 && user.role !== "SuperAdmin") {
+                router.replace("/login");
             } else {
                 setChecked(true);
             }
+
         }
     }, [user, hydrating, router]);
+
 
     if (hydrating || !checked) return <DashboardLoader />;
 

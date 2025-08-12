@@ -14,18 +14,20 @@ interface HeaderProps {
 const Topbar: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
     const { user } = useAuth();
 
-    const getRoleDisplayName = (role: string) => {
+    const getRoleDisplayName = (role: string | number) => {
         switch (role) {
-            case "0 ": return 'Receptionist/Nurse';
+            case "0": return 'Receptionist/Nurse';
             case '1': return 'General Practitioner';
             case '2': return 'Specialist';
             case '3': return 'Pharmacist';
             case '4': return 'Lab Technician';
             case '5': return 'Administrator';
+            case 6: return 'Super Admin';
             default: return role;
         }
     };
 
+    console.log(user)
     return (
         <header className="bg-white border-b border-gray-200 px-6 py-4">
             <div className="flex items-center justify-between">

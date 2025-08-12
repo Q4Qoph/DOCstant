@@ -16,7 +16,7 @@ interface AuthContextType {
     isLoading: boolean;
     forgetPassword: (email: string) => void;
     resetPassword: (token: ParamValue, password: string, confirmPassword: string) => Promise<void>;
-    hydrating: boolean; 
+    hydrating: boolean;
 }
 interface DecodedToken {
     name: string;
@@ -72,13 +72,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             );
 
             const user = response.data
-            setUser({ id: user.userId, name: user.name })
+            setUser({ id: user.userId, name: user.name , role: user.role})
             const token = user.token;
 
             localStorage.setItem("token", token);
 
             toast.success("Login Successful")
-            router.push("/dashboard");
+            if (user.role == "6") {
+                router.push("/moderator")
+            } else {
+                router.push("/dashboard");
+            }
 
         } catch (error: any) {
             const message = error.response?.data || error.message || "An unexpected error occurred";

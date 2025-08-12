@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check } from "lucide-react"
+import Link from "next/link"
 
 export function Pricing() {
     return (
@@ -43,7 +44,9 @@ export function Pricing() {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full bg-gray-100 hover:bg-gray-200 text-black">Start Free Trial</Button>
+                            <Link href="#contact" className="w-full">
+                                <Button className="w-full bg-gray-100 hover:bg-gray-200 text-black">Start Free Trial</Button>
+                            </Link>
                         </CardFooter>
                     </Card>
 
@@ -73,14 +76,16 @@ export function Pricing() {
                                 <Check className="h-5 w-5 text-blue-600" />
                                 <span className="text-gray-700">Priority support</span>
                             </div>
-                           
+
                             <div className="flex items-center space-x-3">
                                 <Check className="h-5 w-5 text-blue-600" />
                                 <span className="text-gray-700">Cancel anytime</span>
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Get Started</Button>
+                            <Link href="#contact" className="w-full">
+                                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Get Started</Button>
+                            </Link>
                         </CardFooter>
                     </Card>
                 </div>
