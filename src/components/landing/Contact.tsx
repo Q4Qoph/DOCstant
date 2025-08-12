@@ -1,37 +1,98 @@
 "use client";
 
+import { useState } from "react";
+import axios from "axios";
+import { z } from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Send,
-  MessageCircle,
-  Calendar,
-  Users
-} from "lucide-react";
+import { toast } from "sonner";
+import { Mail, Phone, MessageCircle, Send } from "lucide-react";
+
+const API = axios.create({
+  baseURL: "https://docstant-cnhrfqh8fnajc6gj.canadacentral-01.azurewebsites.net",
+  headers: { "Content-Type": "application/json" },
+});
+
+// Zod schema for form validation
+const contactSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Enter a valid email address"),
+  phone: z.string().min(5, "Phone number is required"),
+  subject: z.string().min(1, "Subject is required"),
+  message: z.string().min(1, "Message is required"),
+});
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
   const contactMethods = [
     {
+       type: "phone",
       icon: <Phone className="h-6 w-6" />,
       title: "Call Us",
       description: "Speak with our healthcare technology specialists",
       detail: "+1 (758) 486-9802",
-      action: "Call Now"
     },
     {
+       type: "email",
       icon: <Mail className="h-6 w-6" />,
       title: "Email Support",
       description: "Get detailed responses within 24 hours",
       detail: "contact@intl-coltium.com",
-      action: "Send Email"
     },
   ];
+
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" })); // clear field error when typing
+  };
+
+  const handleSubmit = async () => {
+    const validation = contactSchema.safeParse(formData);
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach((err) => {
+        const field = err.path[0] as string;
+        fieldErrors[field] = err.message;
+      });
+      setErrors(fieldErrors);
+      toast.error("Please correct the highlighted fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await API.post("/api/Contact/sendContactEmail", formData);
+      toast.success("Message sent! We'll get back to you within 24 hours.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+      setErrors({});
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-24 bg-gradient-to-b from-white to-blue-50">
@@ -55,7 +116,7 @@ export const Contact = () => {
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card className="shadow-lg border border-blue-100">
+            <Card className="shadow-none border border-blue-100">
               <CardHeader>
                 <CardTitle className="text-2xl">Send us a Message</CardTitle>
                 <p className="text-gray-400">
@@ -64,56 +125,96 @@ export const Contact = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div>
                     <label className="text-sm font-medium">First Name</label>
-                    <Input placeholder="Enter your first name" />
+                    <Input
+                      placeholder="Enter your first name"
+                      value={formData.firstName}
+                      onChange={(e) => handleChange("firstName", e.target.value)}
+                    />
+                    {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div>
                     <label className="text-sm font-medium">Last Name</label>
-                    <Input placeholder="Enter your last name" />
+                    <Input
+                      placeholder="Enter your last name"
+                      value={formData.lastName}
+                      onChange={(e) => handleChange("lastName", e.target.value)}
+                    />
+                    {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div>
                     <label className="text-sm font-medium">Email</label>
-                    <Input type="email" placeholder="your.email@example.com" />
+                    <Input
+                      type="email"
+                      placeholder="your.email@example.com"
+                      value={formData.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                    />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div>
                     <label className="text-sm font-medium">Phone</label>
-                    <Input type="tel" placeholder="+1 (555) 123-4567" />
+                    <Input
+                      type="tel"
+                      placeholder="+1 (555) 123-4567"
+                      value={formData.phone}
+                      onChange={(e) => handleChange("phone", e.target.value)}
+                    />
+                    {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div>
                   <label className="text-sm font-medium">Subject</label>
-                  <Input placeholder="What can we help you with?" />
+                  <Input
+                    placeholder="What can we help you with?"
+                    value={formData.subject}
+                    onChange={(e) => handleChange("subject", e.target.value)}
+                  />
+                  {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
                 </div>
 
-                <div className="space-y-2">
+                <div>
                   <label className="text-sm font-medium">Message</label>
                   <Textarea
                     placeholder="Tell us more about your inquiry..."
                     className="min-h-32"
+                    value={formData.message}
+                    onChange={(e) => handleChange("message", e.target.value)}
                   />
+                  {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
                 </div>
 
-                <Button className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300">
+                <Button
+                  disabled={loading}
+                  onClick={handleSubmit}
+                  className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300"
+                >
                   <Send className="mr-2 h-4 w-4" />
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Info */}
           <div className="space-y-8">
-            {/* Contact Methods */}
             <div className="space-y-4">
               {contactMethods.map((method, index) => (
                 <Card
                   key={index}
-                  className="border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
+                  onClick={() => {
+                    if (method.type === "phone") {
+                      window.location.href = `tel:${method.detail.replace(/\s+/g, "")}`;
+                    } else if (method.type === "email") {
+                      window.location.href = `mailto:${method.detail}`;
+                    }
+                  }}
+                  className="border border-blue-100 shadow-none hover:shadow-md transition-all duration-300 cursor-pointer group"
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
@@ -121,12 +222,10 @@ export const Contact = () => {
                         {method.icon}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold  group-hover:text-blue-600 transition-colors">
+                        <h3 className="font-semibold group-hover:text-blue-600 transition-colors">
                           {method.title}
                         </h3>
-                        <p className="text-sm text-gray-400 mb-2">
-                          {method.description}
-                        </p>
+                        <p className="text-sm text-gray-400 mb-2">{method.description}</p>
                         <p className="font-medium text-blue-600">{method.detail}</p>
                       </div>
                     </div>
@@ -136,7 +235,7 @@ export const Contact = () => {
             </div>
 
             {/* Emergency Contact */}
-            <Card className="bg-blue-600  text-white border-0 shadow-xl">
+            <Card className="bg-blue-600 text-white border-0 shadow-none">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold mb-2">Priority Support</h3>
                 <p className="text-white/90 mb-4">
@@ -147,7 +246,6 @@ export const Contact = () => {
                 </Button>
               </CardContent>
             </Card>
-
           </div>
         </div>
       </div>
