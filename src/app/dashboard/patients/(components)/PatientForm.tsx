@@ -51,7 +51,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
         try {
             const validatedData = patientSchema.parse(formData);
             // onSubmit(validatedData);
-            const response = await api.post("/api/DiagnosisRecord", validatedData)
+            const response = await api.post("/api/DiagnosisRecord", { ...validatedData, companyId: Number(user?.companyId) })
             if (response.status == 200) {
                 toast.success("Patient recorded successfuly");
                 if (specialists && specialists.length > 0) {

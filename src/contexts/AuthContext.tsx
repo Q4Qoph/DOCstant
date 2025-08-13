@@ -22,6 +22,7 @@ interface DecodedToken {
     name: string;
     email: string;
     role: string;
+    companyId: string;
     sub: string;
     exp: number;
 }
@@ -54,7 +55,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 if (decoded.exp * 1000 < Date.now()) {
                     logout();
                 } else {
-                    setUser({ id: decoded.sub, name: decoded.name, email: decoded.email, role: decoded.role });
+                    setUser({ id: decoded.sub, name: decoded.name, email: decoded.email, role: decoded.role, companyId: decoded.companyId });
                 }
             } catch (e) {
                 logout();
@@ -72,7 +73,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             );
 
             const user = response.data
-            setUser({ id: user.userId, name: user.name , role: user.role})
+            setUser({ id: user.userId, name: user.name, role: user.role, companyId: user.companyId })
             const token = user.token;
 
             localStorage.setItem("token", token);

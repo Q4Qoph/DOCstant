@@ -68,12 +68,12 @@ export const Services = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center space-x-2 bg-blue-100 rounded-full px-4 py-2 mb-6">
-            <Heart className="h-5 w-5 text-blue-600" />
-            <span className="text-blue-600 font-medium">Our Services</span>
+            <Heart className="h-5 w-5 text-[#0c9aff]" />
+            <span className="text-[#0c9aff] font-medium">Our Services</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Enterprise-Grade Healthcare
-            <span className="block text-blue-600">Technology Platform</span>
+            <span className="block text-[#0c9aff]">Technology Platform</span>
           </h2>
           <p className="text-xl text-gray-400">
             Streamline operations, reduce administrative burden, and scale your healthcare practice 
@@ -118,7 +118,7 @@ export const Services = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-16">
-          <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-xl">
+          <Card className="bg-[#0c9aff] text-white shadow-xl">
             <CardContent className="p-8 md:p-12">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Ready to Transform Your Healthcare Practice?
@@ -129,7 +129,7 @@ export const Services = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
                   size="lg" 
-                  className="bg-white text-blue-600 hover:bg-blue-50 shadow-md"
+                  className="bg-white text-[#0c9aff] hover:bg-blue-50 shadow-md"
                 >
                   Start Free Trial
                 </Button>

@@ -26,7 +26,7 @@ export const Hero = () => {
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-7xl xl:text-8xl font-bold text-slate-900 leading-[0.9] tracking-tight">
                   Transform
-                  <span className="block text-transparent bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text">
+                  <span className="block text-transparent bg-gradient-to-r from-[#0c9aff] via-blue-500 to-indigo-600 bg-clip-text">
                     Healthcare
                   </span>
                   <span className="block text-slate-700 text-4xl lg:text-5xl xl:text-6xl font-semibold mt-2">
@@ -56,7 +56,7 @@ export const Hero = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Shield className="h-5 w-5 text-blue-600" />
+                    <Shield className="h-5 w-5 text-[#0c9aff]" />
                   </div>
                   <div>
                     <div className="font-semibold text-slate-900">HIPAA</div>
@@ -78,7 +78,7 @@ export const Hero = () => {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg font-semibold rounded-xl"
+                  className="bg-[#0c9aff] hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg font-semibold rounded-xl"
                 >
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -136,7 +136,7 @@ export const Hero = () => {
                   <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Users className="h-5 w-5 text-blue-600" />
+                        <Users className="h-5 w-5 text-[#0c9aff]" />
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-slate-900">50K+</div>

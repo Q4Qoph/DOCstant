@@ -21,7 +21,7 @@ export default function AICard({ patient, step }: AIResponseCardProps) {
     const handleGenerateAnalysis = async () => {
         try {
             setLoading(true)
-            await api.post("/api/ai", null, { params: { id: patient.id } })
+            await api.post("/api/ai", null, { params: { id: patient.id, steps: step } })
             toast.success("Analysis complete!")
             await queryClient.invalidateQueries({ queryKey: ["patient", patient.id] })
         } catch {
@@ -32,7 +32,7 @@ export default function AICard({ patient, step }: AIResponseCardProps) {
     }
 
     const aiEntry = Array.isArray(patient.aiResponse)
-        ? patient.aiResponse.find((item: any) => item.step === step)
+        ? patient.aiResponse.find((item: any) => item.steps === step)
         : undefined;
 
     return (

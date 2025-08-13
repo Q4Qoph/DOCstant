@@ -9,6 +9,7 @@ import { Plus } from "lucide-react"
 import { InventoryForm } from "./(components)/InventoryForm"
 import InventoryList from "./(components)/InventoryList"
 import api from "@/lib/axios"
+import { useAuth } from "@/contexts/AuthContext"
 
 export interface InventoryItem {
   id: number
@@ -23,8 +24,8 @@ export interface InventoryItem {
   supplier: string
 }
 
-const fetchInventory = async () => {
-  const response = await api.get("/api/inventory")
+const fetchInventory = async (companyId: any) => {
+  const response = await api.get("/api/inventory", { params: { companyId } })
   return response.data
 
 }
@@ -32,10 +33,11 @@ const fetchInventory = async () => {
 export default function InventoryPage() {
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const { user } = useAuth()
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["inventory"],
-    queryFn: fetchInventory,
+    queryFn: () => fetchInventory(user?.companyId),
   })
 
   const handleEdit = (item: InventoryItem) => {

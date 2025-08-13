@@ -54,12 +54,12 @@ export const About = () => {
           <div className="space-y-8">
             <div>
               <div className="inline-flex items-center space-x-2 bg-blue-100 rounded-full px-4 py-2 mb-6">
-                <Lightbulb className="h-5 w-5 text-blue-600" />
-                <span className="text-blue-600 font-medium">About Docstant</span>
+                <Lightbulb className="h-5 w-5 text-[#0c9aff]" />
+                <span className="text-[#0c9aff] font-medium">About Docstant</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
                 Transforming Healthcare
-                <span className="block text-blue-500">Through Smart Technology</span>
+                <span className="block text-[#0c9aff]">Through Smart Technology</span>
               </h2>
               <p className="text-xl text-black/60 leading-relaxed">
                 Docstant is the leading technology platform that empowers healthcare practices to
@@ -95,7 +95,7 @@ export const About = () => {
             <Card className="absolute -bottom-8 -left-8 bg-white shadow-lg border border-blue-100">
               <CardContent className="p-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-500 mb-2">4.9/5</div>
+                  <div className="text-3xl font-bold text-[#0c9aff] mb-2">4.9/5</div>
                   <div className="text-sm text-black/60 mb-3">Practitioner Rating</div>
                   <div className="flex space-x-1 justify-center">
                     {[...Array(5)].map((_, i) => (
@@ -116,10 +116,10 @@ export const About = () => {
               className="text-center border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300"
             >
               <CardContent className="p-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 text-white mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#0c9aff] to-blue-400 text-white mb-4">
                   {stat.icon}
                 </div>
-                <div className="text-3xl font-bold text-blue-500 mb-2">{stat.number}</div>
+                <div className="text-3xl font-bold text-[#0c9aff] mb-2">{stat.number}</div>
                 <div className="text-blue-900/70">{stat.label}</div>
               </CardContent>
             </Card>
@@ -140,10 +140,10 @@ export const About = () => {
                 className="border border-blue-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
                 <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#0c9aff] to-blue-400 text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                     {value.icon}
                   </div>
-                  <h4 className="text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">
+                  <h4 className="text-xl font-semibold mb-4 group-hover:text-[#0c9aff] transition-colors">
                     {value.title}
                   </h4>
                   <p className="text-blue-900/70 leading-relaxed">
@@ -156,7 +156,7 @@ export const About = () => {
         </div>
 
         {/* Mission Statement */}
-        <Card className="bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-xl">
+        <Card className="bg-gradient-to-br from-[#0c9aff] to-[#0c9aff] text-white shadow-xl">
           <CardContent className="p-8 md:p-16 text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h3>
             <p className="text-xl text-white/90 max-w-4xl mx-auto leading-relaxed">
