@@ -100,12 +100,12 @@ export const Contact = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center space-x-2 bg-blue-100 rounded-full px-4 py-2 mb-6">
-            <MessageCircle className="h-5 w-5 text-blue-600" />
-            <span className="text-blue-600 font-medium">Get In Touch</span>
+            <MessageCircle className="h-5 w-5 text-[#0c9aff]" />
+            <span className="text-[#0c9aff] font-medium">Get In Touch</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Contact Our
-            <span className="block text-blue-600">Healthcare Experts</span>
+            <span className="block text-[#0c9aff]">Healthcare Experts</span>
           </h2>
           <p className="text-xl text-gray-400">
             Have questions about our AI-powered healthcare technology? Our team is here to help
@@ -192,7 +192,7 @@ export const Contact = () => {
                 <Button
                   disabled={loading}
                   onClick={handleSubmit}
-                  className="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:brightness-110 transition-all duration-300"
+                  className="bg-[#0c9aff] text-white shadow-md hover:brightness-110 transition-all duration-300"
                 >
                   <Send className="mr-2 h-4 w-4" />
                   {loading ? "Sending..." : "Send Message"}
@@ -218,7 +218,7 @@ export const Contact = () => {
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-400 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-[#0c9aff] rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                         {method.icon}
                       </div>
                       <div className="flex-1">
@@ -226,7 +226,7 @@ export const Contact = () => {
                           {method.title}
                         </h3>
                         <p className="text-sm text-gray-400 mb-2">{method.description}</p>
-                        <p className="font-medium text-blue-600">{method.detail}</p>
+                        <p className="font-medium text-[#0c9aff]">{method.detail}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -235,13 +235,13 @@ export const Contact = () => {
             </div>
 
             {/* Emergency Contact */}
-            <Card className="bg-blue-600 text-white border-0 shadow-none">
+            <Card className="bg-[#0c9aff] text-white border-0 shadow-none">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold mb-2">Priority Support</h3>
                 <p className="text-white/90 mb-4">
                   For urgent technical assistance, our support team is available 24/7
                 </p>
-                <Button className="bg-white text-blue-600 hover:bg-blue-100">
+                <Button className="bg-white text-[#0c9aff] hover:bg-blue-100">
                   Priority Contact
                 </Button>
               </CardContent>

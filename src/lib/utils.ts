@@ -13,3 +13,16 @@ export const formatDate = (dateString: string) => {
     year: "numeric",
   })
 }
+
+export const getRoleDisplayName = (role: number) => {
+        switch (role) {
+            case 0: return 'Receptionist/Nurse';
+            case 1: return 'General Practitioner';
+            case 2: return 'Specialist';
+            case 3: return 'Pharmacist';
+            case 4: return 'Lab Technician';
+            case 5: return 'Administrator';
+            case 6: return 'Super Admin';
+            default: return role;
+        }
+    };

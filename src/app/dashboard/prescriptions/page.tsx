@@ -109,7 +109,7 @@ export default function PrescriptionDashboard() {
     } = useQuery({
         queryKey: ["prescriptions", filter],
         queryFn: async () => {
-            const response = await api.get(`/api/prescription`)
+            const response = await api.get(`/api/prescription`, {params: {companyId: user?.companyId}})
             const prescriptions = response.data as PrescriptionRecord[]
 
             // Fetch patient details for each prescription

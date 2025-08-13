@@ -25,17 +25,19 @@ import { useRouter } from "next/navigation";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import PatientForm from "./PatientForm";
 import PatientCard from "./PatientCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Records() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const { user } = useAuth()
 
     const router = useRouter()
 
     const { data: patients, isLoading } = useQuery({
         queryKey: ["records"],
         queryFn: async () => {
-            const response = await api.get("/api/diagnosisrecord");
+            const response = await api.get("/api/diagnosisrecord", {params: {companyId: user?.companyId}});
             return response.data;
         },
     });

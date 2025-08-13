@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import api from "@/lib/axios"
+import { useAuth } from "@/contexts/AuthContext"
 
 export interface InventoryItem {
     id: number
@@ -20,6 +21,7 @@ export interface InventoryItem {
     quantity: number
     price: number
     supplier: string
+    companyId?: string
 }
 
 
@@ -38,6 +40,8 @@ const updateItem = async (item: InventoryItem) => {
 }
 
 export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps) {
+    const {user} = useAuth()
+    
     const queryClient = useQueryClient()
 
     const [formData, setFormData] = useState({
@@ -50,6 +54,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
         quantity: 0,
         price: 0,
         supplier: "",
+        companyId: ""
     })
 
 
@@ -70,6 +75,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
                 quantity: 0,
                 price: 0,
                 supplier: "",
+                companyId: ""
             })
         },
         onError: (error: Error) => {
@@ -101,6 +107,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
                 quantity: item.quantity,
                 price: item.price,
                 supplier: item.supplier,
+                 companyId: item.companyId!
             })
         } else {
             setFormData({
@@ -113,6 +120,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
                 quantity: 0,
                 price: 0,
                 supplier: "",
+                 companyId: ""
             })
         }
     }, [item])
@@ -124,7 +132,7 @@ export function InventoryForm({ item, onSuccess, onCancel }: InventoryFormProps)
         if (item) {
             updateMutation.mutate({ ...formData, id: item.id })
         } else {
-            createMutation.mutate(formData)
+            createMutation.mutate({...formData, companyId: user?.companyId})
         }
     }
 

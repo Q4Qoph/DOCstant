@@ -27,19 +27,19 @@ export function Pricing() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Full platform access</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">All core features</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Email support</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">No credit card required</span>
                             </div>
                         </CardContent>
@@ -51,9 +51,9 @@ export function Pricing() {
                     </Card>
 
                     {/* Monthly Plan */}
-                    <Card className="relative border-2 shadow-none border-blue-500 hover:border-blue-600 transition-colors">
+                    <Card className="relative border-2 shadow-none border-[#0c9aff] hover:border-[#0c9aff] transition-colors">
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
+                            <span className="bg-[#0c9aff] text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
                         </div>
                         <CardHeader className="text-center pb-8">
                             <CardTitle className="text-2xl font-bold text-gray-900">Monthly Plan</CardTitle>
@@ -65,26 +65,26 @@ export function Pricing() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Everything in Free Trial</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Unlimited usage</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Priority support</span>
                             </div>
 
                             <div className="flex items-center space-x-3">
-                                <Check className="h-5 w-5 text-blue-600" />
+                                <Check className="h-5 w-5 text-[#0c9aff]" />
                                 <span className="text-gray-700">Cancel anytime</span>
                             </div>
                         </CardContent>
                         <CardFooter>
                             <Link href="#contact" className="w-full">
-                                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Get Started</Button>
+                                <Button className="w-full bg-[#0c9aff] hover:bg-blue-700 text-white">Get Started</Button>
                             </Link>
                         </CardFooter>
                     </Card>

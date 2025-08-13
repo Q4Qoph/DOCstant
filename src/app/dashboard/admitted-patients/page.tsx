@@ -11,10 +11,12 @@ import PatientsRecordSkeleton from "../patients/loading";
 import DischargeForm from "./(components)/DischargeForm";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdmittedPatients() {
     const [dischargeOpen, setDischargeOpen] = useState(false)
     const [selectedPatient, setSelectedPatient] = useState("")
+const {user} = useAuth()
 
     const {
         data: inpatients,
@@ -23,7 +25,7 @@ export default function AdmittedPatients() {
     } = useQuery({
         queryKey: ['inpatients'],
         queryFn: async () => {
-            const response = await api.get("/api/inpatient");
+            const response = await api.get("/api/inpatient", {params: {companyId: user?.companyId}});
             return response.data;
         },
     });

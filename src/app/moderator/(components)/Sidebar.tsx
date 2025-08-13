@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from '@/lib/utils';
+import { cn, getRoleDisplayName } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Users, FileText, Package, TestTube, Calendar, Settings, LogOut, User, Plus, List, HeartPulse, Pill, BedDouble, Bell, MSquareIcon, MessageCircle } from 'lucide-react';
@@ -93,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         {!collapsed && (
           <div className="mb-3">
             <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-            <p className="text-xs text-gray-500">{user?.role}</p>
+            <p className="text-xs text-gray-500">{getRoleDisplayName(user?.role || '')}</p>
             <p className="text-xs text-gray-500">{user?.phone}</p>
           </div>
         )}

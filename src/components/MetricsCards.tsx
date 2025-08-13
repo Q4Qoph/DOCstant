@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DollarSign, Users, Stethoscope, CalendarCheck, Wallet } from "lucide-react"
 import api from "@/lib/axios" // Using your provided axios instance
+import { useAuth } from "@/contexts/AuthContext"
 
 // Define a generic fetcher function using axios
-const fetchMetric = async (url: string) => {
-  const response = await api.get(url)
+const fetchMetric = async (url: string, companyId: any) => {
+  const response = await api.get(url, {params: {companyId}})
   return response.data
 }
 
@@ -21,9 +22,10 @@ interface MetricCardProps {
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, queryKey, apiUrl, icon: Icon, formatter }) => {
+  const {user} = useAuth()
   const { data, isLoading, isError, error } = useQuery({
     queryKey,
-    queryFn: () => fetchMetric(apiUrl),
+    queryFn: () => fetchMetric(apiUrl, user?.companyId),
   })
 
   const displayValue = () => {

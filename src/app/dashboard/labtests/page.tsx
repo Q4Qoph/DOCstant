@@ -4,8 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import PatientsRecordSkeleton from "../patients/loading";
 import LabtestsList from "./(components)/LabtestsList";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LabTests() {
+  const {user} = useAuth()
+
   const {
     data: labTests,
     isLoading,
@@ -13,7 +16,7 @@ export default function LabTests() {
   } = useQuery({
     queryKey: ["labtests"],
     queryFn: async () => {
-      const response = await api.get("/api/LabTest/all");
+      const response = await api.get("/api/LabTest/all",{params: {companyId: user?.companyId}} );
       return response.data;
     },
   });
