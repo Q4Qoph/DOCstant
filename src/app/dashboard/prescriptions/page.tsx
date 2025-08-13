@@ -229,7 +229,7 @@ export default function PrescriptionDashboard() {
     } = useQuery({
         queryKey: ["all-prescribed-patients"],
         queryFn: async () => {
-            const response = await api.get(`/api/Receptionist/newPatientMedicaton`)
+            const response = await api.get(`/api/Receptionist/newPatientMedicaton`, {params: {companyId: user?.companyId}})
             const patients = response.data as PrescribedPatient[]
 
             // Fetch patient details for each prescribed patient

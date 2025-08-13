@@ -49,19 +49,21 @@ import UserForm from './UserForm';
 import api from '@/lib/axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import UserManagementSkeleton from '../loading';
+import { useAuth } from '@/contexts/AuthContext';
 
 const UserManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+const {user} = useAuth()
 
   const queryClient = useQueryClient()
 
   const { data: users, isLoading, isError } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await api.get("/api/user/users")
+      const response = await api.get("/api/user/users", {params: {companyId: user?.companyId}})
       return response.data
     }
   })
