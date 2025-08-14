@@ -23,12 +23,8 @@ export default function VaccinationForm({ patientId, patientData, onSuccess }: P
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   
-  // Initialize vaccinations state with existing data or empty array with one item
-  const [vaccinations, setVaccinations] = useState<Vaccination[]>(
-    patientData?.vaccinations?.length 
-      ? patientData.vaccinations 
-      : [{ vaccineName: "" }]
-  );
+  // Initialize vaccinations state with empty array - don't load existing vaccinations
+  const [vaccinations, setVaccinations] = useState<Vaccination[]>([{ vaccineName: "" }]);
 
   const addVaccination = () => {
     setVaccinations(prev => [...prev, { vaccineName: "" }]);
@@ -47,11 +43,19 @@ export default function VaccinationForm({ patientId, patientData, onSuccess }: P
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
     try {
+      // Send only the new vaccinations, not existing ones
+      const validVaccinations = vaccinations.filter(v => v.vaccineName.trim() !== "");
+      
+      // Destructure to exclude existing vaccinations from patientData
+      const { vaccinations: existingVaccinations, ...otherPatientData } = patientData || {};
+      
       const response = await api.put(`/api/DiagnosisRecord/${patientId}`, {
-          vaccinations,
-          ...patientData,
+        ...otherPatientData,
+        vaccinations: validVaccinations,
       });
+      
       if (response.status === 200) {
         toast.success("Vaccinations updated successfully!");
         queryClient.invalidateQueries({ queryKey: ["patient", patientId] });
@@ -59,7 +63,7 @@ export default function VaccinationForm({ patientId, patientData, onSuccess }: P
       }
     } catch (error: any) {
       toast.error("Failed to update vaccinations.");
-      console.error(error);
+      console.error("Error updating vaccinations:", error);
     } finally {
       setIsLoading(false);
     }

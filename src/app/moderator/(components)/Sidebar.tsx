@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const getMenuItems = () => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/moderator' },
-      { id: 'subs', label: 'Subscribers', icon: Users, href: '/moderator/subscribers' },
+      // { id: 'subs', label: 'Subscribers', icon: Users, href: '/moderator/subscribers' },
       // { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/moderator/chat' },
       // { id: 'notifications', label: 'Notifications', icon: Bell, href: '/moderator/notifications' },
     ];

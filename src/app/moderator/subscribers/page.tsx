@@ -36,68 +36,10 @@ type UserFormData = z.infer<typeof userSchema>
 
 interface UserData extends UserFormData {
     id: string
-    status?: "active" | "trial" | "pending"
-    joinedDate?: string
+    active?: boolean
 }
 
-// Mock API for demo purposes
-// const api = {
-//   get: async (url: string) => {
-//     await new Promise((resolve) => setTimeout(resolve, 800))
-//     return {
-//       data: [
-//         {
-//           id: "1",
-//           name: "Sarah Johnson",
-//           email: "sarah@example.com",
-//           phoneNumber: "+1 (555) 123-4567",
-//           address: "123 Main St, New York, NY 10001",
-//           status: "active",
-//           joinedDate: "2024-01-15",
-//         },
-//         {
-//           id: "2",
-//           name: "Michael Chen",
-//           email: "michael@example.com",
-//           phoneNumber: "+1 (555) 987-6543",
-//           address: "456 Oak Ave, San Francisco, CA 94102",
-//           status: "trial",
-//           joinedDate: "2024-02-20",
-//         },
-//         {
-//           id: "3",
-//           name: "Emily Rodriguez",
-//           email: "emily@example.com",
-//           phoneNumber: "+1 (555) 456-7890",
-//           address: "789 Pine St, Austin, TX 73301",
-//           status: "pending",
-//           joinedDate: "2024-03-10",
-//         },
-//       ],
-//     }
-//   },
-//   post: async (url: string, data: any) => {
-//     await new Promise((resolve) => setTimeout(resolve, 500))
-//     return {
-//       data: {
-//         ...data,
-//         id: Date.now().toString(),
-//         status: "pending",
-//         joinedDate: new Date().toISOString().split("T")[0],
-//       },
-//     }
-//   },
-//   put: async (url: string, data: any) => {
-//     await new Promise((resolve) => setTimeout(resolve, 500))
-//     return { data: { ...data, id: url.split("/").pop() } }
-//   },
-//   delete: async (url: string) => {
-//     await new Promise((resolve) => setTimeout(resolve, 500))
-//     return { data: {} }
-//   },
-// }
-
-export default function CustomerManagement() {
+export default function Subscribers() {
     const [users, setUsers] = useState<UserData[]>([])
     const [isSheetOpen, setIsSheetOpen] = useState(false)
     const [editingUser, setEditingUser] = useState<UserData | null>(null)
@@ -237,9 +179,8 @@ export default function CustomerManagement() {
 
     const stats = {
         total: users.length,
-        active: users.filter((u) => u.status === "active").length,
-        trial: users.filter((u) => u.status === "trial").length,
-        pending: users.filter((u) => u.status === "pending").length,
+        active: users.filter((u) => u.active).length,
+        inactive:users.filter((u) => !u.active).length,
     }
 
     if (isInitialLoading) {
@@ -401,8 +342,8 @@ export default function CustomerManagement() {
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600">Trial Users</p>
-                                    <p className="text-3xl font-bold text-amber-600">{stats.trial}</p>
+                                    <p className="text-sm font-medium text-gray-600">Inactive Users</p>
+                                    <p className="text-3xl font-bold text-amber-600">{stats.inactive}</p>
                                 </div>
                                 <Clock className="w-8 h-8 text-amber-600" />
                             </div>
