@@ -87,7 +87,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                         </div>
                                         <div className="flex gap-2">
                                             <Badge className="bg-blue-100 border-blue-300">Follow-up</Badge>
-                                            {reevaluation.isPregnant && (
+                                            {reevaluation.reevaluation.isPregnant && (
                                                 <Badge className="bg-pink-100 text-pink-800 border-pink-300">Pregnant</Badge>
                                             )}
                                         </div>
@@ -96,26 +96,26 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                                         <div className="bg-white p-3 rounded-lg border border-purple-100">
                                             <h5 className="font-semibold mb-2">Chief Complaint</h5>
-                                            <p className="text-sm text-gray-700">{reevaluation.chiefComplaint}</p>
+                                            <p className="text-sm text-gray-700">{reevaluation.reevaluation.chiefComplaint}</p>
                                         </div>
                                         <div className="bg-white p-3 rounded-lg border border-purple-100">
                                             <h5 className="font-semibold mb-2">Current Symptoms</h5>
-                                            <p className="text-sm text-gray-700">{reevaluation.symptoms}</p>
+                                            <p className="text-sm text-gray-700">{reevaluation.reevaluation.symptoms}</p>
                                         </div>
                                         <div className="bg-white p-3 rounded-lg border border-purple-100">
                                             <h5 className="font-semibold mb-2">Vital Signs</h5>
                                             <div className="text-sm text-gray-700 space-y-1">
-                                                <div>BP: {reevaluation.bloodPresure}</div>
-                                                <div>Temp: {reevaluation.temperature}</div>
-                                                <div>HR: {reevaluation.heartRate}</div>
+                                                <div>BP: {reevaluation.reevaluation.bloodPresure}</div>
+                                                <div>Temp: {reevaluation.reevaluation.temperature}</div>
+                                                <div>HR: {reevaluation.reevaluation.heartRate}</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {reevaluation.laboratoryResults && (
+                                    {reevaluation.reevaluation.laboratoryResults && (
                                         <div className="bg-white p-3 rounded-lg border border-purple-100 mb-4">
                                             <h5 className="font-semibold mb-2">Latest Lab Results</h5>
-                                            <p className="text-sm text-gray-700">{reevaluation.laboratoryResults}</p>
+                                            <p className="text-sm text-gray-700">{reevaluation.reevaluation.laboratoryResults}</p>
                                         </div>
                                     )}
 
@@ -130,16 +130,16 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                                 <Button
                                                     size="sm"
                                                     className="bg-blue-500 hover:bg-blue-600 text-white"
-                                                    onClick={() => handleGenerateReevaluationAnalysis(reevaluation.id)}
-                                                    disabled={loadingAI === reevaluation.id}
+                                                    onClick={() => handleGenerateReevaluationAnalysis(reevaluation.reevaluation.id)}
+                                                    disabled={loadingAI === reevaluation.reevaluation.id}
                                                 >
                                                     <Sparkles
                                                         className={cn(
                                                             "h-3 w-3 mr-2",
-                                                            loadingAI === reevaluation.id && "animate-spin"
+                                                            loadingAI === reevaluation.reevaluation.id && "animate-spin"
                                                         )}
                                                     />
-                                                    {loadingAI === reevaluation.id
+                                                    {loadingAI === reevaluation.reevaluation.id
                                                         ? "Analyzing..."
                                                         : "Analyze With AI"}
                                                 </Button>
@@ -151,7 +151,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                             <div
                                                 className={cn(
                                                     "bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200",
-                                                    loadingAI === reevaluation.id && "opacity-50 animate-pulse"
+                                                    loadingAI === reevaluation.reevaluation.id && "opacity-50 animate-pulse"
                                                 )}
                                             >
                                                 <div className="prose prose-sm text-gray-700 max-w-none">
@@ -167,7 +167,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
                                                 <Bot className="h-8 w-8 mx-auto mb-2 text-gray-400" />
                                                 <p className="text-sm text-gray-500">
-                                                    {loadingAI === reevaluation.id
+                                                    {loadingAI === reevaluation.reevaluation.id
                                                         ? "Generating AI analysis..."
                                                         : "No AI analysis available for this reevaluation"}
                                                 </p>

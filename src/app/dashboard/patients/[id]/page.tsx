@@ -166,10 +166,6 @@ const RecordDetails = () => {
                                                     <div key={treatment.id} className="bg-green-50 p-4 rounded-lg border border-green-200">
                                                         <div className="flex justify-between items-start mb-3">
                                                             <h4 className="font-semibold">Treatment #{index + 1}</h4>
-                                                            <Badge className="bg-green-100 text-green-800 border-green-300">
-                                                                <Clock className="h-3 w-3 mr-1" />
-                                                                Active
-                                                            </Badge>
                                                         </div>
                                                         <p className="text-gray-700 whitespace-pre-wrap">{treatment.description}</p>
                                                     </div>

@@ -26,14 +26,16 @@ const AITab = ({ patient }: { patient: Patient }) => {
             toast.success("Analysis complete!")
             await queryClient.invalidateQueries({ queryKey: ["patient", patient.id] })
         } catch (error) {
-            toast.error("Failed to generate AI diagnosis. Please try again.");
+            // toast.error("Failed to generate AI diagnosis. Please try again.");
         } finally {
             setLoading(false)
         }
     }
-const analyzePrescribe = patient.aiResponse?.find(
-  item => item.step === "2"
-);
+    
+    const analyzePrescribe = patient.aiResponse?.find(
+        item => item.step === "2"
+    );
+
     return (
         <TabsContent value="ai-analysis" className="mt-0">
             {analyzePrescribe ? (
@@ -66,7 +68,7 @@ const analyzePrescribe = patient.aiResponse?.find(
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 >
-                                     {analyzePrescribe.response}
+                                    {analyzePrescribe.response}
                                 </ReactMarkdown>
                             </div>
 
