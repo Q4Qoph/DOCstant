@@ -25,7 +25,7 @@ export default function AICard({ patient, step }: AIResponseCardProps) {
             toast.success("Analysis complete!")
             await queryClient.invalidateQueries({ queryKey: ["patient", patient.id] })
         } catch {
-            toast.error("Failed to generate AI diagnosis. Please try again.")
+            // toast.error("Failed to generate AI diagnosis. Please try again.")
         } finally {
             setLoading(false)
         }

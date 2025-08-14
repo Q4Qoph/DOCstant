@@ -28,6 +28,7 @@ import {
   X
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Zod schema for user validation
 const userRoles = ['0', '1', '2', '3', '4', '5'] as const;
@@ -73,7 +74,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { user: authUser } = useAuth()
   useEffect(() => {
     if (user) {
       setFormData({
@@ -132,7 +133,7 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
           role: Number(formData.role),
         };
 
-        await onSave(userData);
+        await onSave(isEditing ? userData : { ...userData, companyId: authUser?.companyId });
         onClose();
         toast.success(isEditing ? 'User updated successfully' : 'User created successfully');
       }
@@ -142,16 +143,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
       setIsSubmitting(false);
     }
   };
-
-  const roleLabels: Record<User['role'], string> = {
-    '0': 'Receptionist',
-    '1': 'General Practitioner',
-    '2': 'Specialist',
-    '3': 'Pharmacist',
-    '4': 'Lab Technician',
-    '5': 'Admin',
-  };
-
 
   return (
     <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">

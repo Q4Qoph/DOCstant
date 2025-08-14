@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/contexts/AuthContext";
 import { Toaster } from "sonner";
+import { TrialModalProvider } from "@/contexts/TrialModalContext";
+import UpgradeModal from "@/components/UgradeModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppProvider>
-          {children}
-          <Toaster richColors position="top-right" closeButton/>
+          <TrialModalProvider>
+            {children}
+            <UpgradeModal />
+            <Toaster richColors position="top-right" closeButton />
+          </TrialModalProvider>
         </AppProvider>
       </body>
     </html>
