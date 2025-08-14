@@ -29,7 +29,7 @@ import TestnResults from "./(components)/TestnResults";
 import Examinations from "./(components)/examinations/Examinations";
 import MedicalHistory from "./(components)/MedicalHistory";
 import AITab from "./(components)/AITab";
-import Vaccinations from "./(components)/Vaccinations";
+import Vaccinations from "./(components)/vaccinations/Vaccinations";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
