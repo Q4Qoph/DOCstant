@@ -22,16 +22,18 @@ export function UpgradeModal() {
     try {
       // Use axios API client instead of fetch
       const response = await api.post("/api/Subscription/paySubscription", {
+        successURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/subscription-success`,
+        cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
         companyId: user.companyId,
       })
 
       // Handle new response format with url and sessionId
       const { url, sessionId } = response.data
-      
+
       if (url && sessionId) {
         // Store sessionId for later reference if needed
-        console.log("Payment session created:", { sessionId })
-        
+        localStorage.setItem("sid", sessionId)
+
         // Redirect to payment URL
         window.location.href = url
       } else {

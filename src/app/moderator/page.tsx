@@ -1,8 +1,9 @@
 import React from 'react'
+import Subscribers from './subscribers/page'
 
 const ColtiumDashboard = () => {
   return (
-    <div>ColtiumDashboard</div>
+   <Subscribers/>
   )
 }
 
