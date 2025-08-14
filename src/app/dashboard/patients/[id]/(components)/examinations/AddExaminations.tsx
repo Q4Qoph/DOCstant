@@ -94,11 +94,6 @@ export default function AddExaminationForm({ patientId, patientData, onCancel }:
         );
     };
 
-    const getTechniqueName = (technique: number) => {
-        const techniques = ["Inspection", "Palpation", "Percussion", "Auscultation"];
-        return techniques[technique] || "Unknown";
-    };
-
     return (
         <SheetContent className="sm:max-w-[700px] w-full overflow-y-auto px-8 py-4">
             <SheetHeader className="p-0">
