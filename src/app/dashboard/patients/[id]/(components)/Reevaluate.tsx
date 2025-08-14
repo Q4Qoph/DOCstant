@@ -48,7 +48,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
             toast.success("Reevaluation analysis complete!");
             await queryClient.invalidateQueries({ queryKey: ["reevaluations", id] });
         } catch (error) {
-            toast.error("Failed to generate AI analysis. Please try again.");
+            // toast.error("Failed to generate AI analysis. Please try again.");
         } finally {
             setLoadingAI(null);
         }

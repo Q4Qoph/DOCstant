@@ -19,4 +19,41 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+let triggerTrialExpiredModal: (() => void) | null = null
+
+export const setTrialExpiredModalTrigger = (trigger: () => void) => {
+  triggerTrialExpiredModal = trigger
+}
+
+// Response interceptor to handle trial expiration
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error.response?.data
+
+    if (
+      error.response?.status === 400 &&
+      typeof message === "string" &&
+      message.includes("Kindly pay for your Subscription")
+    ) {
+      // Fire a global event so any component can listen for it
+      window.dispatchEvent(new CustomEvent("show-payment-modal"))
+    }
+
+    // Check if the error indicates trial expiration (existing logic)
+    if (
+      error.response?.status === 402 ||
+      error.response?.data?.code === "TRIAL_EXPIRED" ||
+      error.response?.data?.message?.includes("trial expired")
+    ) {
+      // Trigger the trial expired modal
+      if (triggerTrialExpiredModal) {
+        triggerTrialExpiredModal()
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)
+
 export default api;
