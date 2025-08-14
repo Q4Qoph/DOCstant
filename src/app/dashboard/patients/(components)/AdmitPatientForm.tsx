@@ -8,6 +8,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { ParamValue } from "next/dist/server/request/params";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AdmitPatientFormProps {
     open: boolean
@@ -16,6 +17,7 @@ interface AdmitPatientFormProps {
 }
 
 export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: AdmitPatientFormProps) {
+    const {user} = useAuth()
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
         setIsLoading(true);
 
         try {
-            const response = await api.post("/api/inpatient", formData);
+            const response = await api.post("/api/inpatient",{ ...formData, companyId: user?.companyId});
 
             if (response.status === 200) {
                 toast.success("Patient admitted successfully");

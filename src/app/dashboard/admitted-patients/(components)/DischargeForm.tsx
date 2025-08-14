@@ -15,6 +15,7 @@ import {
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DischargeFormProps {
     open: boolean;
@@ -37,6 +38,8 @@ export default function DischargeForm({
         comments: "",
     });
 
+    const queryClient = useQueryClient()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
@@ -55,6 +58,7 @@ export default function DischargeForm({
                 });
                 onOpenChange(false);
             }
+            queryClient.invalidateQueries({ queryKey: ['inpatients'] })
         } catch (error: any) {
             toast.error(error.message || "Failed to submit discharge");
             const fieldErrors: Record<string, string> = {};
