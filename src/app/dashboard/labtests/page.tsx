@@ -5,9 +5,11 @@ import api from "@/lib/axios";
 import PatientsRecordSkeleton from "../patients/loading";
 import LabtestsList from "./(components)/LabtestsList";
 import { useAuth } from "@/contexts/AuthContext";
+import PageGuard from "@/app/(auth)/PageGuard";
+import { Roles } from "@/constants/roles";
 
 export default function LabTests() {
-  const {user} = useAuth()
+  const { user } = useAuth()
 
   const {
     data: labTests,
@@ -16,22 +18,25 @@ export default function LabTests() {
   } = useQuery({
     queryKey: ["labtests"],
     queryFn: async () => {
-      const response = await api.get("/api/LabTest/all",{params: {companyId: user?.companyId}} );
+      const response = await api.get("/api/LabTest/all", { params: { companyId: user?.companyId } });
       return response.data;
     },
   });
 
   return (
-    <div className="py-8">
-      <div className="flex justify-between items-center mb-6 px-8">
-        <div>
-          <h1 className="text-3xl font-bold">Lab Test Records</h1>
-          <p>Review and manage laboratory tests</p>
+    <PageGuard allowedRoles={[Roles.ADMIN, Roles.LAB_TECH]}>
+      <div className="py-8">
+        <div className="flex justify-between items-center mb-6 px-8">
+          <div>
+            <h1 className="text-3xl font-bold">Lab Test Records</h1>
+            <p>Review and manage laboratory tests</p>
+          </div>
         </div>
-      </div>
 
-      {isLoading ? (
-        <PatientsRecordSkeleton />
-      ) : (<LabtestsList labTests={labTests} />)
-      }</div>)
+        {isLoading ? (
+          <PatientsRecordSkeleton />
+        ) : (<LabtestsList labTests={labTests} />)
+        }</div>
+    </PageGuard>
+  )
 }
