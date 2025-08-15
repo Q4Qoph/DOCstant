@@ -20,50 +20,70 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const getMenuItems = () => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
-      { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
-      { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
-      { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
-      { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
-      { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
-      { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
-      { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-      { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
     ];
 
     switch (user?.role) {
-      case 'RN':
+      case 'Receptionist/Nurse':
         return [
           ...baseItems,
-          { id: 'patient-registration', label: 'Register Patient', icon: Plus, href: '/patient-registration' },
-          { id: 'payments', label: 'Payments', icon: Package, href: '/payments' },
-          { id: 'appointments', label: 'Appointments', icon: Calendar, href: '/appointments' },
+          { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+          { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
-      case 'GP':
-      case 'C':
+      case 'General Practitioner':
         return [
           ...baseItems,
-          { id: 'consultations', label: 'Consultations', icon: User, href: '/consultations' },
-          { id: 'prescriptions', label: 'Prescriptions', icon: Package, href: '/prescriptions' },
-          { id: 'appointments', label: 'Appointments', icon: Calendar, href: '/appointments' },
+          { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+          { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
-      case 'P':
+      case 'Specialist':
         return [
           ...baseItems,
-          { id: 'prescriptions', label: 'Prescriptions', icon: Package, href: '/prescriptions' },
-          { id: 'inventory', label: 'Inventory', icon: Package, href: '/inventory' },
+          { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+          { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+          { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
-      case 'L':
+      case 'Pharmacist':
         return [
           ...baseItems,
-          { id: 'lab-results', label: 'Lab Results', icon: TestTube, href: '/lab-results' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+          { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
-      case 'admin':
+      case 'Lab Technician':
         return [
           ...baseItems,
-          { id: 'users', label: 'Users', icon: Users, href: '/users' },
-          { id: 'departments', label: 'Departments', icon: Settings, href: '/departments' },
-          { id: 'inventory', label: 'Inventory', icon: Package, href: '/inventory' },
-          { id: 'reports', label: 'Reports', icon: FileText, href: '/reports' },
+          { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+        ];
+      case 'Admin':
+      case 6:
+        return [
+          ...baseItems,
+          { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+          { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+          { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
+          { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+          { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+          { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
+        ];
+      case 'Super Admin':
+        return [
+          ...baseItems,
+          { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
+          { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
+          { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
+          { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
+          { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
+          { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+          { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
         ];
       default:
         return baseItems;

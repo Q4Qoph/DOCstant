@@ -14,15 +14,18 @@ export const formatDate = (dateString: string) => {
   })
 }
 
-export const getRoleDisplayName = (role: number) => {
-        switch (role) {
-            case 0: return 'Receptionist/Nurse';
-            case 1: return 'General Practitioner';
-            case 2: return 'Specialist';
-            case 3: return 'Pharmacist';
-            case 4: return 'Lab Technician';
-            case 5: return 'Administrator';
-            case 6: return 'Super Admin';
-            default: return role;
-        }
-    };
+export const getRoleDisplayName = (role: number | string) => {
+  console.log(role)
+  switch (role) {
+    case 0: return 'Receptionist/Nurse';
+    case 1: return 'General Practitioner';
+    case 2: return 'Specialist';
+    case 3: return 'Pharmacist';
+    case 4: return 'Lab Technician';
+    case 5:
+    case 'Admin':
+      return 'Administrator';
+    case 6: return 'Super Admin';
+    default: return role;
+  }
+};
