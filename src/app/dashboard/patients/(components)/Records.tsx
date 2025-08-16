@@ -80,7 +80,7 @@ export default function Records() {
                                     <Button
                                         onClick={onAdd}
                                         size="lg"
-                                        className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
+                                        className="bg-[#0c9aff] hover:bg-blue-400 transition-all duration-300 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
                                     >
                                         <Plus className="h-5 w-5 mr-2" />
                                         Add New Patient
@@ -171,7 +171,7 @@ export default function Records() {
                 {isLoading ? (
                     <div className="text-center p-8">Loading patients...</div>
                 ) : !patients || patients.length === 0 ? (
-                    <Card className="">
+                    <Card className="shadow-none">
                         <CardContent className="text-center p-12">
                             <div className="max-w-md mx-auto space-y-4">
                                 <div className="p-4 rounded-full bg-[hsl(215,20%,65%)/.5] w-fit mx-auto">
@@ -183,9 +183,9 @@ export default function Records() {
                                 <p className="text-[hsl(215,20%,65%)]">
                                     Get started by adding your first patient
                                 </p>
-                                <Button onClick={onAdd} className="mt-4">
+                                <Button onClick={onAdd} className="mt-4 bg-[#0c9aff] hover:bg-blue-400">
                                     <Plus className="h-4 w-4 mr-2" />
-                                    Get Diagnosis
+                                    Record First Patient
                                 </Button>
                             </div>
                         </CardContent>

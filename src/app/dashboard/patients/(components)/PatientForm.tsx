@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
     const { data: specialists } = useDepartmentUsers(2);
@@ -44,6 +45,8 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
         }
     );
 
+    const queryClient = useQueryClient()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
@@ -52,8 +55,10 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             const validatedData = patientSchema.parse(formData);
             // onSubmit(validatedData);
             const response = await api.post("/api/DiagnosisRecord", { ...validatedData, companyId: Number(user?.companyId) })
+
             if (response.status == 200) {
                 toast.success("Patient recorded successfuly");
+                queryClient.invalidateQueries({ queryKey: ["patients"] })
                 if (specialists && specialists.length > 0) {
                     sendNotification({
                         title: "Patient Registration Alert",
@@ -138,14 +143,21 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="sex">Sex</Label>
-                        <Input
+                        <select
                             id="sex"
                             value={formData.sex}
-                            onChange={(e) => setFormData(prev => ({ ...prev, sex: e.target.value }))}
-                            className={`border-blue-200 focus:border-blue-500 ${errors.sex ? 'border-red-500' : ''}`}
-                        />
+                            onChange={(e) => setFormData((prev) => ({ ...prev, sex: e.target.value }))}
+                            className={`w-full rounded-md border border-blue-200 focus:border-blue-500 px-3 py-2 text-sm outline-none ${errors.sex ? "border-red-500" : ""
+                                }`}
+                        >
+                            <option value="">Select sex</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
                         {errors.sex && <p className="text-red-500 text-sm mt-1">{errors.sex}</p>}
                     </div>
+
 
                     <div className="space-y-2">
                         <Label htmlFor="phoneNumber" className="">Phone Number</Label>
@@ -329,9 +341,9 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-[#0c9aff] hover:bg-blue-400 text-white"
                     >
-                        {isLoading ? "Saving..." : "Add Patient"}
+                        {isLoading ? "Saving..." : "Save Patient Data"}
                     </Button>
                 </div>
             </form>
