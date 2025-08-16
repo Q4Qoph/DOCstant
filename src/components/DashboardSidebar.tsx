@@ -24,6 +24,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 
     switch (user?.role) {
       case 'Receptionist/Nurse':
+      case 0:
         return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
@@ -31,6 +32,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'General Practitioner':
+      case 1:
         return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
@@ -39,6 +41,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'Specialist':
+      case 2:
         return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
@@ -48,6 +51,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'Pharmacist':
+      case 3:
         return [
           ...baseItems,
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
@@ -55,13 +59,14 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'Lab Technician':
+      case 4:
         return [
           ...baseItems,
           { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'Admin':
-      case 6:
+      case 5:
         return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
