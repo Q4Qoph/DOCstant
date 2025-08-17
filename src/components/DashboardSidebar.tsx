@@ -135,17 +135,17 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
                 "flex items-center p-2 w-full justify-start transition-colors",
                 collapsed ? "px-2" : "px-3",
                 isActive
-                  ? "bg-blue-50 text-blue-500 hover:bg-blue-100 border-l-3 border-blue-500"
+                  ? "bg-blue-50 text-[#0c9aff] hover:bg-blue-100 border-l-3 border-[#0c9aff]"
                   : "hover:bg-gray-100"
               )}>
                 <Icon className={cn(
                   "h-4 w-4",
-                  isActive ? "text-blue-500" : "text-gray-600"
+                  isActive ? "text-[#0c9aff]" : "text-gray-600"
                 )} />
                 {!collapsed && (
                   <span className={cn(
                     "ml-2",
-                    isActive ? "text-blue-500 font-medium" : "text-gray-700"
+                    isActive ? "text-[#0c9aff] font-medium" : "text-gray-700"
                   )}>
                     {item.label}
                   </span>

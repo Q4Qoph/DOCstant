@@ -11,7 +11,7 @@ import UserRolesBreakdownCard from "@/components/UserRolesBreakdownCard"
 const Dashboard = () => {
   const { user } = useAuth()
   const quickActions = [
-    { title: "Register Patient", icon: UserPlus, color: "bg-blue-500", href: "/dashboard/patients" },
+    { title: "Register Patient", icon: UserPlus, color: "bg-[#0c9aff]", href: "/dashboard/patients" },
     { title: "Admitted Patients", icon: FileText, color: "bg-purple-500", href: "/dashboard/admitted-patients" },
     { title: "Prescriptions", icon: Pill, color: "bg-orange-500", href: "/dashboard/prescriptions" },
   ]
@@ -27,7 +27,7 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-4">
             <Link href="/dashboard/patients">
-              <Button size="sm" className="bg-blue-500">
+              <Button size="sm" className="bg-[#0c9aff]">
                 <Plus className="h-4 w-4 mr-2" />
                 New Patient
               </Button>

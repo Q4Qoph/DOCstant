@@ -34,12 +34,12 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, queryKey, apiUrl, icon: 
   }
 
   return (
-    <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+    <Card className="bg-white shadow-none border border-gray-100">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <div className="bg-blue-50 p-2 rounded-lg">
 
-        <Icon className="w-6 h-6 text-blue-500 " />
+        <Icon className="w-6 h-6 text-[#0c9aff]" />
         </div>
       </CardHeader>
       <CardContent>

@@ -36,7 +36,7 @@ const DashboardTopbar: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
                 <div className="flex items-center space-x-4">
                     <NotificationDropdown />
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-[#0c9aff] rounded-full flex items-center justify-center">
                         <span className="text-white font-semibold text-sm">
                             {user?.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                         </span>
