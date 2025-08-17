@@ -39,7 +39,7 @@ const ResetPasswordForm = () => {
 
   return (
     <div className="w-full max-w-md p-8">
-      <h2 className="text-3xl font-bold text-gray-800 text-center pb-4">
+      <h2 className="text-3xl font-bold text-gray-800  pb-4">
         Reset Password
       </h2>
       <p className="text-gray-600 text-center mb-6">
@@ -89,10 +89,15 @@ const ResetPasswordForm = () => {
             />
           </div>
         </div>
-
+        <div className="mt-2">
+          Remembered Password?{" "}
+          <Link href="/login" className="text-[#0c9aff] hover:underline text-sm">
+            Login
+          </Link>
+        </div>
         <Button
           type="submit"
-          className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-2"
+          className="w-full h-12 bg-[#0c9aff] hover:bg-blue-500 text-white flex items-center justify-center gap-2"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -104,12 +109,7 @@ const ResetPasswordForm = () => {
             "Reset Password"
           )}
         </Button>
-        <div className="mt-2">
-          Remembered Password?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline text-sm">
-            Login
-          </Link>
-        </div>
+
       </form>
     </div>
   );

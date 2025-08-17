@@ -17,7 +17,7 @@ export const Hero = () => {
             {/* Left Content - Takes up more space */}
             <div className="lg:col-span-7 space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-200">
+              <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0c9aff] px-4 py-2 rounded-full text-sm font-medium border border-blue-200">
                 <Sparkles className="h-4 w-4" />
                 Trusted by 1000+ Healthcare Providers
               </div>

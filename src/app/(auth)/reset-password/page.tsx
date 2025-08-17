@@ -32,10 +32,10 @@ const ForgotPasswordForm = () => {
 
     return (
         <div className="w-full max-w-md p-8">
-            <h2 className="text-3xl font-bold text-gray-800 text-center pb-4">
+            <h2 className="text-3xl font-bold text-gray-800 pb-4">
                 Forgot Password
             </h2>
-            <p className="text-gray-600 text-center mb-6">
+            <p className="text-gray-600  mb-6">
                 Enter your email address to receive a reset link
             </p>
 
@@ -57,12 +57,17 @@ const ForgotPasswordForm = () => {
                         />
                     </div>
                 </div>
-
+                <div className="mt-2">
+                    Remembered Password?{" "}
+                    <Link href="/login" className="text-[#0c9aff] hover:underline text-sm">
+                        Login
+                    </Link>
+                </div>
                 <Button
                     type="submit"
-                    className={`w-full h-12 text-white flex items-center justify-center gap-2 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 ${isSent
+                    className={`w-full h-12 rounded-full text-white flex items-center justify-center gap-2 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 ${isSent
                         ? 'bg-green-500 hover:bg-green-600'
-                        : 'bg-blue-500 hover:bg-blue-600'
+                        : 'bg-[#0c9aff] hover:bg-blue-500'
                         }`}
                     disabled={isLoading || isSent}
                 >
@@ -81,12 +86,7 @@ const ForgotPasswordForm = () => {
                     )}
                 </Button>
 
-                <div className="mt-2">
-                    Remembered Password?{" "}
-                    <Link href="/login" className="text-blue-600 hover:underline text-sm">
-                        Login
-                    </Link>
-                </div>
+
             </form>
         </div>
     );

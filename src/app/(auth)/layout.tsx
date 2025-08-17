@@ -23,7 +23,7 @@ const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
                     <div className="grid grid-cols-1 gap-6 max-w-md">
                         <div className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-blue-100">
                             <div className="p-2 bg-blue-100 rounded-lg">
-                                <Shield className="h-6 w-6 text-blue-600" />
+                                <Shield className="h-6 w-6 text-[#0c9aff]" />
                             </div>
                             <div>
                                 <h3 className="font-semibold text-slate-900">Secure & Reliable</h3>
@@ -32,7 +32,7 @@ const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
                         </div>
                         <div className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-blue-100">
                             <div className="p-2 bg-blue-100 rounded-lg">
-                                <User className="h-6 w-6 text-blue-600" />
+                                <User className="h-6 w-6 text-[#0c9aff]" />
                             </div>
                             <div>
                                 <h3 className="font-semibold text-slate-900">Role-Based Access</h3>
