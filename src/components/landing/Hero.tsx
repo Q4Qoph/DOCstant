@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Shield, Clock, CheckCircle, Users, TrendingUp } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export const Hero = () => {
   return (
@@ -76,20 +77,24 @@ export const Hero = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button
-                  size="lg"
-                  className="bg-[#0c9aff] hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg font-semibold rounded-xl"
-                >
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50 px-8 py-6 text-lg font-semibold rounded-xl transition-all duration-300 bg-transparent"
-                >
-                  Watch Demo
-                </Button>
+                <a href="/#contact">
+                  <Button
+                    size="lg"
+                    className="bg-[#0c9aff] hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg font-semibold rounded-xl"
+                  >
+                    Start Free Trial
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
+                <a href="/#contact">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-2 border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50 px-8 py-6 text-lg font-semibold rounded-xl transition-all duration-300 bg-transparent"
+                  >
+                    Contact Us
+                  </Button>
+                </a>
               </div>
 
               {/* Social Proof */}
