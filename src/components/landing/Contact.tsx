@@ -216,7 +216,7 @@ export const Contact = () => {
                   }}
                   className="border border-blue-100 shadow-none hover:shadow-md transition-all duration-300 cursor-pointer group"
                 >
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 ">
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-[#0c9aff] rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                         {method.icon}
@@ -235,7 +235,7 @@ export const Contact = () => {
             </div>
 
             {/* Emergency Contact */}
-            <Card className="bg-[#0c9aff] text-white border-0 shadow-none">
+            {/* <Card className="bg-[#0c9aff] text-white border-0 shadow-none">
               <CardContent className="p-6 text-center">
                 <h3 className="text-xl font-semibold mb-2">Priority Support</h3>
                 <p className="text-white/90 mb-4">
@@ -245,7 +245,7 @@ export const Contact = () => {
                   Priority Contact
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>
