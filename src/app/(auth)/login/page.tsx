@@ -27,10 +27,7 @@ const LoginForm = () => {
   return (
     <div className="w-full max-w-md">
       <div className="w-full max-w-md p-8">
-        <div className="text-center pb-8 pt-8">
-          {/* <div className="flex justify-center mb-4">
-                <Image src="/logo.png" alt="HIMS Logo" width={100} height={100} />
-              </div> */}
+        <div className="pb-8 pt-8">
           <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
           <p className="text-gray-600 mt-2">
             Sign in to access your Docstant dashboard
@@ -76,30 +73,27 @@ const LoginForm = () => {
               </button>
             </div>
           </div>
-
+          <div className="mt-2">
+            <Link href="/reset-password" className="text-[#0c9aff] hover:underline text-sm">
+              Forgot Password?
+            </Link>
+          </div>
           <Button
             type="submit"
-            className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+            className="w-full h-12 rounded-full bg-[#0c9aff] hover:bg-blue-500 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
             disabled={isLoading}
           >
             {isLoading ? (
               <>
                 <Loader className="h-5 w-5 animate-spin" />
-                Signing In...
+                Logging In...
               </>
             ) : (
-              "Sign In"
+              "Login"
             )}
           </Button>
-
-          <div className="mt-2">
-            <Link href="/reset-password" className="text-blue-600 hover:underline text-sm">
-              Forgot Password?
-            </Link>
-          </div>
         </form>
       </div>
-
     </div>
   );
 };
