@@ -110,7 +110,7 @@ export default function PrescriptionDashboard() {
     } = useQuery({
         queryKey: ["prescriptions", filter],
         queryFn: async () => {
-            const response = await api.get(`/api/prescription`, {params: {companyId: user?.companyId}})
+            const response = await api.get(`/api/prescription`, { params: { companyId: user?.companyId } })
             const prescriptions = response.data as PrescriptionRecord[]
 
             // Fetch patient details for each prescription
@@ -230,7 +230,7 @@ export default function PrescriptionDashboard() {
     } = useQuery({
         queryKey: ["all-prescribed-patients"],
         queryFn: async () => {
-            const response = await api.get(`/api/Receptionist/newPatientMedicaton`, {params: {companyId: user?.companyId}})
+            const response = await api.get(`/api/Receptionist/newPatientMedicaton`, { params: { companyId: user?.companyId } })
             const patients = response.data as PrescribedPatient[]
 
             // Fetch patient details for each prescribed patient
@@ -471,6 +471,7 @@ export default function PrescriptionDashboard() {
         })
     }
 
+
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
             year: "numeric",
@@ -479,6 +480,17 @@ export default function PrescriptionDashboard() {
             hour: "2-digit",
             minute: "2-digit",
         })
+    }
+
+    const isNewItem = (dateString: string) => {
+        const itemDate = new Date(dateString)
+        const twoHoursAgo = subHours(new Date(), 6)
+        console.log(isAfter(itemDate, twoHoursAgo))
+        return isAfter(itemDate, twoHoursAgo)
+    }
+
+    const isLatestItem = (index: number) => {
+        return index === 0
     }
 
     if (error || patientsError) {
@@ -492,6 +504,7 @@ export default function PrescriptionDashboard() {
             </div>
         )
     }
+
 
     return (
         <div className="p-8 space-y-6">
@@ -514,7 +527,7 @@ export default function PrescriptionDashboard() {
                     </TabsList>
 
                     <TabsContent value="prescriptions" className="space-y-4">
-                        <Card>
+                        <Card >
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Filter className="h-5 w-5" />
@@ -539,14 +552,14 @@ export default function PrescriptionDashboard() {
                             </CardContent>
                         </Card>
 
-                        <Card>
-                            <CardHeader>
+                        <div className="shadow-none bg-transparent py-4">
+                            <div>
                                 <CardTitle>Prescriptions</CardTitle>
                                 <CardDescription>
                                     {prescriptions.length} prescription{prescriptions.length !== 1 ? "s" : ""} found
                                 </CardDescription>
-                            </CardHeader>
-                            <CardContent className="pt-6">
+                            </div>
+                            <div className="pt-6">
                                 {isLoading ? (
                                     <div className="flex items-center justify-center py-8">
                                         <Loader2 className="h-8 w-8 animate-spin" />
@@ -556,8 +569,12 @@ export default function PrescriptionDashboard() {
                                     <div className="text-center py-8 text-blue-600">No prescriptions found for the selected filter.</div>
                                 ) : (
                                     <div className="grid gap-6">
-                                        {prescriptions.map((prescription: PrescriptionWithPatientDetails) => (
-                                            <Card key={prescription.id} className="hover:shadow-md transition-shadow duration-200">
+                                        {prescriptions.map((prescription: PrescriptionWithPatientDetails, index) => (
+                                            <Card key={prescription.id}
+                                                //  className="hover:shadow-md transition-shadow duration-200"
+                                                className={`cursor-pointer hover:shadow-none ${isNewItem(prescription.createdAt) ? "border-green-500 border-2" : ""
+                                                    }`}
+                                            >
                                                 <CardContent className="p-6">
                                                     <div className="flex items-start justify-between mb-4">
                                                         <div className="flex items-start space-x-4">
@@ -565,7 +582,20 @@ export default function PrescriptionDashboard() {
                                                                 <Pill className="h-6 w-6 text-purple-600" />
                                                             </div>
                                                             <div className="flex-1">
-                                                                <h3 className="text-lg font-semibold text-gray-900">{prescription.drugName}</h3>
+                                                                <div className="flex gap-2">
+                                                                    <h3 className="text-lg font-semibold text-gray-900">{prescription.drugName}</h3>
+                                                                    {isLatestItem(index) ? (
+                                                                        <Badge variant="outline" className="bg-green-100 text-green-800">
+                                                                            Latest
+                                                                        </Badge>
+                                                                    ) : isNewItem(prescription.createdAt) ? (
+                                                                        <Badge variant="outline" className="bg-green-100 text-green-800">
+                                                                            New
+                                                                        </Badge>
+                                                                    ) : null}
+
+                                                                </div>
+
                                                                 <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
                                                                     <span className="flex items-center">
                                                                         <span className="font-medium">Dosage:</span>
@@ -614,6 +644,7 @@ export default function PrescriptionDashboard() {
                                                                                         <span className="text-sm text-blue-600 group-hover:text-blue-700">
                                                                                             {prescription.patientDetails?.name}
                                                                                         </span>
+
                                                                                         <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                                                         </svg>
@@ -762,13 +793,13 @@ export default function PrescriptionDashboard() {
                                         ))}
                                     </div>
                                 )}
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
                     </TabsContent>
 
                     <TabsContent value="patients" className="space-y-6">
                         {/* Enhanced Filter Section */}
-                        <Card>
+                        <Card className="shadow-none">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Filter className="h-5 w-5" />
