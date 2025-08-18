@@ -14,6 +14,7 @@ import { useDepartmentUsers } from "@/hooks/useDepartmentUsers";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader, Loader2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LabTestFormProps {
     open: boolean;
@@ -38,6 +39,8 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
     const { sendNotification } = useNotifications();
     const { user } = useAuth();
 
+    const queryClient = useQueryClient()
+
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
@@ -60,7 +63,8 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
 
             if (response.status === 200) {
                 toast.success("Results updated successfully");
-
+                queryClient.invalidateQueries({ queryKey: ["labtests", labTest?.diagnosisId] })
+                
                 // Notify specialists about the updated results
                 if (specialists && specialists.length > 0) {
                     sendNotification({

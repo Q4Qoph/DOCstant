@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
 import api from '@/lib/axios'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { TestTube } from 'lucide-react'
 import React, { useState } from 'react'
 
@@ -24,6 +24,7 @@ const TestnResults = ({ id }: any) => {
             return response.data;
         },
     });
+
     return (
         <div>
             <TabsContent value="laboratory" className="mt-0">

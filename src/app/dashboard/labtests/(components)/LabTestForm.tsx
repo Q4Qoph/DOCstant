@@ -34,7 +34,7 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
     const { data: specialists } = useDepartmentUsers(2);
     const { sendNotification } = useNotifications();
     const { user } = useAuth();
-
+ 
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
@@ -82,7 +82,8 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
 
             if (response.status === 200) {
                 toast.success(`Lab test ${isEditing ? "updated" : "scheduled"} successfully`);
-                queryClient.invalidateQueries({queryKey: ["labTests", diagnosisId]})
+                queryClient.invalidateQueries({queryKey: ["labtests", diagnosisId]})
+                
                 if (!isEditing) {
                     if (specialists && specialists.length > 0) {
                         sendNotification({
