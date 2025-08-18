@@ -59,8 +59,8 @@ interface PrescriptionWithPatientDetails extends PrescriptionRecord {
     patientDetails?: Patient
 }
 
-const fetchMedications = async () => {
-    const response = await api.get("/api/inventory")
+const fetchMedications = async (companyId: string) => {
+    const response = await api.get("/api/inventory", {params: {companyId}})
     return response.data
 }
 
@@ -99,7 +99,7 @@ export default function PrescriptionDashboard() {
     // Fetch medications
     const medsQuery = useQuery({
         queryKey: ["medications"],
-        queryFn: fetchMedications,
+        queryFn: ()=> fetchMedications(user?.companyId!),
     })
 
     // Fetch prescriptions with patient details
@@ -182,7 +182,7 @@ export default function PrescriptionDashboard() {
                 case "approve":
                 case "reject":
                     endpoint = `/${action}/${prescriptionId}`
-                    config.params = { comment, receptionistId }
+                    config.params = { comment }
                     response = (await api.put(endpoint, null, config)).data
 
                     sendNotification({
@@ -217,8 +217,10 @@ export default function PrescriptionDashboard() {
             setPrescriptionActionType(null)
         },
         onError: (error: any) => {
-            const message = error?.message || "Failed to update prescription"
-            toast.error(message)
+            const message = error?.response?.data?.message
+                || error?.message
+                || "Failed to update prescription";
+            toast.error(message);
         }
     })
 
@@ -321,7 +323,6 @@ export default function PrescriptionDashboard() {
                     data = { description, administeredMedId: medicationId }
                     response = (await api.post(endpoint, data)).data
                     return response
-
                 default:
                     throw new Error(`Unknown action: ${action}`)
             }
@@ -448,7 +449,6 @@ export default function PrescriptionDashboard() {
         setActionType(action)
 
         if (action === "assign") {
-            // Directly assign to self
             patientActionMutation.mutate({
                 action,
                 patientId: patient.id,
@@ -485,7 +485,6 @@ export default function PrescriptionDashboard() {
     const isNewItem = (dateString: string) => {
         const itemDate = new Date(dateString)
         const twoHoursAgo = subHours(new Date(), 6)
-        console.log(isAfter(itemDate, twoHoursAgo))
         return isAfter(itemDate, twoHoursAgo)
     }
 
@@ -504,7 +503,6 @@ export default function PrescriptionDashboard() {
             </div>
         )
     }
-
 
     return (
         <div className="p-8 space-y-6">

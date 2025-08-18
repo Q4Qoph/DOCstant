@@ -60,10 +60,6 @@ const Expenses = ({ id }: { id: any }) => {
     })
 
     const handleStripePayment = () => {
-        if (!expenses || expenses.length === 0) {
-            toast.error("No expenses to pay for this patient.")
-            return
-        }
         createPaymentMutation.mutate()
     }
 
