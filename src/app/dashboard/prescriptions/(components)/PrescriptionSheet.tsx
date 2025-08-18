@@ -98,10 +98,12 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
 
       onOpenChange(false)
     } catch (error) {
+      
     } finally {
       setLoading(false)
     }
   }
+
   const { data: inventory = [], isLoading: inventoryLoading, error: inventoryError } = useQuery({
     queryKey: ["inventory", user?.companyId],
     queryFn: () => fetchInventory(user!.companyId),

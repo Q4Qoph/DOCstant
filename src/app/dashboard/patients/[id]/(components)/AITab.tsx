@@ -97,7 +97,6 @@ const AITab = ({ patient }: { patient: Patient }) => {
                 </Card>
             )}
 
-
             <PrescriptionSheet
                 diagnosisId={patient.id}
                 open={prescOpen}
