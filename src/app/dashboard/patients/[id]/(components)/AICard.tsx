@@ -32,7 +32,7 @@ export default function AICard({ patient, step }: AIResponseCardProps) {
     }
 
     const aiEntry = Array.isArray(patient.aiResponse)
-        ? patient.aiResponse.find((item: any) => item.steps === step)
+        ? patient.aiResponse.find((item: any) => item.step == step)
         : undefined;
 
     return (

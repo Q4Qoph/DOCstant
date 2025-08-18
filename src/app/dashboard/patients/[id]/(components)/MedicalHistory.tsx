@@ -60,7 +60,7 @@ const MedicalHistory = ({ patient }: any) => {
             </div>
             {/* AI */}
             <AICard patient={patient}
-                step="medical_history"
+                step="0"
             />
         </TabsContent>
     )

@@ -15,6 +15,7 @@ import { z } from "zod"
 import { toast } from "sonner"
 import axios from "axios"
 import api from "@/lib/axios"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 // ----------------------
 // Zod schema
@@ -37,10 +38,12 @@ type UserFormData = z.infer<typeof userSchema>
 interface UserData extends UserFormData {
     id: string
     active?: boolean
+    createdAt: any
 }
 
 export default function Subscribers() {
-    const [users, setUsers] = useState<UserData[]>([])
+    const queryClient = useQueryClient()
+
     const [isSheetOpen, setIsSheetOpen] = useState(false)
     const [editingUser, setEditingUser] = useState<UserData | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -56,21 +59,21 @@ export default function Subscribers() {
     })
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof UserFormData, string>>>({})
 
-    useEffect(() => {
-        fetchUsers()
-    }, [])
 
-    const fetchUsers = async () => {
-        try {
-            setIsInitialLoading(true)
-            const response = await api.get("/api/Company")
-            setUsers(response.data)
-        } catch (error) {
-            toast.error("Failed to load customers. Please check your connection.")
-        } finally {
-            setIsInitialLoading(false)
-        }
-    }
+    const {
+        data: users = [],
+        isLoading: isFetching,
+        isError,
+    } = useQuery<UserData[]>({
+        queryKey: ["users"],
+        queryFn: async () => {
+            const res = await api.get("/api/Company")
+            return res.data.sort(
+                (a: UserData, b: UserData) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            )
+        },
+    })
 
     const validateForm = (data: UserFormData) => {
         const result = userSchema.safeParse(data)
@@ -95,10 +98,11 @@ export default function Subscribers() {
         try {
             if (editingUser) {
                 const response = await api.put(`/users/${editingUser.id}`, formData)
-                setUsers((prev) => prev.map((u) => (u.id === editingUser.id ? response.data : u)))
+                queryClient.invalidateQueries({ queryKey: ["users"] })
                 toast.success("Customer updated successfully!")
             } else {
                 const response = await api.post("/api/Company", formData)
+                queryClient.invalidateQueries({ queryKey: ["users"] })
                 toast.success("Customer added successfully!")
             }
             setIsSheetOpen(false)
@@ -131,7 +135,7 @@ export default function Subscribers() {
         setIsLoading(true)
         try {
             await api.delete(`/users/${userId}`)
-            setUsers((prev) => prev.filter((u) => u.id !== userId))
+            queryClient.invalidateQueries({ queryKey: ["users"] })
             toast.success("Customer removed successfully!")
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -182,14 +186,21 @@ export default function Subscribers() {
         active: users.filter((u) => u.active).length,
         inactive: users.filter((u) => !u.active).length,
     }
-
-    if (isInitialLoading) {
+    if (isFetching) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="shimmer w-16 h-16 rounded-full mx-auto mb-4"></div>
                     <p className="text-slate-700 font-medium">Loading your dashboard...</p>
                 </div>
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <p className="text-red-600 font-medium">Failed to load customers.</p>
             </div>
         )
     }
@@ -365,82 +376,82 @@ export default function Subscribers() {
                 </div>
 
                 <div className="space-y-6">
-          {filteredUsers.length === 0 ? (
-            <Card className="bg-card border-border shadow-lg">
-              <CardContent className="text-center py-20">
-                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <Users className="w-12 h-12 text-primary" />
-                </div>
-                <h3 className="text-2xl font-black text-foreground mb-3 font-sans">
-                  {searchQuery ? "No subscribers found" : "No subscribers yet"}
-                </h3>
-                <p className="text-muted-foreground mb-8 text-lg">
-                  {searchQuery ? "Try adjusting your search terms" : "Start building your subscriber base today"}
-                </p>
-                {!searchQuery && (
-                  <Button
-                    onClick={handleNewUser}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
-                  >
-                    <Plus className="w-5 h-5 mr-2" /> Add Your First Subscriber
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ) : (
-            filteredUsers.map((user: any) => (
-              <Card
-                key={user.id}
-                className="p-0 px-0 bg-card border-border shadow-none transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
-              >
-                <CardContent className="p-0">
-                  <div className="flex">
-                    <div className="flex-1 p-8">
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                              <User className="w-6 h-6 text-primary" />
-                            </div>
-                            <div>
-                              <h3 className="text-lg font-black text-foreground font-sans mb-1">{user.name}</h3>
-                              <div className="flex items-center gap-3">
-                                <Badge
-                                  className={` font-medium border ${getStatusColor(user.status)} px-3 py-1`}
-                                >
-                                  {user.active ? "Active" : "Inactive"}
-                                </Badge>
-                                <div className="flex items-center gap-1 text-muted-foreground">
-                                  <Calendar className="w-4 h-4" />
-                                  {/* <span className="text-sm">Member since 2024</span> */}
+                    {filteredUsers.length === 0 ? (
+                        <Card className="bg-card border-border shadow-lg">
+                            <CardContent className="text-center py-20">
+                                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-6 flex items-center justify-center">
+                                    <Users className="w-12 h-12 text-primary" />
                                 </div>
-                              </div>
-                            </div>
-                          </div>
+                                <h3 className="text-2xl font-black text-foreground mb-3 font-sans">
+                                    {searchQuery ? "No subscribers found" : "No subscribers yet"}
+                                </h3>
+                                <p className="text-muted-foreground mb-8 text-lg">
+                                    {searchQuery ? "Try adjusting your search terms" : "Start building your subscriber base today"}
+                                </p>
+                                {!searchQuery && (
+                                    <Button
+                                        onClick={handleNewUser}
+                                        className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
+                                    >
+                                        <Plus className="w-5 h-5 mr-2" /> Add Your First Subscriber
+                                    </Button>
+                                )}
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        filteredUsers.map((user: any) => (
+                            <Card
+                                key={user.id}
+                                className="p-0 px-0 bg-card border-border shadow-none transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+                            >
+                                <CardContent className="p-0">
+                                    <div className="flex">
+                                        <div className="flex-1 p-8">
+                                            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center gap-4 mb-4">
+                                                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                                            <User className="w-6 h-6 text-primary" />
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-lg font-black text-foreground font-sans mb-1">{user.name}</h3>
+                                                            <div className="flex items-center gap-3">
+                                                                <Badge
+                                                                    className={` font-medium border ${getStatusColor(user.status)} px-3 py-1`}
+                                                                >
+                                                                    {user.active ? "Active" : "Inactive"}
+                                                                </Badge>
+                                                                <div className="flex items-center gap-1 text-muted-foreground">
+                                                                    <Calendar className="w-4 h-4" />
+                                                                    {/* <span className="text-sm">Member since 2024</span> */}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
-                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                              <Mail className="w-5 h-5 text-primary" />
-                              <span className="font-medium">{user.email}</span>
-                            </div>
-                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                              <Phone className="w-5 h-5 text-primary" />
-                              <span className="font-medium">{user.phoneNumber}</span>
-                            </div>
-                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg md:col-span-2">
-                              <MapPin className="w-5 h-5 text-primary" />
-                              <span className="font-medium">{user.address}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
+                                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                                            <Mail className="w-5 h-5 text-primary" />
+                                                            <span className="font-medium">{user.email}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                                                            <Phone className="w-5 h-5 text-primary" />
+                                                            <span className="font-medium">{user.phoneNumber}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg md:col-span-2">
+                                                            <MapPin className="w-5 h-5 text-primary" />
+                                                            <span className="font-medium">{user.address}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     )

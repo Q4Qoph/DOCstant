@@ -40,6 +40,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import { useNotifications } from "@/hooks/useNotifications"
 import Link from "next/link"
+import { formatDistanceToNow, isAfter, subHours } from "date-fns";
 
 interface PrescribedPatient {
     id: number

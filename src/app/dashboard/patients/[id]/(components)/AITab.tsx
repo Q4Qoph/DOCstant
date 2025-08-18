@@ -33,7 +33,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
     }
     
     const analyzePrescribe = patient.aiResponse?.find(
-        item => item.step === "2"
+        item => item.step == "2"
     );
 
     return (
