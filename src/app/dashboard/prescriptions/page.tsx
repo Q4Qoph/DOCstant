@@ -182,7 +182,7 @@ export default function PrescriptionDashboard() {
                 case "approve":
                 case "reject":
                     endpoint = `/${action}/${prescriptionId}`
-                    config.params = { comment, receptionistId }
+                    config.params = { comment }
                     response = (await api.put(endpoint, null, config)).data
 
                     sendNotification({

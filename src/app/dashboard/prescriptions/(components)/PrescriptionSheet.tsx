@@ -22,6 +22,8 @@ import { useDepartmentUsers } from "@/hooks/useDepartmentUsers"
 import { useNotifications } from "@/hooks/useNotifications"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface PrescriptionFormProps {
   diagnosisId: string
@@ -35,6 +37,11 @@ const prescriptionSchema = z.object({
   medicineDosage: z.string().min(1, "Dosage is required"),
   comments: z.string().optional(),
 })
+
+const fetchInventory = async (companyId: string) => {
+  const response = await api.get("/api/inventory", { params: { companyId } })
+  return response.data
+}
 
 const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionFormProps) => {
   const { data: pharmacists } = useDepartmentUsers(3);
@@ -95,6 +102,11 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
       setLoading(false)
     }
   }
+  const { data: inventory = [], isLoading: inventoryLoading, error: inventoryError } = useQuery({
+    queryKey: ["inventory", user?.companyId],
+    queryFn: () => fetchInventory(user!.companyId),
+    enabled: !!user?.companyId && open, // only run if companyId exists and sheet is open
+  })
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -106,8 +118,20 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
 
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label>Drug Name</Label>
-            <Input value={drugName} onChange={(e) => setDrugName(e.target.value)} />
+            <Label>Drug Name (From Inventory)</Label>
+            <Select value={drugName} onValueChange={setDrugName} disabled={inventoryLoading}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={inventoryLoading ? "Loading drugs..." : "Select a drug"} />
+              </SelectTrigger>
+              <SelectContent>
+                {inventoryError && <p className="text-red-500 text-sm">Failed to load inventory</p>}
+                {inventory.map((item: any) => (
+                  <SelectItem key={item.id} value={item.genericName}>
+                    {item.genericName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {errors.drugName && <p className="text-red-500 text-sm">{errors.drugName}</p>}
           </div>
           <div className="grid gap-2">
