@@ -67,7 +67,7 @@ const Vaccinations = ({ patient }: any) => {
                 </CardContent>
             </Card>
 
-            <AICard patient={patient} step="vaccinations" />
+            <AICard patient={patient} step="1" />
         </TabsContent>
     );
 };

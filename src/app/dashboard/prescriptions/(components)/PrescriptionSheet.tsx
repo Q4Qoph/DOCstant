@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import { useDepartmentUsers } from "@/hooks/useDepartmentUsers"
 import { useNotifications } from "@/hooks/useNotifications"
 import { useAuth } from "@/contexts/AuthContext"
+import { useRouter } from "next/navigation"
 
 interface PrescriptionFormProps {
   diagnosisId: string
@@ -45,6 +46,8 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
   const [comments, setComments] = useState("")
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const router = useRouter()
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -71,6 +74,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
     try {
       await api.post("/api/prescription", result.data)
       toast.success("Prescription saved successfully.")
+      router.push("/dashboard/prescriptions")
       if (pharmacists && pharmacists.length > 0) {
         sendNotification({
           title: "Medication Approval Request",

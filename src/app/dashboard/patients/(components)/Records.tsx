@@ -35,7 +35,7 @@ export default function Records() {
     const router = useRouter()
 
     const { data: patients, isLoading } = useQuery({
-        queryKey: ["records"],
+        queryKey: ["patients"],
         queryFn: async () => {
             const response = await api.get("/api/diagnosisrecord", {params: {companyId: user?.companyId}});
             return response.data;
