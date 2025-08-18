@@ -7,7 +7,7 @@ import { TabsContent } from "@/components/ui/tabs" // Updated import
 import { Separator } from "@/components/ui/separator"
 import api from "@/lib/axios"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CreditCard, DollarSign, Plus, Bitcoin, History, Wallet, Receipt, CheckCircle2 } from "lucide-react"
+import { CreditCard, DollarSign, Plus, History, Receipt, CheckCircle2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import ExpenseForm from "../../(components)/ExpenseForm"
@@ -24,6 +24,7 @@ const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
 const Expenses = ({ id }: { id: any }) => {
     const [isPaid, setIsPaid] = useState(false)
     const [expenseOpen, setExpenseOpen] = useState(false)
+
     const queryClient = useQueryClient()
 
     const { data: expenses, isLoading: expensesLoading } = useQuery({
@@ -42,6 +43,7 @@ const Expenses = ({ id }: { id: any }) => {
         mutationFn: createExpense,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["expenses", id] })
+            queryClient.invalidateQueries({ queryKey: ["payments", id] })
             setExpenseOpen(false)
         },
     })
@@ -76,11 +78,6 @@ const Expenses = ({ id }: { id: any }) => {
                     <CardTitle className="flex items-center gap-2">
                         <DollarSign className="h-5 w-5" />
                         Expenses ({expenses?.length || 0})
-                        {/* {expenses && expenses.length > 0 && (
-                            <Badge className="bg-blue-100 text-blue-800 border-blue-300 ml-2">
-                                Total: ${totalAmount.toFixed(2)}
-                            </Badge>
-                        )} */}
                     </CardTitle>
                     <div className="flex gap-2">
                         <Button onClick={() => setExpenseOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">

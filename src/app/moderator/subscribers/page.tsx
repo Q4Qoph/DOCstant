@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Trash2, Edit, Plus, User, Mail, Phone, MapPin, Loader2, Users, TrendingUp, Clock, Search } from "lucide-react"
+import { Trash2, Edit, Plus, User, Mail, Phone, MapPin, Loader2, Users, TrendingUp, Clock, Search, Calendar } from "lucide-react"
 import { z } from "zod"
 import { toast } from "sonner"
 import axios from "axios"
@@ -180,7 +180,7 @@ export default function Subscribers() {
     const stats = {
         total: users.length,
         active: users.filter((u) => u.active).length,
-        inactive:users.filter((u) => !u.active).length,
+        inactive: users.filter((u) => !u.active).length,
     }
 
     if (isInitialLoading) {
@@ -353,8 +353,8 @@ export default function Subscribers() {
 
                 {/* Search Bar */}
                 <div className="mb-6">
-                    <div className="relative max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <div className="relative max-w-md bg-white">
+                        <Search className="absolute bg-white left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <Input
                             placeholder="Search subscribers..."
                             value={searchQuery}
@@ -364,80 +364,83 @@ export default function Subscribers() {
                     </div>
                 </div>
 
-                {/* Subscribers List */}
-                <div className="space-y-4">
-                    {filteredUsers.length === 0 ? (
-                        <Card>
-                            <CardContent className="text-center py-16">
-                                <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                                <h3 className="text-xl font-bold text-slate-700 mb-2 font-heading">
-                                    {searchQuery ? "No subscribers found" : "No subscribers yet"}
-                                </h3>
-                                <p className="text-gray-600 mb-6">
-                                    {searchQuery ? "Try adjusting your search terms" : "Start building your subscriber base today"}
-                                </p>
-                                {!searchQuery && (
-                                    <Button onClick={handleNewUser} className="bg-blue-600 hover:bg-blue-700 text-white hover-lift">
-                                        <Plus className="w-4 h-4 mr-2" /> Add Your First Subscriber
-                                    </Button>
-                                )}
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        filteredUsers.map((user: any) => (
-                            <Card key={user.id} className="hover-lift transition-all duration-200 hover:shadow-md">
-                                <CardContent className="p-6">
-                                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-3">
-                                                <h3 className="text-lg font-semibold text-slate-700 font-heading">{user.name}</h3>
-                                                <Badge className={`text-xs font-medium border ${getStatusColor(user.status)}`}>
-                                                    {user.active? "active": "unknown"}
-                                                </Badge>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
-                                                <div className="flex items-center gap-2">
-                                                    <Mail className="w-4 h-4 text-gray-400" />
-                                                    <span>{user.email}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Phone className="w-4 h-4 text-gray-400" />
-                                                    <span>{user.phoneNumber}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2 md:col-span-2">
-                                                    <MapPin className="w-4 h-4 text-gray-400" />
-                                                    <span>{user.address}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => handleEdit(user)}
-                                                disabled={isLoading}
-                                                className="hover:bg-blue-50 hover:border-blue-200"
-                                            >
-                                                <Edit className="w-4 h-4 mr-1" /> Edit
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="destructive"
-                                                onClick={() => handleDelete(user.id)}
-                                                disabled={isLoading}
-                                                className="hover:bg-red-600"
-                                            >
-                                                <Trash2 className="w-4 h-4 mr-1" /> Remove
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))
-                    )}
+                <div className="space-y-6">
+          {filteredUsers.length === 0 ? (
+            <Card className="bg-card border-border shadow-lg">
+              <CardContent className="text-center py-20">
+                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <Users className="w-12 h-12 text-primary" />
                 </div>
+                <h3 className="text-2xl font-black text-foreground mb-3 font-sans">
+                  {searchQuery ? "No subscribers found" : "No subscribers yet"}
+                </h3>
+                <p className="text-muted-foreground mb-8 text-lg">
+                  {searchQuery ? "Try adjusting your search terms" : "Start building your subscriber base today"}
+                </p>
+                {!searchQuery && (
+                  <Button
+                    onClick={handleNewUser}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
+                  >
+                    <Plus className="w-5 h-5 mr-2" /> Add Your First Subscriber
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            filteredUsers.map((user: any) => (
+              <Card
+                key={user.id}
+                className="p-0 px-0 bg-card border-border shadow-none transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+              >
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="flex-1 p-8">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                              <User className="w-6 h-6 text-primary" />
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-black text-foreground font-sans mb-1">{user.name}</h3>
+                              <div className="flex items-center gap-3">
+                                <Badge
+                                  className={` font-medium border ${getStatusColor(user.status)} px-3 py-1`}
+                                >
+                                  {user.active ? "Active" : "Inactive"}
+                                </Badge>
+                                <div className="flex items-center gap-1 text-muted-foreground">
+                                  <Calendar className="w-4 h-4" />
+                                  {/* <span className="text-sm">Member since 2024</span> */}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
+                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                              <Mail className="w-5 h-5 text-primary" />
+                              <span className="font-medium">{user.email}</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                              <Phone className="w-5 h-5 text-primary" />
+                              <span className="font-medium">{user.phoneNumber}</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg md:col-span-2">
+                              <MapPin className="w-5 h-5 text-primary" />
+                              <span className="font-medium">{user.address}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
             </div>
         </div>
     )
