@@ -60,7 +60,7 @@ interface PrescriptionWithPatientDetails extends PrescriptionRecord {
 }
 
 const fetchMedications = async (companyId: string) => {
-    const response = await api.get("/api/inventory", {params: {companyId}})
+    const response = await api.get("/api/inventory", { params: { companyId } })
     return response.data
 }
 
@@ -99,7 +99,7 @@ export default function PrescriptionDashboard() {
     // Fetch medications
     const medsQuery = useQuery({
         queryKey: ["medications"],
-        queryFn: ()=> fetchMedications(user?.companyId!),
+        queryFn: () => fetchMedications(user?.companyId!),
     })
 
     // Fetch prescriptions with patient details
@@ -217,7 +217,7 @@ export default function PrescriptionDashboard() {
             setPrescriptionActionType(null)
         },
         onError: (error: any) => {
-            const message = error?.response?.data?.message
+            const message = error?.response?.data || error?.response?.data?.message
                 || error?.message
                 || "Failed to update prescription";
             toast.error(message);
@@ -301,10 +301,10 @@ export default function PrescriptionDashboard() {
             description,
         }: {
             action: "assign" | "administer"
-            patientId: number
+            patientId: string | number
             nurseId?: string
             nurseName?: string
-            medicationId?: string
+            medicationId?: number
             description?: string
         }) => {
             let endpoint = ""
@@ -461,12 +461,12 @@ export default function PrescriptionDashboard() {
     }
 
     const handleAdministerSubmit = () => {
-        if (!selectedPatient || !selectedMed) return
+        if (!selectedPatient) return
 
         patientActionMutation.mutate({
             action: "administer",
             patientId: selectedPatient.id,
-            medicationId: selectedMed,
+            medicationId: selectedPatient.id,
             description: medDescription,
         })
     }
@@ -516,7 +516,7 @@ export default function PrescriptionDashboard() {
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="prescriptions" className="flex items-center gap-2">
                             <FileText className="h-4 w-4" />
-                            Prescriptions
+                           All Prescriptions
                         </TabsTrigger>
                         <TabsTrigger value="patients" className="flex items-center gap-2">
                             <Users className="h-4 w-4" />
@@ -1082,7 +1082,7 @@ export default function PrescriptionDashboard() {
 
                                             {patient.medicationDescriptions && patient.medicationDescriptions.length > 0 && (
                                                 <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                                    <h4 className="text-sm font-medium text-green-800 mb-2">💊 Prescribed Medications:</h4>
+                                                    <h4 className="text-sm font-medium text-green-800 mb-2">💊 Medications Administered:</h4>
                                                     <div className="space-y-1">
                                                         {patient.medicationDescriptions.map((med: any, index: number) => (
                                                             <div key={index} className="text-sm text-green-700">
@@ -1155,7 +1155,7 @@ export default function PrescriptionDashboard() {
                         </DialogTitle>
                         <DialogDescription>
                             {prescriptionActionType === "approve"
-                                ? "Add a comment for approval (optional)"
+                                ? "Add a comment for approval"
                                 : "Add a reason for rejection"}
                         </DialogDescription>
                     </DialogHeader>
@@ -1167,7 +1167,7 @@ export default function PrescriptionDashboard() {
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                                 placeholder="Enter your comment..."
-                                className="mt-1"
+                                className="mt-3"
                                 required
                                 disabled={prescriptionActionMutation.isPending}
                             />
@@ -1216,31 +1216,11 @@ export default function PrescriptionDashboard() {
                     <DialogHeader>
                         <DialogTitle>Administer Medicine</DialogTitle>
                         <DialogDescription>
-                            Select a medicine and add a description for {selectedPatient?.patientDetails?.name || "the patient"}
+                            Please record the medicine you are giving to{" "}
+                            {selectedPatient?.patientDetails?.name || "the patient"}, and include a brief description.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
-                        {/* Select Medicine */}
-                        <div>
-                            <Label htmlFor="medication">Select Medicine</Label>
-                            <Select
-                                value={selectedMed}
-                                onValueChange={(value) => setSelectedMed(value)}
-                                disabled={medsQuery.isLoading || patientActionMutation.isPending}
-                            >
-                                <SelectTrigger className="mt-1">
-                                    <SelectValue placeholder="Choose a medicine" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {medsQuery.data?.map((med: any) => (
-                                        <SelectItem key={med.id} value={med.id}>
-                                            {med.genericName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
                         {/* Description */}
                         <div>
                             <Label htmlFor="description">Description</Label>
@@ -1249,7 +1229,8 @@ export default function PrescriptionDashboard() {
                                 value={medDescription}
                                 onChange={(e) => setMedDescription(e.target.value)}
                                 placeholder="Enter a brief description..."
-                                className="mt-1"
+                                className="mt-3"
+                                required
                                 disabled={patientActionMutation.isPending}
                             />
                         </div>
@@ -1273,7 +1254,7 @@ export default function PrescriptionDashboard() {
                             </Button>
                             <Button
                                 onClick={handleAdministerSubmit}
-                                disabled={patientActionMutation.isPending || !selectedMed}
+                                disabled={!medDescription.trim() || patientActionMutation.isPending}
                                 className="flex-1 bg-blue-600 hover:bg-blue-700"
                             >
                                 {patientActionMutation.isPending ? (

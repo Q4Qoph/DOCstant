@@ -98,7 +98,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
             )}
 
             <PrescriptionSheet
-                diagnosisId={patient.id}
+                diagnosisId={patient.id as string}
                 open={prescOpen}
                 onOpenChange={setPrescOpen}
             />

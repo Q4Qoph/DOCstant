@@ -98,7 +98,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
 
       onOpenChange(false)
     } catch (error) {
-      
+
     } finally {
       setLoading(false)
     }
