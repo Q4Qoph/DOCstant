@@ -64,7 +64,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
             if (response.status === 200) {
                 toast.success("Results updated successfully");
                 queryClient.invalidateQueries({ queryKey: ["labtests", labTest?.diagnosisId] })
-                
+
                 // Notify specialists about the updated results
                 if (specialists && specialists.length > 0) {
                     sendNotification({
@@ -131,7 +131,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                             </div>
                             <div>
                                 <p className="font-medium text-gray-600">Cost:</p>
-                                <p className="text-gray-900">Ksh {labTest?.cost}</p>
+                                <p className="text-gray-900">$ {labTest?.cost}</p>
                             </div>
                             <div>
                                 <p className="font-medium text-gray-600">Current Status:</p>
