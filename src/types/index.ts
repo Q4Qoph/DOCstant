@@ -149,6 +149,7 @@ export interface PrescriptionRecord {
   diagnosisId: string
   drugName: string
   quantity: number
+  status: string
   medicineDosage: string
   comments: string
   approve: boolean
