@@ -21,8 +21,10 @@ const createExpense = (data: { expenseName: string; amount: number; diagnosisId:
 const createPayment = (diagnosisId: string): Promise<{ data: any }> =>
     api.post(`/api/Payment/${diagnosisId}`)
 
+const getPaymentStatus = (diagnosisId: string) =>
+    api.get(`/api/Payment/status/${diagnosisId}`);
+
 const Expenses = ({ id }: { id: any }) => {
-    const [isPaid, setIsPaid] = useState(false)
     const [expenseOpen, setExpenseOpen] = useState(false)
 
     const queryClient = useQueryClient()
@@ -51,13 +53,21 @@ const Expenses = ({ id }: { id: any }) => {
     const createPaymentMutation = useMutation({
         mutationFn: () => createPayment(id as string),
         onSuccess: (response) => {
-            setIsPaid(true)
+            queryClient.invalidateQueries({ queryKey: ["payments", id] })
+            queryClient.invalidateQueries({ queryKey: ["paymentStatus", id] })
         },
         onError: (error) => {
             console.error("Payment error:", error)
             toast.error("Failed to initiate payment. Please try again.")
         },
     })
+
+    const { data: isPaid, isLoading: statusLoading } = useQuery({
+        queryKey: ["paymentStatus", id],
+        queryFn: () => getPaymentStatus(id as string).then((res) => res.data),
+        enabled: !!id,
+    });
+
 
     const handleStripePayment = () => {
         createPaymentMutation.mutate()
@@ -183,8 +193,7 @@ const Expenses = ({ id }: { id: any }) => {
 
                                 <div className="space-y-3">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        {/* Stripe Payment */}
-                                        <Button
+                                        {/* <Button
                                             onClick={handleStripePayment}
                                             disabled={createPaymentMutation.isPending || isPaid}
                                             className={`w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200
@@ -205,7 +214,31 @@ const Expenses = ({ id }: { id: any }) => {
                                                 : isPaid
                                                     ? "Paid"
                                                     : "Mark As Paid"}
+                                        </Button> */}
+                                        <Button
+                                            onClick={handleStripePayment}
+                                            disabled={statusLoading || createPaymentMutation.isPending || isPaid === true}
+                                            className={`w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200
+    ${isPaid === true
+                                                    ? "bg-green-500 hover:bg-green-700 text-white"
+                                                    : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                                                }`}
+                                        >
+                                            {createPaymentMutation.isPending ? (
+                                                <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+                                            ) : isPaid === true ? (
+                                                <CheckCircle2 className="h-5 w-5 mr-2" />
+                                            ) : (
+                                                <CreditCard className="h-5 w-5 mr-2" />
+                                            )}
+                                            {createPaymentMutation.isPending
+                                                ? "Saving..."
+                                                : isPaid === true
+                                                    ? "Paid"
+                                                    : "Mark As Paid"}
                                         </Button>
+
+
 
                                     </div>
                                 </div>

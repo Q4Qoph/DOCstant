@@ -68,7 +68,7 @@ const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
                                         </div>
                                         <div>
                                             <p className="font-medium">Cost</p>
-                                            <p className="text-gray-700">Ksh {test.cost}</p>
+                                            <p className="text-gray-700">$ {test.cost}</p>
                                         </div>
                                     </div>
 
