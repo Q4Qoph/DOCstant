@@ -9,7 +9,7 @@ export interface User {
 
 
 export interface Patient {
-  id: string;
+  id: number;
   medicalRecordNumber: string;
   firstName: string;
   lastName: string;
