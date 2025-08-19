@@ -147,11 +147,12 @@ export default function PrescriptionDashboard() {
         if (filter !== "all") {
             switch (filter) {
                 case "approved":
-                    filtered = filtered.filter((prescription) => prescription.approve)
+                    filtered = filtered.filter((prescription) => prescription.status == "Approved")
                     break
                 case "unapproved":
+                    filtered = filtered.filter((prescription) => prescription.status == "Rejected")
                 case "pending":
-                    filtered = filtered.filter((prescription) => !prescription.approve)
+                    filtered = filtered.filter((prescription) => prescription.status == "")
                     break
             }
         }
@@ -516,7 +517,7 @@ export default function PrescriptionDashboard() {
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="prescriptions" className="flex items-center gap-2">
                             <FileText className="h-4 w-4" />
-                           All Prescriptions
+                            All Prescriptions
                         </TabsTrigger>
                         <TabsTrigger value="patients" className="flex items-center gap-2">
                             <Users className="h-4 w-4" />
@@ -542,8 +543,8 @@ export default function PrescriptionDashboard() {
                                         <SelectContent>
                                             <SelectItem value="all">All Prescriptions</SelectItem>
                                             <SelectItem value="approved">Approved</SelectItem>
-                                            <SelectItem value="unapproved">Unapproved</SelectItem>
-                                            <SelectItem value="pending">Pending Review</SelectItem>
+                                            <SelectItem value="unapproved">Rejected</SelectItem>
+                                            <SelectItem value="pending">Pending Approval</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -608,13 +609,25 @@ export default function PrescriptionDashboard() {
                                                         </div>
                                                         <div className="text-right">
                                                             <Badge
-                                                                variant={prescription.approve ? "default" : "secondary"}
+                                                                variant={
+                                                                    prescription.status === ""
+                                                                        ? "secondary"
+                                                                        : prescription.status === "Approved"
+                                                                            ? "default"
+                                                                            : "destructive"
+                                                                }
                                                                 className={
-                                                                    prescription.approve ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
+                                                                    prescription.status === ""
+                                                                        ? "bg-yellow-100 text-yellow-800"
+                                                                        : prescription.status === "Approved"
+                                                                            ? "bg-green-100 text-green-800"
+                                                                            : "bg-red-100 text-red-800"
                                                                 }
                                                             >
-                                                                {prescription.approve ? "Approved" : "Pending"}
+                                                                {prescription.status === "" ? "Pending" : prescription.status}
                                                             </Badge>
+
+
                                                             <p className="text-xs text-gray-500 mt-2">
                                                                 Created: {formatDate(prescription.createdAt)}
                                                             </p>
@@ -737,7 +750,7 @@ export default function PrescriptionDashboard() {
                                                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                                                         <div className="text-xs text-gray-500">Prescription ID: #{prescription.id}</div>
                                                         <div className="flex space-x-2">
-                                                            {!prescription.approve ? (
+                                                            {prescription.status == "" && (
                                                                 <>
                                                                     <Button
                                                                         size="sm"
@@ -772,18 +785,23 @@ export default function PrescriptionDashboard() {
                                                                         Reject
                                                                     </Button>
                                                                 </>
-                                                            ) : (
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    onClick={() => handlePrescriptionAction(prescription, "reject")}
-                                                                    disabled={prescriptionActionMutation.isPending}
-                                                                    className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
-                                                                >
-                                                                    <X className="h-4 w-4" />
-                                                                    Revoke Approval
-                                                                </Button>
                                                             )}
+                                                            {
+                                                                prescription.status == "Approved" && (
+                                                                    <>
+                                                                        <Button
+                                                                            size="sm"
+                                                                            variant="outline"
+                                                                            onClick={() => handlePrescriptionAction(prescription, "reject")}
+                                                                            disabled={prescriptionActionMutation.isPending}
+                                                                            className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
+                                                                        >
+                                                                            <X className="h-4 w-4" />
+                                                                            Revoke Approval
+                                                                        </Button>
+                                                                    </>
+                                                                )
+                                                            }
                                                         </div>
                                                     </div>
                                                 </CardContent>

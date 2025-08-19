@@ -237,9 +237,6 @@ const Expenses = ({ id }: { id: any }) => {
                                                     ? "Paid"
                                                     : "Mark As Paid"}
                                         </Button>
-
-
-
                                     </div>
                                 </div>
                             </div>

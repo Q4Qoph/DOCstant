@@ -5,10 +5,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useAuth } from "@/contexts/AuthContext"
 import { useTrialModal } from "@/contexts/TrialModalContext"
 import api from "@/lib/axios"
-import { Check, Clock, Zap } from 'lucide-react'
-import Link from "next/link"
+import { Check, Clock, Zap, CreditCard, Coins } from "lucide-react"
 import { useState } from "react"
-// Import axios API client instead of using fetch
 
 export function UpgradeModal() {
   const { user } = useAuth()
@@ -20,29 +18,50 @@ export function UpgradeModal() {
 
     setIsProcessing(true)
     try {
-      // Use axios API client instead of fetch
       const response = await api.post("/api/Subscription/paySubscription", {
         successURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/subscription-success`,
         cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
         companyId: user.companyId,
       })
 
-      // Handle new response format with url and sessionId
       const { url, sessionId } = response.data
 
       if (url && sessionId) {
-        // Store sessionId for later reference if needed
         localStorage.setItem("sid", sessionId)
-
-        // Redirect to payment URL
         window.location.href = url
       } else {
         console.error("Invalid response format - missing url or sessionId")
-        // Handle error - show toast or error message
       }
     } catch (error) {
       console.error("Payment error:", error)
-      // Handle network error
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleCryptoPayment = async () => {
+    if (!user?.companyId) return
+
+    setIsProcessing(true)
+    try {
+      const response = await api.post("/api/Coinbase", {
+        amount: 15,
+        currency: "USD",
+        companyId: user.companyId,
+        // successURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/subscription-success`,
+        // cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
+      })
+
+      const { hosted_url, paymentId } = response.data
+
+      if (hosted_url && paymentId) {
+        localStorage.setItem("cryptoPaymentId", paymentId)
+        window.location.href = hosted_url
+      } else {
+        console.error("Invalid crypto payment response")
+      }
+    } catch (error) {
+      console.error("Crypto payment error:", error)
     } finally {
       setIsProcessing(false)
     }
@@ -56,7 +75,9 @@ export function UpgradeModal() {
             <div className="mx-auto w-16 h-16 bg-[#0c9aff]/10 rounded-full flex items-center justify-center">
               <Clock className="h-8 w-8 text-[#0c9aff]" />
             </div>
-            <DialogTitle className="text-xl text-center font-bold text-gray-900">Your Free Trial Has Expired</DialogTitle>
+            <DialogTitle className="text-xl text-center font-bold text-gray-900">
+              Your Free Trial Has Expired
+            </DialogTitle>
             <DialogDescription className="text-sm text-center text-gray-600 max-w-md mx-auto">
               Thanks for trying our platform! To continue enjoying all features, please upgrade to our monthly plan.
             </DialogDescription>
@@ -101,22 +122,34 @@ export function UpgradeModal() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex gap-3 pt-6">
-              <Button
+            <CardFooter className="flex flex-col gap-3 pt-6">
+              <div className="flex gap-3 w-full">
+              
+                <Button
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+                  onClick={handleCryptoPayment}
+                  disabled={isProcessing}
+                >
+                  <Coins className="h-4 w-4 mr-2" />
+                  {isProcessing ? "Processing..." : "Pay with Crypto"}
+                </Button>
+                  <Button
+                  className="flex-1 bg-[#0c9aff] hover:bg-blue-700 text-white"
+                  onClick={handleUpgrade}
+                  disabled={isProcessing}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {isProcessing ? "Processing..." : "Pay with Card"}
+                </Button>
+              </div>
+              {/* <Button
                 variant="outline"
-                className="flex-1 border-gray-300 hover:bg-gray-50 bg-transparent shadow-none"
+                className="w-full border-gray-300 hover:bg-gray-50 bg-transparent shadow-none"
                 onClick={closeModal}
                 disabled={isProcessing}
               >
                 Maybe Later
-              </Button>
-              <Button
-                className="flex-1 bg-[#0c9aff] hover:bg-blue-700 text-white"
-                onClick={handleUpgrade}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "Processing..." : "Upgrade Now"}
-              </Button>
+              </Button> */}
             </CardFooter>
           </Card>
 
