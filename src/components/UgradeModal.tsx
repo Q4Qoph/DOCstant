@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useAuth } from "@/contexts/AuthContext"
 import { useTrialModal } from "@/contexts/TrialModalContext"
 import api from "@/lib/axios"
+import axios from "axios"
 import { Check, Clock, Zap, CreditCard, Coins } from "lucide-react"
 import { useState } from "react"
 
@@ -21,7 +22,7 @@ export function UpgradeModal() {
       const response = await api.post("/api/Subscription/paySubscription", {
         successURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/subscription-success`,
         cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
-        companyId: user.companyId,
+        companyId: Number(user.companyId),
       })
 
       const { url, sessionId } = response.data
@@ -44,18 +45,15 @@ export function UpgradeModal() {
 
     setIsProcessing(true)
     try {
-      const response = await api.post("/api/Coinbase", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_CRYPTO_BASE_URL}/checkout`, {
         amount: 15,
-        currency: "USD",
-        companyId: user.companyId,
-        // successURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/subscription-success`,
-        // cancelURL: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/cancelled`,
-      })
+        currency: "USD", url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/crypto-success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment/crypto-cancelled`,
+      });
 
-      const { hosted_url, paymentId } = response.data
+      const hosted_url  = response.data.charge.hosted_url
 
-      if (hosted_url && paymentId) {
-        localStorage.setItem("cryptoPaymentId", paymentId)
+      if (hosted_url) {
         window.location.href = hosted_url
       } else {
         console.error("Invalid crypto payment response")
@@ -124,7 +122,7 @@ export function UpgradeModal() {
 
             <CardFooter className="flex flex-col gap-3 pt-6">
               <div className="flex gap-3 w-full">
-              
+
                 <Button
                   className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
                   onClick={handleCryptoPayment}
@@ -133,7 +131,7 @@ export function UpgradeModal() {
                   <Coins className="h-4 w-4 mr-2" />
                   {isProcessing ? "Processing..." : "Pay with Crypto"}
                 </Button>
-                  <Button
+                <Button
                   className="flex-1 bg-[#0c9aff] hover:bg-blue-700 text-white"
                   onClick={handleUpgrade}
                   disabled={isProcessing}
