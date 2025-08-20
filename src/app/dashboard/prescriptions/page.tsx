@@ -610,21 +610,21 @@ export default function PrescriptionDashboard() {
                                                         <div className="text-right">
                                                             <Badge
                                                                 variant={
-                                                                    prescription.status === ""
+                                                                    prescription.status === "Pending"
                                                                         ? "secondary"
                                                                         : prescription.status === "Approved"
                                                                             ? "default"
-                                                                            : "destructive"
+                                                                            : prescription.status === "Rejected" ? "destructive" : "secondary"
                                                                 }
                                                                 className={
-                                                                    prescription.status === ""
+                                                                    prescription.status === "Pending"
                                                                         ? "bg-yellow-100 text-yellow-800"
                                                                         : prescription.status === "Approved"
                                                                             ? "bg-green-100 text-green-800"
                                                                             : "bg-red-100 text-red-800"
                                                                 }
                                                             >
-                                                                {prescription.status === "" ? "Pending" : prescription.status}
+                                                                {prescription.status}
                                                             </Badge>
 
 
@@ -750,7 +750,7 @@ export default function PrescriptionDashboard() {
                                                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                                                         <div className="text-xs text-gray-500">Prescription ID: #{prescription.id}</div>
                                                         <div className="flex space-x-2">
-                                                            {prescription.status == "" && (
+                                                            {prescription.status == "Pending" && (
                                                                 <>
                                                                     <Button
                                                                         size="sm"
