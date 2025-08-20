@@ -16,35 +16,24 @@ export const Footer = () => {
     {
       title: "Services",
       links: [
-        "Healthcare AI Solutions",
-        "Practice Management",
-        "Workflow Automation",
-        "Analytics & Reporting",
-        "Enterprise Support"
-      ]
+        { name: "Healthcare AI Solutions", href: "/" },
+        { name: "Analytics & Reporting", href: "/" },
+      ],
     },
     {
       title: "Company",
       links: [
-        "About Us",
-        "Our Technology",
-        "Careers",
-        "Press",
-        "Partners"
-      ]
+        { name: "About Us", href: "/#about" },
+        { name: "Our Technology", href: "/" },
+      ],
     },
     {
       title: "Support",
       links: [
-        "Help Center",
-        "Contact Us",
-        "Privacy Policy",
-        "Terms of Service",
-        "FAQ"
-      ]
-    }
+        { name: "Contact Us", href: "/#contact" },
+      ],
+    },
   ];
-
   const socialLinks = [
     { icon: <Facebook className="h-5 w-5" />, href: "#" },
     { icon: <Twitter className="h-5 w-5" />, href: "#" },
@@ -124,17 +113,17 @@ export const Footer = () => {
             </div>
 
             {/* Footer Links */}
-            {footerSections.map((section, index) => (
+              {footerSections.map((section, index) => (
               <div key={index} className="space-y-6">
                 <h4 className="text-xl font-semibold">{section.title}</h4>
                 <ul className="space-y-3">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
                       <a
-                        href="#"
+                        href={link.href}
                         className="text-white/80 hover:text-white transition-colors duration-200"
                       >
-                        {link}
+                        {link.name}
                       </a>
                     </li>
                   ))}
@@ -150,7 +139,7 @@ export const Footer = () => {
             <div className="text-white/80">
               © 2024 Docstant. All rights reserved.
             </div>
-            <div className="flex space-x-6 text-sm">
+            {/* <div className="flex space-x-6 text-sm">
               <a href="#" className="text-white/80 hover:text-white transition-colors">
                 Privacy Policy
               </a>
@@ -160,7 +149,7 @@ export const Footer = () => {
               <a href="#" className="text-white/80 hover:text-white transition-colors">
                 Cookie Policy
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
