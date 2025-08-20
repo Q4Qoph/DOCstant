@@ -69,7 +69,7 @@ const {user} = useAuth()
                                                 <TooltipTrigger asChild>
                                                     <Link
                                                         className="group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
-                                                        href={`/dashboard/patients/${entry.diagnosisId}`}
+                                                        href={`/dashboard/patients/${entry.diagnosis.id}`}
                                                     >
                                                         <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
                                                             {entry.diagnosis?.name || "Unnamed Patient"}

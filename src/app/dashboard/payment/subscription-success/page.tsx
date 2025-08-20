@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 
 const fetchPaymentStatus = async (sid: string) => {
-  const response = await api.put(`/api/Subscription/${sid}`);
+  const response = await api.put(`/api/Subscription/?stripeSessionId=${sid}`);
   return response.data;
 };
 
