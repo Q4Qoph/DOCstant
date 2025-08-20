@@ -37,7 +37,7 @@ export default function Records() {
     const { data: patients, isLoading } = useQuery({
         queryKey: ["patients"],
         queryFn: async () => {
-            const response = await api.get("/api/diagnosisrecord", {params: {companyId: user?.companyId}});
+            const response = await api.get("/api/diagnosisrecord", { params: { companyId: user?.companyId } });
             return response.data;
         },
     });
@@ -51,14 +51,14 @@ export default function Records() {
         router.push(`/dashboard/patients/${id}`)
     };
 
-    const filteredPatients = patients
-        ? patients.filter(
-            (patient: any) =>
-                patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                patient.phoneNumber.includes(searchQuery) ||
-                patient.address.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        : [];
+    const patientsArray = Array.isArray(patients) ? patients : [];
+
+    const filteredPatients = patientsArray.filter((patient: any) =>
+        patient.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        patient.phoneNumber?.includes(searchQuery) ||
+        patient.address?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
 
     return (
         <div className="min-h-screen">
