@@ -23,8 +23,8 @@ interface Message {
   timestamp: Date
   senderName: string
 }
-const fetchUsers = async () => {
-  const res = await api.get("/api/user/users")
+const fetchUsers = async (companyId: any) => {
+  const res = await api.get("/api/user/users", {params: {companyId}})
   return res.data as User[]
 }
 
@@ -37,7 +37,7 @@ export default function ChatPage() {
   // Fetch users
   const { data: usersData = [], isLoading } = useQuery({
     queryKey: ["users"],
-    queryFn: fetchUsers,
+    queryFn: () =>fetchUsers(user?.companyId),
     enabled: !!user?.id
   })
 
