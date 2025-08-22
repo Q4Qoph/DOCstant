@@ -79,7 +79,7 @@ const UserManagement: React.FC = () => {
       let response;
 
       if (editingUser) {
-        response = await api.put(`/api/User/update/${editingUser.id}`, userData);
+        response = await api.put(`/api/User/update/${editingUser.id}`, {...userData,  companyId: user?.companyId });
       } else {
         response = await api.post('/api/user/register', userData);
       }
