@@ -31,7 +31,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
-      case 'General Practitioner':
+      case 'GeneralPracticioner':
       case 1:
         return [
           ...baseItems,
