@@ -95,7 +95,7 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
                             toUserIds: specialists.map((u: any) => u.id),
                         });
                     } else {
-                        toast.warning("No specialists available to notify. Please follow up with the clinical team manually.");
+                        toast.warning("No specialists available to notify. Please follow up with the clinical team.");
                     }
                 }
 
