@@ -50,6 +50,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
+        setIsLoading(true);
 
         try {
             const validatedData = patientSchema.parse(formData);
@@ -59,10 +60,11 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             if (response.status == 200) {
                 toast.success("Patient recorded successfuly");
                 queryClient.invalidateQueries({ queryKey: ["patients"] })
+                console.log(specialists)
                 if (specialists && specialists.length > 0) {
                     sendNotification({
                         title: "Patient Registration Alert",
-                        message: "Reception has registered a new patient. Please proceed with the required pharmacy protocols.",
+                        message: "A new patient has been recorded. Please proceed with the required pharmacy protocols.",
                         fromUserId: user!.id,
                         fromDepartment: 0,
                         toDepartment: 2,
@@ -104,6 +106,8 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                 fieldErrors[path] = err.message;
             });
             setErrors(fieldErrors);
+        } finally {
+            setIsLoading(false);
         }
     };
 
