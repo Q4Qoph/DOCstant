@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const useDepartmentUsers = (role: number) => {
+  const { user } = useAuth()
+
   return useQuery({
     queryKey: ["departmentUsers", role],
     queryFn: async () => {
       const res = await api.get(`/api/User/department`, {
-        params: { role },
+        params: { role, companyId: user?.companyId },
       });
       return res.data;
     },
