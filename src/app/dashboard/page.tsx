@@ -99,28 +99,6 @@ const Dashboard = () => {
         {/* User Roles Breakdown */}
         <UserRolesBreakdownCard /> {/* New component for user roles */}
         {/* Bottom Action Bar */}
-        <Card>
-          <CardContent className="flex items-center justify-between p-6">
-            <div>
-              <h3 className="font-semibold text-gray-900">Need help getting started?</h3>
-              <p className="text-sm text-gray-600">Check out our documentation and tutorials</p>
-            </div>
-            <div className="flex gap-2">
-              <Link href="/dashboard/docs">
-                <Button variant="outline" size="sm">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Documentation
-                </Button>
-              </Link>
-              <Link href="/dashboard/settings">
-                <Button variant="outline" size="sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )
