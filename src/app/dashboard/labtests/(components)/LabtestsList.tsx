@@ -39,12 +39,11 @@ const LabtestsList = ({ labTests, showPatientDetails = true }: any) => {
                                                 <TooltipTrigger asChild>
                                                     <Button
                                                         onClick={() => onEdit(test)}
-                                                        variant="outline"
                                                         size="sm"
-                                                        className="border-blue-300 hover:bg-blue-50"
+                                                        className="bg-[#0c9aff] hover:bg-blue-500"
                                                     >
-                                                        <Upload className="h-4 w-4" />
-                                                        Upload Results
+                                                        <Plus className="h-4 w-4" />
+                                                        Add Results
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>

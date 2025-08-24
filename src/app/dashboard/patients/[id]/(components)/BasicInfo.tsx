@@ -17,7 +17,6 @@ const BasicInfo = ({ patient }: { patient: any }) => {
     return (
         <TabsContent value="basic-info" className="mt-0">
             <div className="space-y-6">
-
                 {/* Contact Info Card */}
                 <Card className="border-slate-200 shadow-none w-full">
                     <CardHeader className="">
@@ -47,9 +46,15 @@ const BasicInfo = ({ patient }: { patient: any }) => {
                 {/* Vital Signs Card */}
                 <Card className="border-slate-200 shadow-none">
                     <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                            <Heart className="h-5 w-5 text-red-600" />
-                            Vital Signs & Chief Complaint
+                        <CardTitle className="flex items-center justify-between gap-2 text-lg">
+                            <p className="flex items-center gap-2">
+                                <Heart className="h-5 w-5 text-red-600" />
+                                Vital Signs & Chief Complaint
+                            </p>
+                            <Button onClick={() => setAdmitOpen(true)} className="bg-[#0c9aff] hover:bg-blue-050 mt-4">
+                                <Stethoscope className="h-4 w-4 mr-2" />
+                                Admit Patient
+                            </Button>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -111,10 +116,7 @@ const BasicInfo = ({ patient }: { patient: any }) => {
                                 <p className="text-slate-700">{patient.symptoms}</p>
                             </div>
                         </div>
-                        <Button onClick={() => setAdmitOpen(true)} className="bg-blue-500 hover:bg-blue-600 mt-4 w-full">
-                            <Stethoscope className="h-4 w-4 mr-2" />
-                            Admit Patient
-                        </Button>
+
                     </CardContent>
                 </Card>
             </div>

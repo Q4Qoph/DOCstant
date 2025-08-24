@@ -19,7 +19,7 @@ export default function PatientTabs() {
   return (
     <div>
       {/* Desktop/Tablet View */}
-      <TabsList className="hidden md:grid w-full grid-cols-5 lg:grid-cols-9 h-auto p-2 bg-gray-50 border border-gray-100 rounded-t-xl">
+      <TabsList className="hidden md:grid w-full grid-cols-5 lg:grid-cols-9 h-auto p-2 bg-gray-50 border border-gray-100 rounded-t-xl ">
         {tabs.map((tab) => {
           const IconComponent = tab.icon
           return (
@@ -28,7 +28,7 @@ export default function PatientTabs() {
               value={tab.value}
               className="group flex flex-col items-center gap-2 py-4 px-3 text-xs font-medium rounded-lg transition-all duration-200
                          data-[state=active]:bg-transparent data-[state=active]:shadow-none
-                         hover:bg-transparent text-slate-600 hover:text-slate-800"
+                         hover:bg-transparent text-slate-600 hover:text-slate-800 cursor-pointer"
             >
               <div className="h-10 w-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 group-data-[state=active]:bg-blue-500 group-data-[state=active]:text-white transition-colors duration-200">
                 <IconComponent className="h-5 w-5" />

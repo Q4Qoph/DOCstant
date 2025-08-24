@@ -76,7 +76,7 @@ export default function DischargeForm({
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto px-8 py-4">
                 <SheetHeader className="p-0">
-                    <SheetTitle>Update Record</SheetTitle>
+                    <SheetTitle>Discharge Patient</SheetTitle>
                     <SheetDescription>
                         Fill out and submit the summary
                     </SheetDescription>

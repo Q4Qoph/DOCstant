@@ -135,7 +135,6 @@ const UserForm = ({ user, isOpen, onClose, onSave }: {
 
         await onSave(isEditing ? userData : { ...userData, companyId: authUser?.companyId });
         onClose();
-        toast.success(isEditing ? 'User updated successfully' : 'User created successfully');
       }
     } catch (error) {
       toast.error('An error occurred while saving the user');
