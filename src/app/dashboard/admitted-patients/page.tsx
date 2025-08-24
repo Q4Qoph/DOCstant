@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, Plus } from "lucide-react";
+import { Eye, Plus, Stethoscope } from "lucide-react";
 import api from "@/lib/axios";
 import PatientsRecordSkeleton from "../patients/loading";
 import DischargeForm from "./(components)/DischargeForm";
@@ -16,7 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function AdmittedPatients() {
     const [dischargeOpen, setDischargeOpen] = useState(false)
     const [selectedPatient, setSelectedPatient] = useState("")
-const {user} = useAuth()
+    const { user } = useAuth()
 
     const {
         data: inpatients,
@@ -25,7 +25,7 @@ const {user} = useAuth()
     } = useQuery({
         queryKey: ['inpatients'],
         queryFn: async () => {
-            const response = await api.get("/api/inpatient", {params: {companyId: user?.companyId}});
+            const response = await api.get("/api/inpatient", { params: { companyId: user?.companyId } });
             return response.data;
         },
     });
@@ -95,9 +95,14 @@ const {user} = useAuth()
                                         >
                                             <Eye className="h-4 w-4" />
                                         </Button> */}
-                                        <Button onClick={() => onDischarge(entry.id)} className="bg-blue-500 hover:bg-blue-600">
-                                            {/* <Stethoscope className="h-4 w-4 mr-2" /> */}
-                                            Edit
+                                        <Button
+                                            onClick={() => onDischarge(entry.id)}
+                                            className="bg-blue-500 hover:bg-blue-600"
+                                            disabled={entry.dischargeDate}
+                                        >
+
+                                            <Stethoscope className="h-4 w-4 mr-2" />
+                                            Discharge Patient
                                         </Button>
                                     </div>
                                 </div>
@@ -112,22 +117,31 @@ const {user} = useAuth()
                                         <p className="font-medium">Admitted On</p>
                                         <p className="text-gray-700">{new Date(entry.startDate).toLocaleDateString()}</p>
                                     </div>
-                                    <div>
-                                        <p className="font-medium">Discharge Date</p>
-                                        <p className="text-gray-700">{new Date(entry.dischargeDate).toLocaleDateString()}</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Days Admitted</p>
-                                        <p className="text-gray-700">{entry.days}</p>
-                                    </div>
+                                    {
+                                        entry.dischargeDate &&
+                                        <div>
+                                            <p className="font-medium">Discharge Date</p>
+                                            <p className="text-gray-700">{new Date(entry.dischargeDate).toLocaleDateString()}</p>
+                                        </div>
+                                    }
+                                    {
+                                        entry.days != null && (
+                                            <div>
+                                                <p className="font-medium">Days Admitted</p>
+                                                <p className="text-gray-700">{entry.days}</p>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-
-                                <div className="mt-3 pt-3 border-t border-gray-200">
-                                    <p className="font-medium text-xs mb-1">Final Diagnosis:</p>
-                                    <p className="text-gray-600 text-xs line-clamp-2">
-                                        {entry.finalDiagnosis || "N/A"}
-                                    </p>
-                                </div>
+                                {
+                                    entry.finalDiagnosis &&
+                                    <div className="mt-3 pt-3 border-t border-gray-200">
+                                        <p className="font-medium text-xs mb-1">Final Diagnosis:</p>
+                                        <p className="text-gray-600 text-xs line-clamp-2">
+                                            {entry.finalDiagnosis || "N/A"}
+                                        </p>
+                                    </div>
+                                }
                             </CardContent>
                         </Card>
                     ))}

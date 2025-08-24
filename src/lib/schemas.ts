@@ -36,7 +36,7 @@ export const diagnosisSchema = z.object({
 
 export const patientSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  age: z.number().min(0, "Age must be a positive number"),
+  age: z.number().min(1, "Age must be a positive number"),
   sex: z.string().min(1, "Sex is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   chiefComplaint: z.string().min(1, "Chief complaint is required"),

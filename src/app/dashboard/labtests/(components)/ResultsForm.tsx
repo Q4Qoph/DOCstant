@@ -27,10 +27,8 @@ interface LabTestFormProps {
         testDate: string;
         diagnosisId: string;
         labTestResult?: string;
-        diagnosis?: {
-            name: string;
-            age: number;
-        };
+        name: string;
+        age: string
     };
 }
 
@@ -47,6 +45,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
         labResult: ""
     });
 
+    console.log(labTest)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -113,11 +112,11 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                         <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                                 <p className="font-medium text-gray-600">Patient Name:</p>
-                                <p className="text-gray-900">{labTest?.diagnosis?.name || 'Unknown'}</p>
+                                <p className="text-gray-900">{labTest?.name || 'Unknown'}</p>
                             </div>
                             <div>
                                 <p className="font-medium text-gray-600">Patient Age:</p>
-                                <p className="text-gray-900">{labTest?.diagnosis?.age || 'N/A'}</p>
+                                <p className="text-gray-900">{labTest?.age || 'N/A'}</p>
                             </div>
                             <div>
                                 <p className="font-medium text-gray-600">Test Name:</p>
@@ -152,7 +151,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                             id="labResult"
                             value={formData.labResult}
                             onChange={(e) => setFormData(prev => ({ ...prev, labResult: e.target.value }))}
-                            className={`w-full min-h-[200px] px-3 py-2 border rounded-md border-blue-200 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-vertical ${errors.labResult ? 'border-red-500' : ''}`}
+                            className={`w-full min-h-[200px] px-3 py-2 border rounded-md border-blue-200 focus:border-[#0c9aff] focus:outline-none focus:ring-1 focus:ring-[#0c9aff] resize-vertical ${errors.labResult ? 'border-red-500' : ''}`}
                             placeholder="Enter the detailed laboratory test results here..."
                             required
                         />
@@ -170,10 +169,11 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                         <Button
                             type="submit"
                             disabled={isLoading || !formData.labResult.trim()}
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            className="bg-[#0c9aff] hover:bg-blue-600 text-white"
                         >
                             {isLoading && <Loader className="h-5 w-5 animate-spin" />}
-                            {isLoading ? "Adding Test Result" : "Add Test Results"}                        </Button>
+                            {isLoading ? "Adding Test Result" : "Add Test Results"}
+                         </Button>
                     </div>
                 </form>
             </SheetContent>

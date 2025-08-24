@@ -56,7 +56,7 @@ export default function AICard({ patient, step }: AIResponseCardProps) {
                         <p>No AI analysis available</p>
                         <button
                             className={cn(
-                                "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-3 flex items-center justify-center mx-auto",
+                                "bg-[#0c9aff] hover:bg-blue-500 text-white px-4 py-2 rounded-lg mt-3 flex items-center justify-center mx-auto",
                                 loading && "opacity-70 cursor-not-allowed"
                             )}
                             onClick={handleGenerateAnalysis}

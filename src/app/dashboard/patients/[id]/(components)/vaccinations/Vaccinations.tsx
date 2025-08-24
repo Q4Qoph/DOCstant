@@ -25,7 +25,7 @@ const Vaccinations = ({ patient }: any) => {
                         </CardTitle>
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                                <Button className="bg-[#0c9aff] hover:bg-blue-600 text-white">
                                     Add Vaccination
                                 </Button>
                             </SheetTrigger>

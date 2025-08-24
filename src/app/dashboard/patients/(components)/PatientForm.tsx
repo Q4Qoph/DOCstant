@@ -76,7 +76,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                 setIsSheetOpen(false)
                 setFormData({
                     name: "",
-                    age: 0,
+                    age: 1,
                     sex: "",
                     phoneNumber: "",
                     weight: "",
@@ -135,7 +135,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="age" className="">Age</Label>
+                        <Label htmlFor="age" className="">Age (yrs)</Label>
                         <Input
                             id="age"
                             type="number"

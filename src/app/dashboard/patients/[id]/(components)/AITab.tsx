@@ -82,7 +82,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
                             <Bot className="h-12 w-12 mx-auto mb-3 opacity-50" />
                             <p>No AI analysis available</p>
                             <Button
-                                className="bg-blue-500 hover:bg-blue-600 mt-3"
+                                className="bg-[#0c9aff] hover:bg-blue-500 mt-3"
                                 onClick={handleGenerateAnalysis}
                                 disabled={loading}
                             >

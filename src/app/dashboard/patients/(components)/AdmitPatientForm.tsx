@@ -9,6 +9,7 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 import { ParamValue } from "next/dist/server/request/params";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface AdmitPatientFormProps {
     open: boolean
@@ -27,6 +28,8 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
         bed: ""
     });
 
+    const router = useRouter()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
@@ -44,6 +47,7 @@ export default function AdmitPatientForm({ open, onOpenChange, diagnosisId }: Ad
                     bed: ""
                 });
                 onOpenChange(false)
+                router.push("/dashboard/admitted-patients")
             }
         } catch (error: any) {
             toast.error(error.message || "Failed to admit patient");

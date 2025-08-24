@@ -215,6 +215,7 @@ export const useNotifications = () => {
       toDepartment: number
     }) => {
       if (socketRef.current && socketRef.current.connected) {
+        console.log(data)
         socketRef.current.emit("notify", data)
       } else {
         console.warn("Socket not connected. Notification not sent.")
