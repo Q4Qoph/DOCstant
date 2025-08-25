@@ -177,7 +177,7 @@ export default function LabTestForm({ open, onOpenChange, diagnosisId, labTest }
                         <Button
                             type="submit"
                             disabled={isLoading}
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            className="bg-[#0c9aff] hover:bg-blue-500 text-white"
                         >
                             {isLoading
                                 ? isEditing ? "Saving..." : "Recording..."

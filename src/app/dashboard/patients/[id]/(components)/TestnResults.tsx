@@ -34,7 +34,7 @@ const TestnResults = ({ id }: any) => {
                             <TestTube className="h-5 w-5 text-blue-600" />
                             Laboratory Results
                         </CardTitle>
-                        <Button onClick={() => setLabTestOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
+                        <Button onClick={() => setLabTestOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500 text-white">
                             Add Test
                         </Button>
                     </CardHeader>

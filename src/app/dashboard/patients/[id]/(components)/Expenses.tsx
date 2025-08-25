@@ -86,7 +86,7 @@ const Expenses = ({ id }: { id: any }) => {
                         Expenses ({expenses?.length || 0})
                     </CardTitle>
                     <div className="flex gap-2">
-                        <Button onClick={() => setExpenseOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
+                        <Button onClick={() => setExpenseOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500 text-white">
                             <Plus className="h-4 w-4 mr-2" />
                             Add Expense
                         </Button>
@@ -95,7 +95,7 @@ const Expenses = ({ id }: { id: any }) => {
                 <CardContent className="p-6">
                     {expensesLoading ? (
                         <div className="flex items-center justify-center py-8">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0c9aff]"></div>
                         </div>
                     ) : expenses && expenses.length > 0 ? (
                         <div className="space-y-4">
@@ -221,7 +221,7 @@ const Expenses = ({ id }: { id: any }) => {
                                             className={`w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200
     ${isPaid === true
                                                     ? "bg-green-500 hover:bg-green-700 text-white"
-                                                    : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                                                    : "bg-[#0c9aff] hover:bg-blue-500 text-white"
                                                 }`}
                                         >
                                             {createPaymentMutation.isPending ? (

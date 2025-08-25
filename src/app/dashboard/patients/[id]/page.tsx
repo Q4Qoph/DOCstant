@@ -150,7 +150,7 @@ const RecordDetails = () => {
                                             <Target className="h-5 w-5 text-blue-600" />
                                             Treatments ({treatments?.length || 0})
                                         </CardTitle>
-                                        <Button onClick={() => setTreatmentOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
+                                        <Button onClick={() => setTreatmentOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500 text-white">
                                             <Plus className="h-4 w-4 mr-2" />
                                             Add Treatment
                                         </Button>
@@ -158,7 +158,7 @@ const RecordDetails = () => {
                                     <CardContent className="p-6">
                                         {treatmentsLoading ? (
                                             <div className="flex items-center justify-center py-8">
-                                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0c9aff]"></div>
                                             </div>
                                         ) : treatments && treatments.length > 0 ? (
                                             <div className="space-y-4">
