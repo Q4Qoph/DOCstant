@@ -102,7 +102,7 @@ export default function AdmittedPatients() {
                                         >
 
                                             <Stethoscope className="h-4 w-4 mr-2" />
-                                            Discharge Patient
+                                            {entry.dischargeDate ? "Discharged" : "Discharge Patient"}
                                         </Button>
                                     </div>
                                 </div>

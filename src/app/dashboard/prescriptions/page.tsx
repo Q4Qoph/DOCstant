@@ -41,6 +41,8 @@ import { toast } from "sonner"
 import { useNotifications } from "@/hooks/useNotifications"
 import Link from "next/link"
 import { formatDistanceToNow, isAfter, subHours } from "date-fns";
+import PageGuard from "@/app/(auth)/PageGuard"
+import { Roles } from "@/constants/roles"
 
 interface PrescribedPatient {
     id: number
@@ -70,7 +72,7 @@ export default function PrescriptionDashboard() {
     const [filter, setFilter] = useState<string>("all")
     const [activeTab, setActiveTab] = useState<string>("prescriptions")
 
-    const [patientFilter, setPatientFilter] = useState<string>("all")
+    const [patientFilter, setPatientFilter] = useState<string>("mine")
     const [dateFilter, setDateFilter] = useState<string>("all")
     const [statusFilter, setStatusFilter] = useState<string>("all")
 
@@ -506,6 +508,8 @@ export default function PrescriptionDashboard() {
     }
 
     return (
+        <PageGuard allowedRoles={[Roles.ADMIN, Roles.SUPER_ADMIN, Roles.RECEPTIONIST]}>
+
         <div className="p-8 space-y-6">
             <div className="flex flex-col space-y-4">
                 <div>
@@ -517,7 +521,7 @@ export default function PrescriptionDashboard() {
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="prescriptions" className="flex items-center gap-2">
                             <FileText className="h-4 w-4" />
-                            All Prescriptions
+                            Prescriptions Queue
                         </TabsTrigger>
                         <TabsTrigger value="patients" className="flex items-center gap-2">
                             <Users className="h-4 w-4" />
@@ -833,8 +837,8 @@ export default function PrescriptionDashboard() {
                                                 <SelectValue placeholder="Filter by assignment" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="all">All Patients</SelectItem>
-                                                <SelectItem value="mine">My Patients Only</SelectItem>
+                                                <SelectItem value="all">Available to Assign (patients you can take on)</SelectItem>
+                                                <SelectItem value="mine">My Patients (patients already assigned to you)</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -1136,7 +1140,7 @@ export default function PrescriptionDashboard() {
                                                             ) : (
                                                                 <UserCheck className="h-4 w-4" />
                                                             )}
-                                                            Assign to Me
+                                                            Assign to me
                                                         </Button>
                                                     )}
 
@@ -1287,5 +1291,6 @@ export default function PrescriptionDashboard() {
                 </DialogContent>
             </Dialog>
         </div>
+        </PageGuard>
     )
 }
