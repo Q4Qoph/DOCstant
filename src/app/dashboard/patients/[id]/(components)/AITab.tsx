@@ -31,7 +31,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
             setLoading(false)
         }
     }
-    
+
     const analyzePrescribe = patient.aiResponse?.find(
         item => item.step == "2"
     );
@@ -56,7 +56,7 @@ const AITab = ({ patient }: { patient: Patient }) => {
                             )} />
                             {loading ? "Regenerating..." : "Regenerate Diagnosis"}
                         </Button> */}
-                        <Button onClick={() => setPrescOpen(true)} className="bg-blue-500 hover:bg-blue-600 mt-4">
+                        <Button onClick={() => setPrescOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500 mt-4">
                             <Pill className="h-4 w-4 mr-2" />
                             Prescribe Medication
                         </Button>

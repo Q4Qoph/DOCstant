@@ -26,7 +26,7 @@ const Examinations = ({ patient }: any) => {
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <CardTitle className="flex items-center gap-2">
-                                <Stethoscope className="h-5 w-5 text-blue-600" />
+                                <Stethoscope className="h-5 w-5 text-[#0c9aff]" />
                                 Physical Examinations ({patient.examinations.length})
                             </CardTitle>
                             
@@ -35,7 +35,7 @@ const Examinations = ({ patient }: any) => {
                                 <SheetTrigger asChild>
                                     <Button 
                                         size="sm" 
-                                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                                        className="bg-[#0c9aff] hover:bg-blue-500 text-white"
                                     >
                                         <Plus className="h-4 w-4 mr-1" />
                                         Add Examination
@@ -56,7 +56,7 @@ const Examinations = ({ patient }: any) => {
                                     <div key={index} className="bg-blue-50 p-6 rounded-lg border border-blue-200">
                                         <div className="flex justify-between items-start mb-4">
                                             <h4 className="font-semibold text-lg">Examination #{index + 1}</h4>
-                                            <Badge className="bg-blue-100 text-blue-800 border-blue-300">
+                                            <Badge className="bg-blue-100 text-[#0c9aff] border-blue-300">
                                                 {techniqueOptions[examination.technique] ?? "Unknown"}
                                             </Badge>
                                         </div>
@@ -76,7 +76,7 @@ const Examinations = ({ patient }: any) => {
                                     <SheetTrigger asChild>
                                         <Button 
                                             variant="outline" 
-                                            className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                                            className="border-blue-300 text-[#0c9aff] hover:bg-blue-50"
                                         >
                                             <Plus className="h-4 w-4 mr-2" />
                                             Add First Examination

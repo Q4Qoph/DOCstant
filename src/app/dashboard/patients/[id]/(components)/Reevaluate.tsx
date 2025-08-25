@@ -59,10 +59,10 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
             <Card className="shadow-none">
                 <CardHeader className="flex justify-between border-b border-slate-200">
                     <CardTitle className="flex items-center gap-2">
-                        <Clock className="h-5 w-5 text-blue-600" />
+                        <Clock className="h-5 w-5 text-[#0c9aff]" />
                         Patient Reevaluations
                     </CardTitle>
-                    <Button onClick={() => setReevaluationOpen(true)} className="bg-blue-500 hover:bg-blue-600 text-white">
+                    <Button onClick={() => setReevaluationOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500 text-white">
                         <Plus className="h-4 w-4 mr-2" />
                         Re-evaluate Patient
                     </Button>
@@ -70,7 +70,7 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                 <CardContent className="p-6">
                     {reevaluationsLoading ? (
                         <div className="flex items-center justify-center py-8">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0c9aff]"></div>
                         </div>
                     ) : reevaluations && reevaluations.length > 0 ? (
                         <div className="space-y-6">
@@ -123,13 +123,13 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                                     <div className="mt-4">
                                         <div className="flex justify-between items-center mb-3">
                                             <h5 className="font-semibold flex items-center gap-2">
-                                                <Bot className="h-4 w-4 text-blue-600" />
+                                                <Bot className="h-4 w-4 text-[#0c9aff]" />
                                                 AI Assessment
                                             </h5>
                                             {(!reevaluation.aiResponse || reevaluation.aiResponse.length === 0) && (
                                                 <Button
                                                     size="sm"
-                                                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                                                    className="bg-[#0c9aff] hover:bg-blue-500 text-white"
                                                     onClick={() => handleGenerateReevaluationAnalysis(reevaluation.reevaluation.id)}
                                                     disabled={loadingAI === reevaluation.reevaluation.id}
                                                 >
@@ -181,11 +181,11 @@ const Reevaluate = ({ id, patient }: { id: any, patient: any }) => {
                     ) : (
                         <div className="text-center py-12">
                             <div className="bg-gradient-to-br from-blue-100 to-blue-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
-                                <Activity className="h-12 w-12 text-blue-500" />
+                                <Activity className="h-12 w-12 text-[#0c9aff]" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">No Reevaluations Yet</h3>
                             <p className="text-gray-500 mb-4">Track patient progress with follow-up evaluations</p>
-                            <Button onClick={() => setReevaluationOpen(true)} className="bg-blue-500 hover:bg-blue-600">
+                            <Button onClick={() => setReevaluationOpen(true)} className="bg-[#0c9aff] hover:bg-blue-500">
                                 <Plus className="h-4 w-4 mr-2" />
                                 Review Patient
                             </Button>

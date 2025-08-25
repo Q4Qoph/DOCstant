@@ -62,7 +62,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
 
             if (response.status === 200) {
                 toast.success("Results updated successfully");
-                queryClient.invalidateQueries({ queryKey: ["labtests", labTest?.diagnosisId] })
+                queryClient.invalidateQueries({ queryKey: ["labtests", diagnosisId] })
 
                 // Notify specialists about the updated results
                 if (specialists && specialists.length > 0) {

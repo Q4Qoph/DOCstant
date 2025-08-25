@@ -165,7 +165,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
               <Button variant="outline">Cancel</Button>
             </SheetClose>
             <Button
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-[#0c9aff] hover:bg-blue-500"
               onClick={handleSubmit}
               disabled={loading}
             >

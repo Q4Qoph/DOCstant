@@ -128,7 +128,7 @@ export default function AddExaminationForm({ patientId, patientData, onCancel }:
                                     value={examination.physicalExamination}
                                     onChange={(e) => updateExamination(index, 'physicalExamination', e.target.value)}
                                     placeholder="Describe the physical examination findings..."
-                                    className={`border-blue-200 focus:border-blue-500 min-h-[100px] ${
+                                    className={`border-blue-200 focus:border-[#0c9aff] min-h-[100px] ${
                                         errors[`examinations.${index}.physicalExamination`] ? 'border-red-500' : ''
                                     }`}
                                 />
@@ -143,7 +143,7 @@ export default function AddExaminationForm({ patientId, patientData, onCancel }:
                                     value={String(examination.technique)}
                                     onValueChange={(value) => updateExamination(index, "technique", parseInt(value))}
                                 >
-                                    <SelectTrigger className="border-blue-200 focus:border-blue-500">
+                                    <SelectTrigger className="border-blue-200 focus:border-[#0c9aff]">
                                         <SelectValue placeholder="Select examination technique" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -189,7 +189,7 @@ export default function AddExaminationForm({ patientId, patientData, onCancel }:
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-[#0c9aff] hover:bg-blue-500 text-white"
                     >
                         {isLoading ? "Saving..." : "Save Examination(s)"}
                     </Button>

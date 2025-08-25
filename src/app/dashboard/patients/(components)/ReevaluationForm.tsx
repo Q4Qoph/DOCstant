@@ -196,7 +196,7 @@ const ReevaluationForm = ({
             <SheetContent className="sm:max-w-[900px] w-full overflow-y-auto p-4">
                 <SheetHeader>
                     <SheetTitle className="flex items-center gap-2">
-                        <Activity className="h-5 w-5 text-blue-500" />
+                        <Activity className="h-5 w-5 text-[#0c9aff]" />
                         Patient Reevaluation
                         <Clock className="h-4 w-4 text-gray-400 ml-2" />
                     </SheetTitle>
@@ -354,7 +354,7 @@ const ReevaluationForm = ({
                                 <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2 text-lg">
-                                            <Stethoscope className="h-5 w-5 text-blue-500" />
+                                            <Stethoscope className="h-5 w-5 text-[#0c9aff]" />
                                             Vital Signs
                                         </CardTitle>
                                     </CardHeader>
@@ -515,7 +515,7 @@ const ReevaluationForm = ({
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-blue-600 hover:bg-blue-700"
+                                className="bg-[#0c9aff] hover:bg-blue-500"
                             >
                                 {isLoading ? (
                                     <>
