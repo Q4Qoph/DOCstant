@@ -29,6 +29,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
+          { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
         ];
       case 'GeneralPracticioner':

@@ -7,7 +7,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
     Activity, Bot, Stethoscope,
     Plus, Clock,
-    Target
+    Target,
+    ArrowLeft
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
@@ -86,20 +87,12 @@ const RecordDetails = () => {
                 <div className="mb-8">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-4">
-                            {/* <Button
-                                onClick={onBack}
-                                variant="outline"
-                                className="border-slate-300 hover:bg-slate-100 hover:border-slate-400 transition-colors"
-                            >
-                                <ArrowLeft className="h-4 w-4 mr-2" />
-                                Back to List
-                            </Button> */}
                             <div>
                                 <h1 className="text-3xl font-bold text-slate-900">
                                     {patient?.name || 'Patient Details'}
                                 </h1>
                                 <p className="text-slate-600 mt-1">
-                                    ID: {patient?.idNumber} • {patient?.age} years old
+                                    ID: {patient?.idNumber} • Sex {patient?.sex} • {patient?.age} years old
                                 </p>
                                 {/* <p className=" mt-1">
                                     Phone {patient.phoneNumber}  • {patient.address}
@@ -107,10 +100,7 @@ const RecordDetails = () => {
                             </div>
                         </div>
                         <div className="space-x-2">
-
-
                         </div>
-
                     </div>
                 </div>
 
