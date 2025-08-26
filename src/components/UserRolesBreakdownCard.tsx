@@ -3,21 +3,23 @@ import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Users } from "lucide-react"
 import api from "@/lib/axios"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface UserRole {
   role: string
   count: number
 }
 
-const fetchUserRoles = async (): Promise<UserRole[]> => {
-  const response = await api.get("/api/Metrics/userCount")
+const fetchUserRoles = async (companyId: any): Promise<UserRole[]> => {
+  const response = await api.get("/api/Metrics/userCount", { params: { companyId } })
   return response.data
 }
 
 export default function UserRolesBreakdownCard() {
+  const { user } = useAuth()
   const { data, isLoading, isError, error } = useQuery<UserRole[]>({
     queryKey: ["userRoles"],
-    queryFn: fetchUserRoles,
+    queryFn: () => fetchUserRoles(user?.companyId),
   })
 
   return (

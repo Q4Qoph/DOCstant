@@ -18,23 +18,27 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const pathname = usePathname();
 
   const getMenuItems = () => {
+    const notificationItem = { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' };
+
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
     ];
+    let roleItems: typeof baseItems = [];
 
     switch (user?.role) {
       case 'Receptionist/Nurse':
       case 0:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+
         ];
       case 'GeneralPracticioner':
       case 1:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
@@ -43,32 +47,35 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         ];
       case 'Specialist':
       case 2:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+
         ];
       case 'Pharmacist':
       case 3:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+
         ];
       case 'Lab Technician':
       case 4:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+
         ];
       case 'Admin':
       case 5:
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
@@ -77,10 +84,9 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-          { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
         ];
       case 'Super Admin':
-        return [
+        roleItems = [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
@@ -89,10 +95,9 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-          { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/notifications' },
         ];
       default:
-        return baseItems;
+        return [...roleItems, notificationItem];
     }
   };
 
