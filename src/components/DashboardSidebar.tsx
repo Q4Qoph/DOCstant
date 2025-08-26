@@ -23,59 +23,65 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: FileText, href: '/dashboard' },
     ];
+
     let roleItems: typeof baseItems = [];
 
     switch (user?.role) {
-      case 'Receptionist/Nurse':
+      case 'Receptionist':
       case 0:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-
+          notificationItem,
         ];
+
       case 'GeneralPracticioner':
       case 1:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+          notificationItem,
         ];
+
       case 'Specialist':
       case 2:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
-          { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-
+          notificationItem,
         ];
+
       case 'Pharmacist':
       case 3:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'prescriptions', label: 'Prescriptions', icon: Pill, href: '/dashboard/prescriptions' },
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-
+          notificationItem,
         ];
-      case 'Lab Technician':
+
+      case 'LabTech':
       case 4:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'labtests', label: 'Lab Tests', icon: TestTube, href: '/dashboard/labtests' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
-
+          notificationItem,
         ];
+
       case 'Admin':
       case 5:
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
@@ -84,9 +90,11 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+          notificationItem,
         ];
+
       case 'Super Admin':
-        roleItems = [
+        return [
           ...baseItems,
           { id: 'patients', label: 'All Patients', icon: List, href: '/dashboard/patients' },
           { id: 'admitted-patients', label: 'Admitted Patients', icon: BedDouble, href: '/dashboard/admitted-patients' },
@@ -95,9 +103,11 @@ const DashboardSidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           { id: 'inventory', label: 'Inventory', icon: HeartPulse, href: '/dashboard/inventory' },
           { id: 'users', label: 'Users', icon: Users, href: '/dashboard/users' },
           { id: 'chat', label: 'Chat', icon: MessageCircle, href: '/dashboard/chat' },
+          notificationItem,
         ];
+
       default:
-        return [...roleItems, notificationItem];
+        return [...baseItems, notificationItem];
     }
   };
 

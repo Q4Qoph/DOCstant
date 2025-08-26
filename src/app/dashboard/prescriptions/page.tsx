@@ -508,7 +508,7 @@ export default function PrescriptionDashboard() {
     }
 
     return (
-        <PageGuard allowedRoles={[Roles.ADMIN, Roles.SUPER_ADMIN, Roles.RECEPTIONIST]}>
+        // <PageGuard allowedRoles={[Roles.ADMIN, Roles.SUPER_ADMIN, Roles.RECEPTIONIST]}>
 
         <div className="p-8 space-y-6">
             <div className="flex flex-col space-y-4">
@@ -1291,6 +1291,6 @@ export default function PrescriptionDashboard() {
                 </DialogContent>
             </Dialog>
         </div>
-        </PageGuard>
+        // </PageGuard>
     )
 }
