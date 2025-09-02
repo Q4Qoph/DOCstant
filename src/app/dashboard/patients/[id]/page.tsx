@@ -2,13 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
-    Activity, Bot, Stethoscope,
-    Plus, Clock,
+    Stethoscope,
+    Plus,
     Target,
-    ArrowLeft
+    Download
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useParams, useRouter } from "next/navigation";
@@ -24,13 +23,12 @@ import BasicInfo from "./(components)/BasicInfo";
 import Reevaluate from "./(components)/Reevaluate";
 import Expenses from "./(components)/Expenses";
 import { Treatment } from "@/types";
-import AI from "./(components)/AITab";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import TestnResults from "./(components)/TestnResults";
 import Examinations from "./(components)/examinations/Examinations";
 import MedicalHistory from "./(components)/MedicalHistory";
 import AITab from "./(components)/AITab";
 import Vaccinations from "./(components)/vaccinations/Vaccinations";
+import { printPatientReport } from "@/utils/printPatientReport";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -45,7 +43,6 @@ const RecordDetails = () => {
     const [activeTab, setActiveTab] = useState("basic-info");
 
     const { id } = useParams();
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     const {
@@ -57,6 +54,7 @@ const RecordDetails = () => {
         queryFn: () => getPatientById(id).then((res) => res.data),
         enabled: !!id,
     });
+
     const {
         data: treatments,
         isLoading: treatmentsLoading,
@@ -65,14 +63,30 @@ const RecordDetails = () => {
         queryFn: () => getTreatments(id as string).then((res) => res.data),
         enabled: !!id,
     });
+
     useEffect(() => {
         console.log(patient)
     }, [patient])
+
     const createTreatmentMutation = useMutation({
         mutationFn: createTreatment,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["treatments", id] });
             setTreatmentOpen(false);
+        },
+    });
+
+    // Lab tests
+    const {
+        data: labTests,
+        isLoading: isLabLoading,
+        isError: isLabError,
+    } = useQuery({
+        queryKey: ["labtests", id],
+        queryFn: async () => {
+            const response = await api.get(`/api/LabTest/${id}`);
+            patient.labTests= response.data
+            return response.data;
         },
     });
 
@@ -100,6 +114,13 @@ const RecordDetails = () => {
                             </div>
                         </div>
                         <div className="space-x-2">
+                            <p
+                                onClick={() => printPatientReport(patient, treatments || [], patient.expenses || [], id as string)}
+                                className="flex cursor-pointer gap-2 text-[#0c9aff]"
+                            >
+                                <Download /> Print Report
+                            </p>
+
                         </div>
                     </div>
                 </div>
@@ -178,7 +199,12 @@ const RecordDetails = () => {
                             <Expenses id={id} />
 
                             {/* Laboratory Results Tab */}
-                            <TestnResults id={id} />
+                            <TestnResults 
+                            id={id} 
+                            labTests={labTests}
+                            isLoading={isLabLoading}
+                            isError={isLabError}
+                            />
 
                             {/* AI Analysis Tab */}
                             <AITab patient={patient} />

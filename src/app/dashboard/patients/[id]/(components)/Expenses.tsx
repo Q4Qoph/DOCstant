@@ -11,6 +11,7 @@ import { CreditCard, DollarSign, Plus, History, Receipt, CheckCircle2 } from "lu
 import { useState } from "react"
 import { toast } from "sonner"
 import ExpenseForm from "../../(components)/ExpenseForm"
+import { printReceipt } from "@/utils/printReceipt"
 
 const getExpenses = (diagnosisId: string) => api.get(`/api/Expense/${diagnosisId}`)
 const getPayments = (diagnosisId: string) => api.get(`/api/Payment/${diagnosisId}`)
@@ -72,7 +73,13 @@ const Expenses = ({ id }: { id: any }) => {
     const handleStripePayment = () => {
         createPaymentMutation.mutate()
     }
-
+    const handlePrintReceipt = () => {
+        if (!expenses || !payments) {
+            toast.error("No data to print")
+            return
+        }
+        printReceipt(id as string, expenses, payments)
+    }
     const totalAmount = payments
         ? payments.prescriptionsCost + payments.labTestCost + payments.inpatientCost + payments.expenseCost
         : 0
@@ -215,28 +222,42 @@ const Expenses = ({ id }: { id: any }) => {
                                                     ? "Paid"
                                                     : "Mark As Paid"}
                                         </Button> */}
-                                        <Button
-                                            onClick={handleStripePayment}
-                                            disabled={statusLoading || createPaymentMutation.isPending || isPaid === true}
-                                            className={`w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200
+                                        <div className="space-y-3 flex gap-3">
+
+                                            <Button
+                                                onClick={handleStripePayment}
+                                                disabled={statusLoading || createPaymentMutation.isPending || isPaid === true}
+                                                className={`w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200
     ${isPaid === true
-                                                    ? "bg-green-500 hover:bg-green-700 text-white"
-                                                    : "bg-[#0c9aff] hover:bg-blue-500 text-white"
-                                                }`}
-                                        >
-                                            {createPaymentMutation.isPending ? (
-                                                <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
-                                            ) : isPaid === true ? (
-                                                <CheckCircle2 className="h-5 w-5 mr-2" />
-                                            ) : (
-                                                <CreditCard className="h-5 w-5 mr-2" />
-                                            )}
-                                            {createPaymentMutation.isPending
-                                                ? "Saving..."
-                                                : isPaid === true
-                                                    ? "Paid"
-                                                    : "Mark As Paid"}
-                                        </Button>
+                                                        ? "bg-green-500 hover:bg-green-700 text-white"
+                                                        : "bg-[#0c9aff] hover:bg-blue-500 text-white"
+                                                    }`}
+                                            >
+                                                {createPaymentMutation.isPending ? (
+                                                    <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+                                                ) : isPaid === true ? (
+                                                    <CheckCircle2 className="h-5 w-5 mr-2" />
+                                                ) : (
+                                                    <CreditCard className="h-5 w-5 mr-2" />
+                                                )}
+                                                {createPaymentMutation.isPending
+                                                    ? "Saving..."
+                                                    : isPaid === true
+                                                        ? "Paid"
+                                                        : "Mark As Paid"
+                                                }
+
+                                            </Button>
+                                            <Button
+                                                onClick={handlePrintReceipt}
+                                                variant="outline"
+                                                className="w-fit h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+                                            >
+                                                <Receipt className="h-5 w-5 mr-2" />
+                                                Print Receipt
+                                            </Button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

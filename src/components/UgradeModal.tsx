@@ -66,7 +66,7 @@ export function UpgradeModal() {
   }
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={closeModal}>
+    <Dialog open={isModalOpen} onOpenChange={closeModal} >
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0">
         <div className="bg-gradient-to-br from-[#0c9aff]/5 to-blue-50 p-6">
           <DialogHeader className="text-center space-y-4">

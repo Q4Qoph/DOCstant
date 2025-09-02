@@ -148,9 +148,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                 if (specialists && specialists.length > 0) {
                     sendNotification({
                         title: existingPatient ? "Patient Update Alert" : "Patient Registration Alert",
-                        message: existingPatient 
-                            ? "A patient record has been updated. Please review the changes."
-                            : "A new patient has been recorded. Please proceed with the required pharmacy protocols.",
+                        message: "A new patient has been recorded. Please proceed with the required pharmacy protocols.",
                         fromUserId: user!.id,
                         fromDepartment: 0,
                         toDepartment: 2,
@@ -159,8 +157,8 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                 } else {
                     toast.warning("No specialists available to notify. Please inform the responsible department manually or by chat.");
                 }
-                
                 setIsSheetOpen(false);
+                
                 handleClearForm();
             }
         } catch (error: any) {
