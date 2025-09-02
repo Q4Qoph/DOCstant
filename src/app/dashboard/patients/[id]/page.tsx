@@ -29,6 +29,8 @@ import MedicalHistory from "./(components)/MedicalHistory";
 import AITab from "./(components)/AITab";
 import Vaccinations from "./(components)/vaccinations/Vaccinations";
 import { printPatientReport } from "@/utils/printPatientReport";
+import RoleGate from "@/app/(auth)/RoleGate";
+import { Roles } from "@/constants/roles";
 
 // Types
 const getPatientById = (id: ParamValue) => api.get(`/api/diagnosisrecord/${id}`);
@@ -85,7 +87,7 @@ const RecordDetails = () => {
         queryKey: ["labtests", id],
         queryFn: async () => {
             const response = await api.get(`/api/LabTest/${id}`);
-            patient.labTests= response.data
+            patient.labTests = response.data
             return response.data;
         },
     });
@@ -199,15 +201,15 @@ const RecordDetails = () => {
                             <Expenses id={id} />
 
                             {/* Laboratory Results Tab */}
-                            <TestnResults 
-                            id={id} 
-                            labTests={labTests}
-                            isLoading={isLabLoading}
-                            isError={isLabError}
+                            <TestnResults
+                                id={id}
+                                labTests={labTests}
+                                isLoading={isLabLoading}
+                                isError={isLabError}
                             />
-
+                            
+                                <AITab patient={patient} />
                             {/* AI Analysis Tab */}
-                            <AITab patient={patient} />
 
                             {/* Reevaluations Tab */}
                             <Reevaluate id={id} patient={patient} />
