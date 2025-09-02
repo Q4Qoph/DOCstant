@@ -1,22 +1,22 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
 api.interceptors.request.use(
-    (config) => {
-        if (typeof window !== "undefined") {
-            const token = localStorage.getItem("token");
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            } else {
-                console.warn("Unauthorized!!");
-            }
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        console.warn("Unauthorized!!");
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 let triggerTrialExpiredModal: (() => void) | null = null
@@ -34,7 +34,7 @@ api.interceptors.response.use(
     if (
       error.response?.status === 400 &&
       typeof message === "string" &&
-      message.includes("Kindly pay for your Subscription")
+      message.includes("Kindly pay for your Subscription") || message.includes("Kindly Pay for your Subscription")
     ) {
       // Fire a global event so any component can listen for it
       window.dispatchEvent(new CustomEvent("show-payment-modal"))

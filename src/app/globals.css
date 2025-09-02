@@ -2,7 +2,10 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+:root {
+  --z-sheet: 50;
+  --z-dialog: 60;
+}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
