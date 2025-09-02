@@ -93,7 +93,7 @@ const PrescriptionSheet = ({ diagnosisId, open, onOpenChange }: PrescriptionForm
         });
 
       } else {
-        toast.warning("No pharmacists available to notify. Please follow up with the pharmacy department manually.");
+        toast.warning("No pharmacists available. Follow up manually and add pharmacists to your org to receive future alerts.");
       }
 
       onOpenChange(false)

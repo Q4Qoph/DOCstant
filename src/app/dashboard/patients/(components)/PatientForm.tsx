@@ -59,11 +59,11 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
         setIsSearching(true);
         try {
             const response = await api.get(`/api/DiagnosisRecord/patient/${searchIdNumber}`);
-            
+
             if (response.data) {
                 const patientData = response.data;
                 setExistingPatient(patientData);
-                
+
                 // Prepopulate form with existing patient data
                 setFormData({
                     name: patientData.name || "",
@@ -85,7 +85,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                     toxicHabits: patientData.toxicHabits || "",
                     isPregnant: patientData.isPregnant || false
                 });
-                
+
                 toast.success("Patient found! Data has been loaded.");
             }
         } catch (error: any) {
@@ -135,8 +135,8 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
 
         try {
             const validatedData = patientSchema.parse(formData);
-            const response = await api.post("/api/DiagnosisRecord", { 
-                ...validatedData, 
+            const response = await api.post("/api/DiagnosisRecord", {
+                ...validatedData,
                 companyId: Number(user?.companyId),
                 isUpdate: !!existingPatient // Flag to indicate if this is updating an existing patient
             });
@@ -144,21 +144,24 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
             if (response.status == 200) {
                 toast.success(existingPatient ? "Patient updated successfully" : "Patient recorded successfully");
                 queryClient.invalidateQueries({ queryKey: ["patients"] });
-                
+
                 if (specialists && specialists.length > 0) {
                     sendNotification({
                         title: existingPatient ? "Patient Update Alert" : "Patient Registration Alert",
-                        message: "A new patient has been recorded. Please proceed with the required pharmacy protocols.",
+                        message: existingPatient
+                            ? "Quick Action Required: An existing patient's profile has been updated. Please review their profile immediately to see the next required steps."
+                            : "Quick Action Required: A new patient has been registered. Please open their profile and complete the necessary initial actions.",
+
                         fromUserId: user!.id,
                         fromDepartment: 0,
                         toDepartment: 2,
                         toUserIds: specialists.map((u: any) => u.id),
                     });
                 } else {
-                    toast.warning("No specialists available to notify. Please inform the responsible department manually or by chat.");
+                    toast.warning("No specialists are currently available to receive notifications. Please alert the responsible department manually (e.g., via chat or phone).");
                 }
                 setIsSheetOpen(false);
-                
+
                 handleClearForm();
             }
         } catch (error: any) {
@@ -201,7 +204,7 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                                     onChange={(e) => {
                                         const newValue = e.target.value;
                                         setSearchIdNumber(newValue);
-                                        
+
                                         // If search field is cleared and we had an existing patient, reset to new record mode
                                         if (newValue === "" && existingPatient) {
                                             setExistingPatient(null);
@@ -250,8 +253,8 @@ export default function PatientForm({ setIsSheetOpen, onCancel }: any) {
                                 Clear
                             </Button>
                         </div>
-                        
-{existingPatient ? (
+
+                        {existingPatient ? (
                             <div className="bg-green-50 border border-green-200 rounded-md p-3">
                                 <div className="flex items-center gap-2 text-green-800">
                                     <User className="h-4 w-4" />
