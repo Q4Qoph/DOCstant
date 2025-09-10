@@ -159,9 +159,8 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                                     "text-sm leading-relaxed",
                                     !notification.read ? "text-foreground/80" : "text-muted-foreground",
                                 )}
-                            >
-                                {notification.message}
-                            </p>
+                                dangerouslySetInnerHTML={{ __html: notification.message }}
+                            />
 
                             <div className="flex items-center gap-1 text-xs text-muted-foreground/70">
                                 <Clock className="h-3 w-3" />

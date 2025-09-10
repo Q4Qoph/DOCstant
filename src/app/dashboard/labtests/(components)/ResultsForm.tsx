@@ -45,8 +45,6 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
         labResult: ""
     });
 
-    console.log(labTest)
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
@@ -68,7 +66,9 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                 if (specialists && specialists.length > 0) {
                     sendNotification({
                         title: "Lab Results Updloaded",
-                        message: `Laboratory test results for ${labTest?.testName} have been updated. Please <a href="/dashboard/patients/${labTest?.diagnosisId}" class="text-blue-600 underline">review the results</a> and proceed with clinical evaluation.`,
+                        message: `Laboratory test results for ${labTest?.testName} have been updated. Please <a href="/dashboard/patients/${encodeURIComponent(
+                            labTest!.diagnosisId
+                        )}"class="text-blue-600 underline">review the results</a> and proceed with clinical evaluation.`,
                         fromUserId: user!.id,
                         fromDepartment: 3,
                         toDepartment: 2,
@@ -173,7 +173,7 @@ export default function ResultsForm({ open, onOpenChange, diagnosisId, labTest }
                         >
                             {isLoading && <Loader className="h-5 w-5 animate-spin" />}
                             {isLoading ? "Adding Test Result" : "Add Test Results"}
-                         </Button>
+                        </Button>
                     </div>
                 </form>
             </SheetContent>
