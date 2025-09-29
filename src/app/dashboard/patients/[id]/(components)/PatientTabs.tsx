@@ -9,14 +9,14 @@ export default function PatientTabs() {
 
   const tabs = [
     { value: "basic-info", icon: User, label: "Basic Info", shortLabel: "Info", allowedRoles: [Roles.ADMIN, Roles.SUPER_ADMIN, Roles.GP, Roles.SPECIALIST, Roles.RECEPTIONIST] },
-    { value: "medical-history", icon: FileText, label: "Medical History", shortLabel: "Medical", allowedRoles: [Roles.GP, Roles.SPECIALIST, Roles.RECEPTIONIST] },
-    { value: "examinations", icon: Stethoscope, label: "Examinations", shortLabel: "Exams", allowedRoles: [Roles.GP, Roles.SPECIALIST] },
-    { value: "vaccinations", icon: Activity, label: "Vaccinations", shortLabel: "Vaccines", allowedRoles: [Roles.GP, Roles.RECEPTIONIST,Roles.SPECIALIST] },
-    { value: "laboratory", icon: TestTube, label: "Laboratory", shortLabel: "Lab", allowedRoles: [Roles.LAB_TECH, Roles.GP, Roles.SPECIALIST] },
-    { value: "ai-analysis", icon: Bot, label: "Analyze & Prescribe", shortLabel: "Prescribe", allowedRoles: [Roles.ADMIN,Roles.SPECIALIST] },
-    { value: "treatments", icon: Target, label: "Treatments", shortLabel: "Treatment", allowedRoles: [Roles.GP, Roles.SPECIALIST] },
-    { value: "expenses", icon: DollarSign, label: "Expenses & Payments", shortLabel: "Expenses", allowedRoles: [Roles.ADMIN, Roles.SUPER_ADMIN, Roles.RECEPTIONIST] },
-    { value: "reevaluations", icon: Clock, label: "Re-evaluations", shortLabel: "Re-eval", allowedRoles: [Roles.GP, Roles.SPECIALIST, Roles.RECEPTIONIST] },
+    { value: "medical-history", icon: FileText, label: "Medical History", shortLabel: "Medical", allowedRoles: [Roles.ADMIN, Roles.GP, Roles.SPECIALIST, Roles.RECEPTIONIST] },
+    { value: "examinations", icon: Stethoscope, label: "Examinations", shortLabel: "Exams", allowedRoles: [Roles.ADMIN, Roles.GP, Roles.SPECIALIST] },
+    { value: "vaccinations", icon: Activity, label: "Vaccinations", shortLabel: "Vaccines", allowedRoles: [Roles.ADMIN, Roles.GP, Roles.RECEPTIONIST, Roles.SPECIALIST] },
+    { value: "laboratory", icon: TestTube, label: "Laboratory", shortLabel: "Lab", allowedRoles: [Roles.ADMIN, Roles.LAB_TECH, Roles.GP, Roles.SPECIALIST] },
+    { value: "ai-analysis", icon: Bot, label: "Analyze & Prescribe", shortLabel: "Prescribe", allowedRoles: [Roles.ADMIN, Roles.SPECIALIST] },
+    { value: "treatments", icon: Target, label: "Treatments", shortLabel: "Treatment", allowedRoles: [Roles.ADMIN, Roles.GP, Roles.SPECIALIST] },
+    { value: "expenses", icon: DollarSign, label: "Expenses & Payments", shortLabel: "Expenses", allowedRoles: [Roles.ADMIN, Roles.ADMIN, Roles.SUPER_ADMIN, Roles.RECEPTIONIST] },
+    { value: "reevaluations", icon: Clock, label: "Re-evaluations", shortLabel: "Re-eval", allowedRoles: [Roles.ADMIN, Roles.GP, Roles.SPECIALIST, Roles.RECEPTIONIST] },
   ]
 
   return (
